@@ -14,7 +14,7 @@ Hook Javascript global XMLHttpRequest  object。 And change the action of defaul
    <script src="wendu.ajaxhook.js"></script>
    ```
 
-2. hook the callbacks and functions you want by call 
+2. hook the callbacks and functions you want .
 
    ```javascript
    hookAjax({
