@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head lang="zh-cmn-Hans">
+    <meta charset="UTF-8">
+    <title>Ajax hook Demo</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="viewport" content="width=device-width,initial-scale=0.5,user-scalable=no"/>
+    <meta name="keywords" content="Ajax hook Demo">
+    <script src="http://cdn.bootcss.com/jquery/3.1.0/jquery.min.js"></script>
+    <script src="wendu.ajaxhook.js"></script>
+
+</head>
+<style>
+    html {
+        font-size: 20px;
+        -webkit-user-select: none;
+    }
+</style>
+<body>
+open console panel to view log.
+<script>
+
+    hookAjax({
+        onreadystatechange:function(xhr){
+            console.log("onreadystatechange called: %O",xhr)
+            //return true
+
+        },
+        onload:function(xhr){
+            console.log("onload called: %O",xhr)
+            xhr.responseText="hook"+xhr.responseText;
+            //return true;
+        },
+        open:function(arg){
+          console.log("open called: method:%s,url:%s,async:%s",arg[0],arg[1],arg[2])
+          arg[1]+="?hook_tag=1";
+
+        },
+        send:function(arg){
+         console.log("send called: %O",arg[0])
+        }
+    })
+
+    $.get().done(function(d){
+        console.log(d.substr(0,30)+"...")
+        //use original XMLHttpRequest
+        console.log("unhook")
+        unHookAjax()
+        $.get().done(function(d){
+            console.log(d.substr(0,10))
+        })
+
+    })
+
+</script>
+</body>
+</html>
