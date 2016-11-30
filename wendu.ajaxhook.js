@@ -56,7 +56,7 @@
         function hookfun(fun) {
             return function () {
                 var args = [].slice.call(arguments)
-                if (funs[fun] && funs[fun].call(this, args)) {
+                if (funs[fun] && funs[fun].call(this, args,this.xhr)) {
                     return;
                 }
                 this.xhr[fun].apply(this.xhr, args);

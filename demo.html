@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=0.5,user-scalable=no"/>
     <meta name="keywords" content="Ajax hook Demo">
     <script src="http://cdn.bootcss.com/jquery/3.1.0/jquery.min.js"></script>
-    <script src="wendu.ajaxhook.js"></script>
+    <script src="wendu.ajaxhook.min.js"></script>
 
 </head>
 <style>
@@ -35,13 +35,18 @@ open console panel to view log.
             xhr.responseText="hook"+xhr.responseText;
             //return true;
         },
-        open:function(arg){
-          console.log("open called: method:%s,url:%s,async:%s",arg[0],arg[1],arg[2])
+        open:function(arg,xhr){
+          console.log("open called: method:%s,url:%s,async:%s",arg[0],arg[1],arg[2],xhr)
           arg[1]+="?hook_tag=1";
+          //统一添加请求头
 
         },
-        send:function(arg){
-         console.log("send called: %O",arg[0])
+        send:function(arg,xhr){
+          console.log("send called: %O",arg[0])
+          xhr.setRequestHeader("_custom_header_","ajaxhook")
+        },
+        setRequestHeader:function(arg,xhr){
+            console.log("setRequestHeader called!",arg)
         }
     })
 

@@ -5,7 +5,7 @@ key words: ajax hook, hook ajax,  XMLHttpRequest hook, hook XMLHttpRequest.
 中文文档:[http://www.jianshu.com/p/9b634f1c9615](http://www.jianshu.com/p/9b634f1c9615)
 ## Description
 
-Hook Javascript global XMLHttpRequest  object。 And change the action of default AJAX  request and response . 
+Hook Javascript global XMLHttpRequest  object。 And change the  default AJAX   request and response .
 
 ## How to use
 
@@ -27,7 +27,7 @@ Hook Javascript global XMLHttpRequest  object。 And change the action of defaul
            console.log("onload called: %O",xhr)
        },
        //hook function
-       open:function(arg){
+       open:function(arg,xhr){
         console.log("open called: method:%s,url:%s,async:%s",arg[0],arg[1],arg[2])
        }
    })
@@ -52,7 +52,7 @@ The result :
   <head l...
 ```
 
-
+**See the demo "demo.html" for more details.**
 
 ## API
 
@@ -65,14 +65,14 @@ The result :
 
 - unhook Ajax 
 
-## Changing the action of default AJAX 
+## Changing the default Ajax behavior
 
-All hook functions return value is boolean, if true, the ajax  will be interrupted ,false or undefined are not . for example:
+The return value type of all hook-functions is boolean, if true, the ajax  will be interrupted ,false or undefined are not . for example:
 
 ```javascript
 
 hookAjax({
-  open:function(arg){
+  open:function(arg,xhr){
     if(arg[0]=="GET"){
       console.log("Request was aborted! method must be post! ")
       return true;
@@ -104,7 +104,7 @@ hook!<!DOCTYPE html>
 
 ## Notice
 
-The arguments of all callbacks such as onreadystatechange、onload, are the current XMLHttpRequest instance. The arguments of all functions, such as open、send，are supplied with a Array.
+ All callbacks such as onreadystatechange、onload and son on, the first argument is current XMLHttpRequest instance. All functions, such as open, send and so on, the first parameter is an array of the original parameters, the second parameter is the current origin XMLHttpRequest instance.
 
 
 
