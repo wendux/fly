@@ -69,7 +69,7 @@ const ah=require("ajax-hook")
 ah.hookAjax({
     onreadystatechange:function(xhr){
       ...
-    }
+    },
     onload:function(xhr){
       ... 
     },
