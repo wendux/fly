@@ -9,10 +9,12 @@ Hook Javascript global XMLHttpRequest  object。 And change the  default AJAX   
 
 ## How to use
 
-1. include the script file "wendu.ajaxhook.js"
+### **Using by script tag**
+
+1. include the script file "ajaxhook.js"
 
    ```html
-   <script src="wendu.ajaxhook.js"></script>
+   <script src="ajaxhook.js"></script>
    ```
 
 2. hook the callbacks and functions you want .
@@ -53,6 +55,31 @@ The result :
 ```
 
 **See the demo "demo.html" for more details.**
+
+### Using in commonJs module build environment
+
+Suppose you are using webpack as your  module bundler, firstly Install ajax-hook plugin:
+
+```javascript
+npm install ajax-hook --save-dev
+```
+And then require the ajax-hook module:
+```javascript
+const ah=require("ajax-hook")
+ah.hookAjax({
+    onreadystatechange:function(xhr){
+      ...
+    }
+    onload:function(xhr){
+      ... 
+    },
+   ...
+})
+...
+ah.unHookAjax()
+```
+
+
 
 ## API
 
