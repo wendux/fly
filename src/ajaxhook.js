@@ -4,11 +4,10 @@
  * source code: https://github.com/wendux/Ajax-hook
  **/
 !function (ob) {
-    var realXMLHttpRequest;
     ob.hookAjax = function (funs) {
-        realXMLHttpRequest = realXMLHttpRequest || XMLHttpRequest
+        window._ahrealxhr = window._ahrealxhr || XMLHttpRequest
         XMLHttpRequest = function () {
-            this.xhr = new realXMLHttpRequest;
+            this.xhr = new window._ahrealxhr;
             for (var attr in this.xhr) {
                 var type = "";
                 try {
@@ -58,11 +57,11 @@
                 this.xhr[fun].apply(this.xhr, args);
             }
         }
-        return realXMLHttpRequest;
+        return window._ahrealxhr;
     }
     ob.unHookAjax = function () {
-        if (realXMLHttpRequest)  XMLHttpRequest = realXMLHttpRequest;
-        realXMLHttpRequest = undefined;
+        if (window._ahrealxhr)  XMLHttpRequest = window._ahrealxhr;
+        window._ahrealxhr = undefined;
     }
-}(window)
-//}(module.exports)
+//}(window)
+}(module.exports)
