@@ -63,5 +63,5 @@
         if (window._ahrealxhr)  XMLHttpRequest = window._ahrealxhr;
         window._ahrealxhr = undefined;
     }
-//}(window)
-}(module.exports)
+}(window)
+//}(module.exports)
