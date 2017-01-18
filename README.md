@@ -3,6 +3,7 @@
 key words: ajax hook, hook ajax,  XMLHttpRequest hook, hook XMLHttpRequest.
 
 中文文档:[http://www.jianshu.com/p/9b634f1c9615](http://www.jianshu.com/p/9b634f1c9615)
+原理解析:[http://www.jianshu.com/p/7337ac624b8e](http://www.jianshu.com/p/7337ac624b8e)
 ## Description
 
 Hook Javascript global XMLHttpRequest  object。 And change the  default AJAX   request and response .
