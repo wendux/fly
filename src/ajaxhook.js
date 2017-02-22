@@ -54,7 +54,7 @@
                 if (funs[fun] && funs[fun].call(this, args, this.xhr)) {
                     return;
                 }
-                this.xhr[fun].apply(this.xhr, args);
+                return this.xhr[fun].apply(this.xhr, args);
             }
         }
         return window._ahrealxhr;
