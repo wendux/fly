@@ -26,7 +26,7 @@
 
         function getFactory(attr) {
             return function () {
-                return this[attr + "_"] || this.xhr[attr]
+                return attr.indexOf("on") != 0?this[attr + "_"] :this.xhr[attr]
             }
         }
 
