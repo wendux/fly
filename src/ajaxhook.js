@@ -26,7 +26,7 @@
 
         function getFactory(attr) {
             return function () {
-                return attr.indexOf("on") != 0?this[attr + "_"] :this.xhr[attr]
+                return this.hasOwnProperty(attr + "_")?this[attr + "_"]:this.xhr[attr];
             }
         }
 
@@ -63,5 +63,5 @@
         if (window._ahrealxhr)  XMLHttpRequest = window._ahrealxhr;
         window._ahrealxhr = undefined;
     }
-}(window)
-//}(module.exports)
+//}(window)
+}(module.exports)

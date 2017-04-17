@@ -1,6 +1,6 @@
 {
   "name": "ajax-hook",
-  "version": "1.5.0",
+  "version": "1.7.0",
   "main":"ajaxhook.js",
   "description": "Hook Javascript global XMLHttpRequest  object。 And change the  default AJAX   request and response.",
 
