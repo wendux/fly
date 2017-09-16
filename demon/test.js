@@ -1,42 +1,41 @@
 /**
  * Created by du on 16/12/10.
  */
+var Ajax = require("../src/ajaxhook")
+var adapter = require("../src/adapter/dsbridge")
+var  Fly=require("../src/fly")
+window.axio=new Fly
+window.fly= new Fly(Ajax)
 
-const ah=require("ajax-hook")
+//Ajax.setAdapter(adapter)
+//window.XMLHttpRequest = Ajax
 
-ah.hookAjax({
-    onreadystatechange:function(xhr){
-        console.log("onreadystatechange called: %O",xhr)
-        //return true
+fly.interceptors.request.use((config)=>{
+    console.log("interceptors.request", config)
+    config.headers.xx=8;
+    return config;
+})
 
+fly.interceptors.response.use(
+    (response,promise) => {
+        return response.data
     },
-    onload:function(xhr){
-        console.log("onload called: %O",xhr)
-        xhr.responseText="hook"+xhr.responseText;
-        //return true;
-    },
-    open:function(arg,xhr){
-        console.log("open called: method:%s,url:%s,async:%s",arg[0],arg[1],arg[2],xhr)
-        arg[1]+="?hook_tag=1";
-        //统一添加请求头
-
-    },
-    send:function(arg,xhr){
-        console.log("send called: %O",arg[0])
-        xhr.setRequestHeader("_custom_header_","ajaxhook")
-    },
-    setRequestHeader:function(arg,xhr){
-        console.log("setRequestHeader called!",arg)
+    (err,promise) => {
+      promise.resolve("ssss")
     }
-})
+)
 
-$.get().done(function(d){
-    console.log(d.substr(0,30)+"...")
-    //use original XMLHttpRequest
-    console.log("unhook")
-    ah.unHookAjax()
-    $.get().done(function(d){
-        console.log(d.substr(0,10))
-    })
+fly.get("").then((d) => {
+    //console.log(d)
+}).catch((e) => console.log("error", e))
 
-})
+
+// $.get("https://www.baidu.com").done(function(d){
+//  alert(d);
+// }).fail(function (e) {
+//        alert("error")
+//     }
+// )
+
+
+

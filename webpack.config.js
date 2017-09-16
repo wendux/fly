@@ -7,13 +7,25 @@ var webpack = require('webpack');
 module.exports = {
     entry: {
         "wendu.ajaxhook": "./src/ajaxhook.js",
-        "test" :["./demon/test.js"]
+         "test": ["./demon/test.js"],
+         "fly":"./src/fly.js"
     },
     output: {
-        path: "./dist",
-        filename: "[name].min.js"
+        path: path.resolve("./dist"),
+        filename: "[name].min.js",
+        libraryTarget: "umd",
     },
-
+    module: {
+        rules: [
+            {
+                test: /\.js$/,
+                loader: "babel-loader",
+                query: {
+                    presets: ['es2015']
+                }
+            }
+        ]
+    },
     plugins: [
         new webpack.optimize.UglifyJsPlugin({
             compress: {

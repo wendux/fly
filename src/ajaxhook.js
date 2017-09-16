@@ -3,65 +3,169 @@
  * email: 824783146@qq.com
  * source code: https://github.com/wendux/Ajax-hook
  **/
-!function (ob) {
-    ob.hookAjax = function (funs) {
-        window._ahrealxhr = window._ahrealxhr || XMLHttpRequest
-        XMLHttpRequest = function () {
-            this.xhr = new window._ahrealxhr;
-            for (var attr in this.xhr) {
-                var type = "";
-                try {
-                    type = typeof this.xhr[attr]
-                } catch (e) {}
-                if (type === "function") {
-                    this[attr] = hookfun(attr);
-                } else {
-                    Object.defineProperty(this, attr, {
-                        get: getFactory(attr),
-                        set: setFactory(attr)
-                    })
+
+var log = console.log;
+var adapter = {
+    onRequest: function (request, responseCallBack) {
+        log(request);
+        responseCallBack({
+            responseText: '{"aa":5}',
+            statusCode: 200,
+            headers: {
+                "Content-Type": "application/json; charset=UTF-8"
+            }
+        })
+    }
+}
+//trim
+class Ajax {
+    constructor() {
+        this.requestHeaders = {};
+        this.readyState = 0;
+        this.timeout = 0;//无超时
+        this.responseURL = "";
+        self.responseHeaders = {};
+        this.onreadystatechange
+            = this.onprogress
+            = this.onload
+            = this.onerror
+            = this.ontimeout
+            = this.onloadend
+            = null;
+    }
+
+    _changeReadyState(state) {
+        this.readyState = state;
+        this.onreadystatechange && this.onreadystatechange();
+    }
+
+    _end() {
+        this.onloadend && this.onloadend();
+    }
+
+    open(method, url) {
+        this.method = method;
+        if (!url) {
+            url = location.href;
+        } else {
+            url = url.trim();
+            if (url.indexOf("http") !== 0) {
+                //是浏览器环境
+                if (typeof document !== "undefined") {
+                    var t = document.createElement("a");
+                    t.href = url;
+                    url = t.href;
                 }
             }
         }
+        this.responseURL = url;
+        this._changeReadyState(1)
+    }
 
-        function getFactory(attr) {
-            return function () {
-                return this.hasOwnProperty(attr + "_")?this[attr + "_"]:this.xhr[attr];
+    send(arg) {
+        //log("send", arguments)
+        this.requestHeaders.cookie = document.cookie;
+        var self = this;
+        if (adapter) {
+            var request = {
+                method: self.method,
+                url: self.responseURL,//todo url 合并
+                headers: self.requestHeaders,
+                formData: arg
             }
-        }
+            self._changeReadyState(3)
+            var timer;
+            if (self.timeout > 0) {
+                timer = setTimeout(() => {
+                    if (self.readyState === 3) {
+                    self._end()
+                    self._changeReadyState(0);
 
-        function setFactory(attr) {
-            return function (f) {
-                var xhr = this.xhr;
-                var that = this;
-                if (attr.indexOf("on") != 0) {
-                    this[attr + "_"] = f;
-                    return;
                 }
-                if (funs[attr]) {
-                    xhr[attr] = function () {
-                        funs[attr](that) || f.apply(xhr, arguments);
+            }, self.timeout);
+            }
+            adapter.onRequest(request, function (response) {
+                //超时了
+                if (self.readyState !== 3) return;
+                clearTimeout(timer)
+                //网络错误
+                self.status = response.statusCode-0;
+                if(self.status===0){
+                    self.statusText= response.responseText;
+                    self.onerror && self.onerror();
+                }else {
+                    var headers = {};
+                    for (var field in response.headers) {
+
+                        var value=response.headers[field];
+                        var key=field.toLowerCase();
+                        //是数组直接赋值
+                        if(typeof value==="object"){
+                            headers[key]=value;
+                        }else{
+                            headers[key]=headers[key]||[]
+                            headers[key].push(value)
+                        }
                     }
-                } else {
-                    xhr[attr] = f;
+                    var cookies=headers["set-cookie"];
+                    if(cookies){
+                        cookies.forEach((e)=>{
+                            document.cookie=e.replace(/;\s*httpOnly/g,"")
+                        })
+                    }
+                    self.responseHeaders=headers;
+                    //错误码信息,暂且为状态码
+                    self.statusText = "" + self.status;
+                    if (self.status >= 200 && self.status < 300) {
+                        self.response = self.responseText = response.responseText;
+                        var contentType = self.getResponseHeader("content-type");
+                        //目前只支持json文档自动解析
+                        if (contentType && contentType.indexOf('json') !== -1) {
+                            self.response = JSON.parse(response.responseText)
+                            //log(self.response)
+                        }
+                        //回调onload
+                        self.onload && self.onload();
+                    } else {
+                        self.onerror && self.onerror();
+                    }
                 }
-            }
+                self._changeReadyState(4);
+                self._end();
+            });
+        }else {
+            console.error("Ajax require adapter")
         }
+    }
 
-        function hookfun(fun) {
-            return function () {
-                var args = [].slice.call(arguments)
-                if (funs[fun] && funs[fun].call(this, args, this.xhr)) {
-                    return;
-                }
-                return this.xhr[fun].apply(this.xhr, args);
-            }
+    setRequestHeader(key, value) {
+        //应该trim一下
+        this.requestHeaders[key] = value;
+    }
+
+    getResponseHeader(key) {
+        return this.responseHeaders[key].toString()
+    }
+
+    getAllResponseHeaders() {
+        var str = "";
+        for (var key in this.responseHeaders) {
+            str += key + ":" + this.getResponseHeader(key) + "\r\n";
         }
-        return window._ahrealxhr;
+        return str;
     }
-    ob.unHookAjax = function () {
-        if (window._ahrealxhr)  XMLHttpRequest = window._ahrealxhr;
-        window._ahrealxhr = undefined;
+
+    abort() {
+        this._changeReadyState(0)
+        this._end();
     }
-}(window)
-//}(module.exports)
+    static setAdapter(requestAdapter){
+        adapter = requestAdapter
+    }
+}
+module.exports=Ajax;
+
+
+
+
+
