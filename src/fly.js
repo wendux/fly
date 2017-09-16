@@ -1,3 +1,7 @@
+
+function trim(str) {
+    return str.replace(/(^\s*)|(\s*$)/g,'');
+}
 class Fly {
     constructor(engine = XMLHttpRequest) {
         this.engine = engine;
@@ -39,9 +43,9 @@ class Fly {
             var rqi = this.interceptors.request;
             var rpi = this.interceptors.response;
             options.params = data;
-            url = url.trim();
+            url = trim(url);
             if (!url) url = location.href;
-            var baseUrl = this.config.baseURL.trim();
+            var baseUrl = trim(this.config.baseURL);
             if (url.indexOf("http") !== 0) {
                 if (!baseUrl) {
                     var arr = location.pathname.split("/");
@@ -73,7 +77,7 @@ class Fly {
             if (rqi.handler) {
                 options = rqi.handler(options, operate);
                 if(!options){
-                    console.warn("interceptors should return a value, request aborted")
+                    //console.warn("interceptors should return a value, request aborted")
                     return ;
                 }
             }
@@ -88,7 +92,7 @@ class Fly {
                 xhr.open("GET", options.url);
             } else {
                 xhr.open("POST", options.url, true);
-                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                //xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
             }
             for (var k in options.headers) {
                 xhr.setRequestHeader(k, options.headers[k])

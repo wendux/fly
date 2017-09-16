@@ -1,15 +1,12 @@
 /**
  * Created by du on 16/12/10.
  */
-var Ajax = require("../src/ajaxhook")
+var engine = require("../src/engine")
 var adapter = require("../src/adapter/dsbridge")
 var  Fly=require("../src/fly")
 window.axio=new Fly
-window.fly= new Fly(Ajax)
-
-//Ajax.setAdapter(adapter)
-//window.XMLHttpRequest = Ajax
-
+window.fly= new Fly(engine)
+engine.setAdapter(adapter)
 fly.interceptors.request.use((config)=>{
     console.log("interceptors.request", config)
     config.headers.xx=8;
