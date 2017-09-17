@@ -1,139 +1,128 @@
-# Ajax-hook
+# Fly.js
 
-key words: ajax hook, hook ajax,  XMLHttpRequest hook, hook XMLHttpRequest.
+Fly.js是一个基于promise的，非常轻量的http网络库，它有如下特点：
 
-中文文档:[http://www.jianshu.com/p/9b634f1c9615](http://www.jianshu.com/p/9b634f1c9615)
-原理解析:[http://www.jianshu.com/p/7337ac624b8e](http://www.jianshu.com/p/7337ac624b8e)
-## Description
+1. 同时支持浏览器和node环境。
+2. 支持Promise API
+3. 支持请求／响应拦截修改
+4. 自动转换JSON数据
+5. **可以随意切换底层http engine， 在浏览器环境中默认使用XMLHttpRequest**
+6. **h5页面内嵌到原生APP中，可以将ajax请求转发到Native，在端上统一发起网络请求、进行cookie管理。**
+7. **非常非常轻量**
 
-Hook Javascript global XMLHttpRequest  object。 And change the  default AJAX   request and response .
+## 安装
 
-## How to use
+### 使用npm
 
-### **Using by script tag**
+```shell
+npm install flyio
+```
 
-1. include the script file "ajaxhook.js"
-
-   ```html
-   <script src="ajaxhook.js"></script>
-   ```
-
-2. hook the callbacks and functions you want .
-
-   ```javascript
-   hookAjax({
-       //hook callbacks
-       onreadystatechange:function(xhr){
-           console.log("onreadystatechange called: %O",xhr)
-       },
-       onload:function(xhr){
-           console.log("onload called: %O",xhr)
-       },
-       //hook function
-       open:function(arg,xhr){
-        console.log("open called: method:%s,url:%s,async:%s",arg[0],arg[1],arg[2])
-       }
-   })
-   ```
-
- Now, it worked! we use jQuery ajax  to test .
+### 使用cdn
 
 ```javascript
-// get current page source code 
-$.get().done(function(d){
-    console.log(d.substr(0,30)+"...")
+<script src="https://unpkg.com/flyio/dist/fly.min.js"></script>
+```
+
+### umd
+
+```html
+https://unpkg.com/flyio/dist/fly.umd.min.js
+```
+
+## 使用
+
+```javascript
+var fly=new Fly
+engine.setAdapter(adapter)
+//定义公共headers
+fly.config.headers={xx:5,bb:6,dd:7}
+//设置超时
+fly.config.timeout=10000;
+//设置请求基地址
+//fly.config.baseURL=""
+
+//请求拦截器
+fly.interceptors.request.use((config,promise)=>{
+    //可以通过promise.reject／resolve直接中止请求
+    console.log("interceptors.request", config)
+    config.headers["X-Tag"]="fly.js";
+    return config;
 })
-```
 
-The result :
-
-```
-> open called: method:GET,url:http://localhost:63342/Ajax-hook/demo.html,async:true
-> onload called: XMLHttpRequest
-> <!DOCTYPE html>
-  <html>
-  <head l...
-```
-
-**See the demo "demo.html" for more details.**
-
-### Using in commonJs module build environment
-
-Suppose you are using webpack as your  module bundler, firstly Install ajax-hook plugin:
-
-```javascript
-npm install ajax-hook --save-dev
-```
-And then require the ajax-hook module:
-```javascript
-const ah=require("ajax-hook")
-ah.hookAjax({
-    onreadystatechange:function(xhr){
-      ...
+//响应拦截器
+fly.interceptors.response.use(
+    (response,promise) => {
+        console.log("interceptors.response", response)
+        return response.data
     },
-    onload:function(xhr){
-      ... 
-    },
-   ...
-})
-...
-ah.unHookAjax()
-```
-
-
-
-## API
-
-### hookAjax(ob)
-
-- ob; type is Object
-- return value: original XMLHttpRequest
-
-### unHookAjax()
-
-- unhook Ajax 
-
-## Changing the default Ajax behavior
-
-The return value type of all hook-functions is boolean, if true, the ajax  will be interrupted ,false or undefined are not . for example:
-
-```javascript
-
-hookAjax({
-  open:function(arg,xhr){
-    if(arg[0]=="GET"){
-      console.log("Request was aborted! method must be post! ")
-      return true;
+    (err,promise) => {
+        //promise.resolve("ssss")
     }
-  } 
- })
+)
+//get请求
+fly.get("../package.json",{aa:8,bb:9,tt:{xx:5}}).then((d) => {
+    console.log("get result:",d)
+}).catch((e) => console.log("error", e))
+
+//post请求
+fly.post("../package.json",{aa:8,bb:9,tt:{xx:5}}).then((d) => {
+    console.log("post result:",d)
+}).catch((e) => console.log("error", e))
+
+//直接调用ajax函数发起post请求
+fly.ajax("../package.json",{hh:5},{
+    method:"post"
+}).then(d=>{
+    console.log("ajax result:",d)
+})
 ```
 
-Changing the "responseText"
+
+
+## Http engine
+
+Http engine就是真正发起http请求的引擎，这在浏览器中一般都是XMLHttpRequest。而在node环境中，开发者可以使用任何自己喜欢的网络库，fly 中提供了engine模块，开发者只需要实现一个adapter即可. 下面是一个在app内嵌网页中，通过fly engine将所有请求重定向到Native中的例子。
 
 ```javascript
-hookAjax({
-   onload:function(xhr){
-    console.log("onload called: %O",xhr)
-    xhr.responseText="hook!"+xhr.responseText;
-   }
- })
-```
+var engine = require("../src/engine")
+var adapter = require("../src/adapter/dsbridge")
+var  Fly=require("../src/fly")
+var fly = new Fly(engine)
+//使用dsbridge适配器，将会使fly实例发起的所有ajax请求通过dsbridge重定向到Native上
+engine.setAdapter(adapter) 
 
-Result:
-
-```
-hook!<!DOCTYPE html>
-<html>
-<h...
+//发起网络请求
+fly.get()....
 ```
 
 
 
-## Notice
+## 下面的适配器在京锣密鼓的开发中....
 
- All callbacks such as onreadystatechange、onload and son on, the first argument is current XMLHttpRequest instance. All functions, such as open, send and so on, the first parameter is an array of the original parameters, the second parameter is the current origin XMLHttpRequest instance.
+### 其它javascript bridge的 adapter
+
+```javascript
+var adapter = require("../src/adapter/webviewjsbridge")
+engine.setAdapter(adapter) 
+```
+
+所有的jsbridge，都只需要实现一个适配器，便可将h5与端打通，是不是很酷。。
 
 
 
-**BY THE WAY** :  welcome starring my another project [Neat.js](https://github.com/wendux/Neat)  ! 😄。
+### node adapter 
+
+在node 中也可以使用哦。
+
+```javascript
+var engine = require("../src/engine")
+var adapter = require("../src/adapter/node")
+var  Fly=require("../src/fly")
+var fly = new Fly(engine)
+engine.setAdapter(adapter) 
+
+//node环境中发起网络请求
+fly.get()....
+```
+

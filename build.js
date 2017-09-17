@@ -2,22 +2,26 @@
  * Created by du on 16/9/24.
  */
 var path = require('path');
-var fs = require("fs");
 var webpack = require('webpack');
-var env=process.argv[2]
+var env=process.argv[2]||"dev"
 var output = {
     path: path.resolve("./dist"),
-    filename: "[name].js",
-    libraryTarget: "umd",
+    filename: "[name].js"
 }
 var plugins=[];
-if (env === "build") {
+if (env !== "dev") {
     output.filename = "[name].min.js"
     plugins.push(new webpack.optimize.UglifyJsPlugin({
         compress: {
             warnings: true
         }
     }))
+    if(env==="umd") {
+        output.libraryTarget = "umd"
+        output.filename = "[name].umd.min.js"
+    }
+}else{
+    output.libraryTarget = "umd"
 }
 
 var config= {
@@ -31,10 +35,20 @@ var config= {
         rules: [
             {
                 test: /\.js$/,
-                loader: "babel-loader",
-                query: {
-                    presets: ['es2015']
-                }
+                use:[
+                    {
+                        loader: 'keep-loader',
+                        options:{
+                            keep:env
+                        }
+                    },
+                    {
+                        loader: "babel-loader",
+                        options: {
+                            presets: ['es2015']
+                        }
+                    },
+                ]
             }
         ]
     },
@@ -44,7 +58,7 @@ webpack(config,function (err,stats) {
     if(err) throw err;
     process.stdout.write(stats.toString({
         colors: true,
-        modules: true,
+        modules: false,
         children: false,
         chunks: false,
         chunkModules: false

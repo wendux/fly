@@ -1,33 +1,35 @@
 {
-  "name": "ajax-hooks",
-  "version": "1.0.0",
+  "name": "flyio",
+  "version": "0.0.2",
+  "main": "dist/fly.js",
   "author": {
     "name": "wendux",
     "email": "824783146@qq.com",
     "url": "https://github.com/wendux"
   },
-  "description": "Hook Javascript global XMLHttpRequest  object。 And change the  default AJAX   request and response .",
+  "description": "Lightweigh Promise based HTTP client for the browser and node.js",
   "keywords": [
-    "ajax hook",
-    "hook ajax",
-    "ajax-hook",
-    "wendux"
+    "flyjs",
+    "fly.js"
   ],
   "respository": {
     "type": "git",
-    "url": "https://github.com/wendux/Neat/Ajax-hook"
+    "url": "https://github.com/flyjs/fly"
   },
   "bugs": {
-    "url": "https://github.com/wendux/Ajax-hook/issues"
+    "url": "https://github.com/flyjs/fly/issues"
   },
   "scripts": {
-    "build": "webpack"
+    "dev": "node build.js",
+    "build": "node build.js && node build.js build && node build.js umd"
   },
   "devDependencies": {
     "babel-core": "^6.0.0",
     "babel-loader": "^6.0.0",
     "babel-plugin-transform-runtime": "^6.0.0",
     "babel-preset-es2015": "^6.0.0",
-    "webpack": "^3.6.0"
-  }
+    "keep-loader": "^0.7.1",
+    "webpack": "^2.6.0"
+  },
+  "dependencies": {}
 }
