@@ -97,7 +97,39 @@ fly.get()....
 
 
 
-## 下面的适配器在京锣密鼓的开发中....
+## Adapter
+
+接口签名如下：
+
+```javascript
+function (request, responseCallBack)
+```
+
+**request**: 请求对象，由engine传给adapter，结构如下：
+
+```javascript
+{
+  method:"",//请求方法， GET 、POST ...
+  headers:{},//请求头
+  url:"",//请求地址
+  data:""//请求数据，GET请求时为null
+}
+```
+
+**responseCallBack(response)**: 响应回调
+
+请求结束时调用此函数，通知engine, response结构如下：
+
+```
+{
+    responseText: '{"aa":5}',//响应内容，为字符串
+    statusCode: 200,// http 状态码，发生异常时，值为0
+    errMsg:"", //错误信息
+    headers: {}//响应头
+}
+```
+
+
 
 ### 其它javascript bridge的 adapter
 

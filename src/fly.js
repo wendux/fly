@@ -78,7 +78,8 @@ class Fly {
             }
             xhr.timeout = options.timeout || 0;
             xhr.withCredentials=!!options.withCredentials;
-            if (options.method === "GET") {
+            var isGet=options.method === "GET"
+            if (isGet) {
                 if (options.data) {
                     data = utils.formatParams(options.data);
                     url += (url.indexOf("?") === -1 ? "?" : "&") + data;
@@ -87,14 +88,14 @@ class Fly {
             } else {
                 xhr.open("POST", url);
             }
-            if (utils.isObject(options.data)) {
+            if (["object","array"].indexOf(utils.type(options.data))!==-1) {
                 options.headers["Content-type"] = 'application/json;charset=utf-8'
                 data = JSON.stringify(options.data);
             }
 
             for (var k in options.headers) {
                 //删除content-type
-                if (k.toLowerCase() === "content-type" && (utils.isFormData(options.data) || !options.data||options.method==="GET")) {
+                if (k.toLowerCase() === "content-type" && (utils.isFormData(options.data) || !options.data||isGet)) {
                     delete options.headers[k]; // Let the browser set it
                 } else {
                     xhr.setRequestHeader(k, options.headers[k])
@@ -114,11 +115,12 @@ class Fly {
                     if(xhr.getResponseHeader("Content-Type").indexOf("json")!==-1){
                         response=JSON.parse(response);
                     }
+                    var data={data: response,xhr, request: options };
                     if (rpi.handler) {
-                        response = rpi.handler({xhr, request: options, data: response}, operate)
+                        data = rpi.handler(data, operate)
                     }
                     if (abort) return;
-                    resolve(response);
+                    resolve(data);
                 } else {
                     var err = new Error(xhr.statusText)
                     err.status = xhr.status;
@@ -128,8 +130,8 @@ class Fly {
                 }
             }
 
-            xhr.onerror = () => {
-                var err = new Error("net error")
+            xhr.onerror = (e) => {
+                var err = new Error(e.msg||"Network Error")
                 err.status = 0;
                 err = onerror(err)
                 if (abort) return;
@@ -143,7 +145,8 @@ class Fly {
                 if (abort) return;
                 reject(err)
             }
-            xhr.send(data)
+            xhr.send(isGet?null:data)
+
         })
 
         promise.xhr = xhr;

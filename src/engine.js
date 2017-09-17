@@ -1,24 +1,12 @@
 /*
  * author: wendu
  * email: 824783146@qq.com
- * source code: https://github.com/wendux/Ajax-hook
  **/
-
+var trim = require('./utils').trim;
+var type=require('./utils').type;
 var log = console.log;
-var adapter = {
-    onRequest: function (request, responseCallBack) {
-        log(request);
-        responseCallBack({
-            responseText: '{"aa":5}',
-            statusCode: 200,
-            headers: {
-                "Content-Type": "application/json; charset=UTF-8"
-            }
-        })
-    }
-}
-//trim
-class Ajax {
+var adapter;
+class AjaxEngine {
     constructor() {
         this.requestHeaders = {};
         this.readyState = 0;
@@ -26,19 +14,16 @@ class Ajax {
         this.responseURL = "";
         self.responseHeaders = {};
         this.onreadystatechange
-            = this.onprogress
             = this.onload
             = this.onerror
             = this.ontimeout
             = this.onloadend
             = null;
     }
-
     _changeReadyState(state) {
         this.readyState = state;
         this.onreadystatechange && this.onreadystatechange();
     }
-
     _end() {
         this.onloadend && this.onloadend();
     }
@@ -48,7 +33,7 @@ class Ajax {
         if (!url) {
             url = location.href;
         } else {
-            url = url.trim();
+            url = trim(url);
             if (url.indexOf("http") !== 0) {
                 //是浏览器环境
                 if (typeof document !== "undefined") {
@@ -63,15 +48,20 @@ class Ajax {
     }
 
     send(arg) {
-        //log("send", arguments)
+        arg=arg||null;
+        var dataType=type(arg)
+        if(["null","object","array","string","number"].indexOf(dataType)===-1){
+            this.abort(`Sorry! an error occurred in function "send" of AjaxEngine ,${dataType} is not supported yet!`);
+            return ;
+        }
         this.requestHeaders.cookie = document.cookie;
         var self = this;
         if (adapter) {
             var request = {
                 method: self.method,
-                url: self.responseURL,//todo url 合并
+                url: self.responseURL,
                 headers: self.requestHeaders,
-                formData: arg
+                data: arg
             }
             self._changeReadyState(3)
             var timer;
@@ -80,19 +70,21 @@ class Ajax {
                     if (self.readyState === 3) {
                     self._end()
                     self._changeReadyState(0);
+                    self.ontimeout&&self.ontimeout();
 
                 }
             }, self.timeout);
             }
-            adapter.onRequest(request, function (response) {
+            adapter(request, function (response) {
                 //超时了
                 if (self.readyState !== 3) return;
                 clearTimeout(timer)
-                //网络错误
+
                 self.status = response.statusCode-0;
+                //网络错误,端上返回0时代表错误
                 if(self.status===0){
                     self.statusText= response.responseText;
-                    self.onerror && self.onerror();
+                    self._onerror(response.errMsg);
                 }else {
                     var headers = {};
                     for (var field in response.headers) {
@@ -127,7 +119,7 @@ class Ajax {
                         //回调onload
                         self.onload && self.onload();
                     } else {
-                        self.onerror && self.onerror();
+                        self._onerror();
                     }
                 }
                 self._changeReadyState(4);
@@ -139,8 +131,7 @@ class Ajax {
     }
 
     setRequestHeader(key, value) {
-        //应该trim一下
-        this.requestHeaders[key] = value;
+        this.requestHeaders[trim(key)] = value;
     }
 
     getResponseHeader(key) {
@@ -154,16 +145,28 @@ class Ajax {
         }
         return str;
     }
-
-    abort() {
+    abort(msg) {
         this._changeReadyState(0)
+        this._onerror(msg);
         this._end();
+    }
+    _onerror(msg=""){
+        this.onerror && this.onerror({msg});
     }
     static setAdapter(requestAdapter){
         adapter = requestAdapter
     }
 }
-module.exports=Ajax;
+//build环境定义全局变量
+KEEP("build", () => {
+    window.AjaxEngine = AjaxEngine
+})
+//非build环境则导出
+KEEP("!build", () => {
+    module.exports = AjaxEngine;
+})
+
+
 
 
 

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>fly ajax-engine</title>
+    <meta name="viewport" content="width=device-width,initial-scale=0.5,user-scalable=no"/>
+    <script src="../dist/fly.min.js"></script>
+    <script src="../dist/engine.min.js"></script>
+    <script src="https://cdn.bootcss.com/axios/0.16.2/axios.js"></script>
+    <script>
+        var log=console.log;
+        AjaxEngine.setAdapter(function (request,responseCallback) {
+            console.log(request)
+            responseCallback({
+                statusCode:0,
+                errMsg:"exception"
+            })
+        })
+        fly.engine=AjaxEngine;
+        XMLHttpRequest=AjaxEngine
+//
+//        fly.post("../package.json",{aa:8,bb:9,tt:{xx:5}}).then((d) => {
+//            console.log("get result:",d)
+//        }).catch((e) => console.log("error", e))
+
+//        var formData = new FormData();
+//        formData.append('username', 'Chris');
+//        axios.post("../package.json",formData).then(log).catch(log)
+//        fly.post("../package.json",formData).then(log).catch(log)
+        fly.post("../package.json")
+        axios.post("../package.json")
+
+
+    </script>
+</head>
+<body>
+
+</body>
+</html>

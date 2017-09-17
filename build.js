@@ -4,10 +4,18 @@
 var path = require('path');
 var webpack = require('webpack');
 var env=process.argv[2]||"dev"
+
+var entry={
+    "engine": "./src/engine.js",
+    "fly": "./src/fly.js",
+    "adapter/dsbridge":"./src/adapter/dsbridge.js",
+    "adapter/webviewjsbridge":"./src/adapter/webviewjsbridge.js",
+}
 var output = {
     path: path.resolve("./dist"),
     filename: "[name].js"
 }
+
 var plugins=[];
 if (env !== "dev") {
     output.filename = "[name].min.js"
@@ -21,15 +29,16 @@ if (env !== "dev") {
         output.filename = "[name].umd.min.js"
     }
 }else{
+    Object.assign(entry,{
+        "adapter/node":"./src/adapter/node.js",
+        "../demon/dist/test": "./demon/test.js",
+    })
     output.libraryTarget = "umd"
+
 }
 
 var config= {
-    entry: {
-        "engine": "./src/engine.js",
-        "fly": "./src/fly.js",
-        "test": "./demon/test.js"
-    },
+    entry: entry,
     output: output,
     module: {
         rules: [
