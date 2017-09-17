@@ -34,7 +34,6 @@ https://unpkg.com/flyio/dist/fly.umd.min.js
 
 ```javascript
 var fly=new Fly
-engine.setAdapter(adapter)
 //定义公共headers
 fly.config.headers={xx:5,bb:6,dd:7}
 //设置超时

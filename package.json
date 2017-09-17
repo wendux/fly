@@ -1,6 +1,6 @@
 {
   "name": "flyio",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "main": "dist/fly.js",
   "author": {
     "name": "wendux",
