@@ -36,5 +36,5 @@
   "dependencies": {
     "request": "^2.81.0"
   },
-  "browser":"dist/fly.js"
+  "browser":"src/browser.js"
 }
