@@ -6,7 +6,7 @@ var webpack = require('webpack');
 var env=process.argv[2]||"dev"
 
 var entry={
-    "engine": "./src/engine.js",
+    "engine-wrapper": "./src/engine-wrapper.js",
     "fly": "./src/fly.js",
     "adapter/dsbridge":"./src/adapter/dsbridge.js",
     "adapter/webviewjsbridge":"./src/adapter/webviewjsbridge.js",
@@ -30,7 +30,6 @@ if (env !== "dev") {
     }
 }else{
     Object.assign(entry,{
-        "adapter/node":"./src/adapter/node.js",
         "../demon/dist/test": "./demon/test.js",
     })
     output.libraryTarget = "umd"

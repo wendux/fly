@@ -143,6 +143,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var utils = __webpack_require__(0);
+var isBrowser = typeof document !== "undefined";
 
 var Fly = function () {
     function Fly() {
@@ -215,10 +216,10 @@ var Fly = function () {
                 }
                 if (abort) return;
                 url = utils.trim(options.url);
-                if (!url) url = location.href;
-                var baseUrl = utils.trim(options.baseURL);
+                if (!url && isBrowser) url = location.href;
+                var baseUrl = utils.trim(options.baseURL || "");
                 if (url.indexOf("http") !== 0) {
-                    if (!baseUrl) {
+                    if (!baseUrl && isBrowser) {
                         var arr = location.pathname.split("/");
                         arr.pop();
                         baseUrl = location.protocol + "//" + location.host + arr.join("/");
@@ -227,7 +228,7 @@ var Fly = function () {
                         baseUrl += '/';
                     }
                     url = baseUrl + (url[0] === "/" ? url.substr(1) : url);
-                    if (typeof document !== "undefined") {
+                    if (isBrowser) {
                         var t = document.createElement("a");
                         t.href = url;
                         url = t.href;
@@ -296,7 +297,7 @@ var Fly = function () {
                 };
 
                 xhr.ontimeout = function () {
-                    var err = new Error("timeout[" + xhr.timeout + "ms]");
+                    var err = new Error("timeout [ " + xhr.timeout + "ms ]");
                     err.status = 1;
                     err = onerror(err);
                     if (abort) return;
@@ -322,6 +323,13 @@ var Fly = function () {
         key: "all",
         value: function all(promises) {
             return Promise.all(promises);
+        }
+    }, {
+        key: "spread",
+        value: function spread(callback) {
+            return function wrap(arr) {
+                return callback.apply(null, arr);
+            };
         }
     }]);
 

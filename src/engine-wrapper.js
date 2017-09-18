@@ -6,26 +6,22 @@ var trim = require('./utils').trim;
 var type=require('./utils').type;
 var log = console.log;
 var adapter;
+var isBrowser=typeof document!=="undefined";
 class AjaxEngine {
     constructor() {
         this.requestHeaders = {};
         this.readyState = 0;
         this.timeout = 0;//无超时
         this.responseURL = "";
-        self.responseHeaders = {};
-        this.onreadystatechange
-            = this.onload
-            = this.onerror
-            = this.ontimeout
-            = this.onloadend
-            = null;
+        this.responseHeaders = {};
     }
+    _call(name) {
+        this[name] && this[name].apply(this,[].splice.call(arguments,1))
+    }
+
     _changeReadyState(state) {
         this.readyState = state;
-        this.onreadystatechange && this.onreadystatechange();
-    }
-    _end() {
-        this.onloadend && this.onloadend();
+        this._call("onreadystatechange")
     }
 
     open(method, url) {
@@ -36,7 +32,7 @@ class AjaxEngine {
             url = trim(url);
             if (url.indexOf("http") !== 0) {
                 //是浏览器环境
-                if (typeof document !== "undefined") {
+                if (isBrowser) {
                     var t = document.createElement("a");
                     t.href = url;
                     url = t.href;
@@ -54,7 +50,9 @@ class AjaxEngine {
             this.abort(`Sorry! an error occurred in function "send" of AjaxEngine ,${dataType} is not supported yet!`);
             return ;
         }
-        this.requestHeaders.cookie = document.cookie;
+        if(isBrowser) {
+            this.requestHeaders.cookie = document.cookie;
+        }
         var self = this;
         if (adapter) {
             var request = {
@@ -65,16 +63,18 @@ class AjaxEngine {
             }
             self._changeReadyState(3)
             var timer;
+            self.timeout=self.timeout||0;
             if (self.timeout > 0) {
                 timer = setTimeout(() => {
                     if (self.readyState === 3) {
-                    self._end()
+                    this._call("onloadend");
                     self._changeReadyState(0);
-                    self.ontimeout&&self.ontimeout();
+                    self._call("ontimeout");
 
                 }
             }, self.timeout);
             }
+            request.timeout=self.timeout;
             adapter(request, function (response) {
                 //超时了
                 if (self.readyState !== 3) return;
@@ -84,7 +84,8 @@ class AjaxEngine {
                 //网络错误,端上返回0时代表错误
                 if(self.status===0){
                     self.statusText= response.responseText;
-                    self._onerror(response.errMsg);
+                    self._call("onerror",{msg:response.errMsg});
+
                 }else {
                     var headers = {};
                     for (var field in response.headers) {
@@ -100,14 +101,14 @@ class AjaxEngine {
                         }
                     }
                     var cookies=headers["set-cookie"];
-                    if(cookies){
+                    if(isBrowser&&cookies){
                         cookies.forEach((e)=>{
                             document.cookie=e.replace(/;\s*httpOnly/g,"")
                         })
                     }
                     self.responseHeaders=headers;
                     //错误码信息,暂且为状态码
-                    self.statusText = "" + self.status;
+                    self.statusText = response.statusMessage||"";
                     if (self.status >= 200 && self.status < 300) {
                         self.response = self.responseText = response.responseText;
                         var contentType = self.getResponseHeader("content-type");
@@ -117,13 +118,11 @@ class AjaxEngine {
                             //log(self.response)
                         }
                         //回调onload
-                        self.onload && self.onload();
-                    } else {
-                        self._onerror();
+                        self._changeReadyState(4);
                     }
+                    self._call("onload");
                 }
-                self._changeReadyState(4);
-                self._end();
+                self._call("onloadend");
             });
         }else {
             console.error("Ajax require adapter")
@@ -135,7 +134,8 @@ class AjaxEngine {
     }
 
     getResponseHeader(key) {
-        return this.responseHeaders[key].toString()
+
+        return this.responseHeaders[key.toLowerCase()].toString()
     }
 
     getAllResponseHeaders() {
@@ -147,11 +147,8 @@ class AjaxEngine {
     }
     abort(msg) {
         this._changeReadyState(0)
-        this._onerror(msg);
-        this._end();
-    }
-    _onerror(msg=""){
-        this.onerror && this.onerror({msg});
+        this._call("onerror",{msg});
+        this._call("onloadend");
     }
     static setAdapter(requestAdapter){
         adapter = requestAdapter

@@ -1,5 +1,5 @@
 var utils = require('./utils');
-
+var isBrowser=typeof document !== "undefined";
 class Fly {
     constructor(engine = XMLHttpRequest) {
         this.engine = engine;
@@ -58,10 +58,10 @@ class Fly {
             }
             if (abort) return;
             url = utils.trim(options.url);
-            if (!url) url = location.href;
-            var baseUrl = utils.trim(options.baseURL);
+            if (!url&&isBrowser) url = location.href;
+            var baseUrl = utils.trim(options.baseURL||"");
             if (url.indexOf("http") !== 0) {
-                if (!baseUrl) {
+                if (!baseUrl&&isBrowser) {
                     var arr = location.pathname.split("/");
                     arr.pop();
                     baseUrl = location.protocol + "//" + location.host + arr.join("/")
@@ -70,7 +70,7 @@ class Fly {
                     baseUrl += '/'
                 }
                 url = baseUrl + (url[0] === "/" ? url.substr(1) : url)
-                if (typeof document !== "undefined") {
+                if (isBrowser) {
                     var t = document.createElement("a");
                     t.href = url;
                     url = t.href;
@@ -139,7 +139,7 @@ class Fly {
             }
 
             xhr.ontimeout = () => {
-                var err = new Error(`timeout[${xhr.timeout}ms]`)
+                var err = new Error(`timeout [ ${xhr.timeout}ms ]`)
                 err.status = 1;
                 err = onerror(err)
                 if (abort) return;
@@ -162,6 +162,11 @@ class Fly {
     }
     all(promises){
         return Promise.all(promises)
+    }
+    spread(callback) {
+        return function wrap(arr) {
+            return callback.apply(null, arr);
+        }
     }
 }
 

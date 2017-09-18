@@ -151,6 +151,7 @@ var trim = __webpack_require__(0).trim;
 var type = __webpack_require__(0).type;
 var log = console.log;
 var adapter;
+var isBrowser = typeof document !== "undefined";
 
 var AjaxEngine = function () {
     function AjaxEngine() {
@@ -160,20 +161,19 @@ var AjaxEngine = function () {
         this.readyState = 0;
         this.timeout = 0; //无超时
         this.responseURL = "";
-        self.responseHeaders = {};
-        this.onreadystatechange = this.onload = this.onerror = this.ontimeout = this.onloadend = null;
+        this.responseHeaders = {};
     }
 
     _createClass(AjaxEngine, [{
+        key: '_call',
+        value: function _call(name) {
+            this[name] && this[name].apply(this, [].splice.call(arguments, 1));
+        }
+    }, {
         key: '_changeReadyState',
         value: function _changeReadyState(state) {
             this.readyState = state;
-            this.onreadystatechange && this.onreadystatechange();
-        }
-    }, {
-        key: '_end',
-        value: function _end() {
-            this.onloadend && this.onloadend();
+            this._call("onreadystatechange");
         }
     }, {
         key: 'open',
@@ -185,7 +185,7 @@ var AjaxEngine = function () {
                 url = trim(url);
                 if (url.indexOf("http") !== 0) {
                     //是浏览器环境
-                    if (typeof document !== "undefined") {
+                    if (isBrowser) {
                         var t = document.createElement("a");
                         t.href = url;
                         url = t.href;
@@ -198,13 +198,17 @@ var AjaxEngine = function () {
     }, {
         key: 'send',
         value: function send(arg) {
+            var _this = this;
+
             arg = arg || null;
             var dataType = type(arg);
             if (["null", "object", "array", "string", "number"].indexOf(dataType) === -1) {
                 this.abort('Sorry! an error occurred in function "send" of AjaxEngine ,' + dataType + ' is not supported yet!');
                 return;
             }
-            this.requestHeaders.cookie = document.cookie;
+            if (isBrowser) {
+                this.requestHeaders.cookie = document.cookie;
+            }
             var self = this;
             if (adapter) {
                 var request = {
@@ -215,15 +219,17 @@ var AjaxEngine = function () {
                 };
                 self._changeReadyState(3);
                 var timer;
+                self.timeout = self.timeout || 0;
                 if (self.timeout > 0) {
                     timer = setTimeout(function () {
                         if (self.readyState === 3) {
-                            self._end();
+                            _this._call("onloadend");
                             self._changeReadyState(0);
-                            self.ontimeout && self.ontimeout();
+                            self._call("ontimeout");
                         }
                     }, self.timeout);
                 }
+                request.timeout = self.timeout;
                 adapter(request, function (response) {
                     //超时了
                     if (self.readyState !== 3) return;
@@ -233,7 +239,7 @@ var AjaxEngine = function () {
                     //网络错误,端上返回0时代表错误
                     if (self.status === 0) {
                         self.statusText = response.responseText;
-                        self._onerror(response.errMsg);
+                        self._call("onerror", { msg: response.errMsg });
                     } else {
                         var headers = {};
                         for (var field in response.headers) {
@@ -249,14 +255,14 @@ var AjaxEngine = function () {
                             }
                         }
                         var cookies = headers["set-cookie"];
-                        if (cookies) {
+                        if (isBrowser && cookies) {
                             cookies.forEach(function (e) {
                                 document.cookie = e.replace(/;\s*httpOnly/g, "");
                             });
                         }
                         self.responseHeaders = headers;
                         //错误码信息,暂且为状态码
-                        self.statusText = "" + self.status;
+                        self.statusText = response.statusMessage || "";
                         if (self.status >= 200 && self.status < 300) {
                             self.response = self.responseText = response.responseText;
                             var contentType = self.getResponseHeader("content-type");
@@ -266,13 +272,11 @@ var AjaxEngine = function () {
                                 //log(self.response)
                             }
                             //回调onload
-                            self.onload && self.onload();
-                        } else {
-                            self._onerror();
+                            self._changeReadyState(4);
                         }
+                        self._call("onload");
                     }
-                    self._changeReadyState(4);
-                    self._end();
+                    self._call("onloadend");
                 });
             } else {
                 console.error("Ajax require adapter");
@@ -286,7 +290,8 @@ var AjaxEngine = function () {
     }, {
         key: 'getResponseHeader',
         value: function getResponseHeader(key) {
-            return this.responseHeaders[key].toString();
+
+            return this.responseHeaders[key.toLowerCase()].toString();
         }
     }, {
         key: 'getAllResponseHeaders',
@@ -301,15 +306,8 @@ var AjaxEngine = function () {
         key: 'abort',
         value: function abort(msg) {
             this._changeReadyState(0);
-            this._onerror(msg);
-            this._end();
-        }
-    }, {
-        key: '_onerror',
-        value: function _onerror() {
-            var msg = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "";
-
-            this.onerror && this.onerror({ msg: msg });
+            this._call("onerror", { msg: msg });
+            this._call("onloadend");
         }
     }], [{
         key: 'setAdapter',

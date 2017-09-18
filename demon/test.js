@@ -1,13 +1,16 @@
 /**
  * Created by du on 16/12/10.
  */
-var engine = require("../src/engine")
+var engineWrapper = require("../src/engine-wrapper")
 var adapter = require("../src/adapter/dsbridge")
 var  Fly=require("../src/fly")
-window.axio= new Fly(engine)
-var fly=new Fly
-engine.setAdapter(adapter)
+engineWrapper.setAdapter(adapter)
 
+//由nfly发起的网络请求将会全部通过dsbridge转发到端上
+window.nfly= new Fly(engineWrapper)
+
+//由fly发起的请求将会使用浏览器默认XMLHttpRequest
+window.fly=new Fly
 
 //定义公共headers
 fly.config.headers={xx:5,bb:6,dd:7}
