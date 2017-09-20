@@ -210,14 +210,14 @@ var Fly = function () {
                 url = utils.trim(options.url);
                 if (!url && isBrowser) url = location.href;
                 var baseUrl = utils.trim(options.baseURL || "");
-                if (baseUrl[baseUrl.length - 1] !== "/") {
-                    baseUrl += "/";
-                }
                 if (url.indexOf("http") !== 0) {
                     if (!baseUrl && isBrowser) {
                         var arr = location.pathname.split("/");
                         arr.pop();
                         baseUrl = location.protocol + "//" + location.host + arr.join("/");
+                    }
+                    if (baseUrl[baseUrl.length - 1] !== "/") {
+                        baseUrl += "/";
                     }
                     url = baseUrl + (url[0] === "/" ? url.substr(0) : url);
                     if (isBrowser) {
