@@ -73,11 +73,12 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 3);
+/******/ 	return __webpack_require__(__webpack_require__.s = 7);
 /******/ })
 /************************************************************************/
-/******/ ([
-/* 0 */
+/******/ ({
+
+/***/ 0:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -130,9 +131,8 @@ module.exports = {
 };
 
 /***/ }),
-/* 1 */,
-/* 2 */,
-/* 3 */
+
+/***/ 7:
 /***/ (function(module, exports, __webpack_require__) {
 
 function KEEP(_,cb){cb();}
@@ -146,12 +146,10 @@ var utils = __webpack_require__(0);
 var isBrowser = typeof document !== "undefined";
 
 var Fly = function () {
-    function Fly() {
-        var engine = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : XMLHttpRequest;
-
+    function Fly(engine) {
         _classCallCheck(this, Fly);
 
-        this.engine = engine;
+        this.engine = engine || XMLHttpRequest;
         this.interceptors = {
             response: {
                 use: function use(handler, onerror) {
@@ -175,17 +173,11 @@ var Fly = function () {
     }
 
     _createClass(Fly, [{
-        key: "ajax",
-        value: function ajax() {
-            var url = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "";
-
+        key: "request",
+        value: function request(url, data, options) {
             var _this = this;
 
-            var data = arguments[1];
-            var options = arguments[2];
-
             var xhr = new this.engine();
-
             var promise = new Promise(function (_resolve, _reject) {
                 options = options || {};
                 var defaultHeaders = {
@@ -207,7 +199,7 @@ var Fly = function () {
                         _resolve(d);
                     }
                 };
-                url = utils.trim(url);
+                url = utils.trim(url || "");
                 options.method = options.method.toUpperCase();
                 options.url = url;
                 if (rqi.handler) {
@@ -218,16 +210,16 @@ var Fly = function () {
                 url = utils.trim(options.url);
                 if (!url && isBrowser) url = location.href;
                 var baseUrl = utils.trim(options.baseURL || "");
+                if (baseUrl[baseUrl.length - 1] !== "/") {
+                    baseUrl += "/";
+                }
                 if (url.indexOf("http") !== 0) {
                     if (!baseUrl && isBrowser) {
                         var arr = location.pathname.split("/");
                         arr.pop();
                         baseUrl = location.protocol + "//" + location.host + arr.join("/");
                     }
-                    if (baseUrl[baseUrl - 1] !== "/") {
-                        baseUrl += '/';
-                    }
-                    url = baseUrl + (url[0] === "/" ? url.substr(1) : url);
+                    url = baseUrl + (url[0] === "/" ? url.substr(0) : url);
                     if (isBrowser) {
                         var t = document.createElement("a");
                         t.href = url;
@@ -270,10 +262,11 @@ var Fly = function () {
                 xhr.onload = function () {
                     if (xhr.status >= 200 && xhr.status < 300) {
                         var response = xhr.responseText;
-                        if (xhr.getResponseHeader("Content-Type").indexOf("json") !== -1) {
+                        if ((xhr.getResponseHeader("Content-Type") || "").indexOf("json") !== -1) {
                             response = JSON.parse(response);
                         }
                         var data = { data: response, xhr: xhr, request: options };
+                        utils.merge(data, xhr._response);
                         if (rpi.handler) {
                             data = rpi.handler(data, operate);
                         }
@@ -303,21 +296,21 @@ var Fly = function () {
                     if (abort) return;
                     _reject(err);
                 };
+                xhr._options = options;
                 xhr.send(isGet ? null : data);
             });
-
             promise.xhr = xhr;
             return promise;
         }
     }, {
         key: "get",
         value: function get(url, data) {
-            return this.ajax(url, data);
+            return this.request(url, data);
         }
     }, {
         key: "post",
         value: function post(url, data) {
-            return this.ajax(url, data, { method: "POST" });
+            return this.request(url, data, { method: "POST" });
         }
     }, {
         key: "all",
@@ -346,5 +339,6 @@ KEEP("!build", function () {
 });
 
 /***/ })
-/******/ ]);
+
+/******/ });
 });

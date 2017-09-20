@@ -33,7 +33,7 @@ https://unpkg.com/flyio/dist/fly.umd.min.js
 ## 使用
 
 ```javascript
-var fly=new Fly
+var fly=require("flyio")
 //定义公共headers
 fly.config.headers={xx:5,bb:6,dd:7}
 //设置超时
@@ -81,18 +81,18 @@ fly.ajax("../package.json",{hh:5},{
 
 ## Http engine
 
-Http engine就是真正发起http请求的引擎，这在浏览器中一般都是XMLHttpRequest。而在node环境中，开发者可以使用任何自己喜欢的网络库，fly 中提供了engine模块，开发者只需要实现一个adapter即可. 下面是一个在app内嵌网页中，通过fly engine将所有请求重定向到Native中的例子。
+Http engine就是真正发起http请求的引擎，这在浏览器中一般都是XMLHttpRequest。而在node环境中，开发者可以使用任何自己喜欢的网络库，fly 中提供了engine-wrapper模块，开发者只需要实现一个adapter即可. 下面是一个在app内嵌网页中，通过fly engine将所有请求重定向到Native中的例子。
 
 ```javascript
-var engine = require("../src/engine")
-var adapter = require("../src/adapter/dsbridge")
-var  Fly=require("../src/fly")
-var fly = new Fly(engine)
+var engineWrapper = require("flyio/dist/engine-wrapper")
+var adapter = require("flyio/dist/adapter/dsbridge")
+var  Fly=require("flyio/dist/fly")
+engineWrapper.setAdapter(adapter)
+module.exports=new Fly(engineWrapper)
 //使用dsbridge适配器，将会使fly实例发起的所有ajax请求通过dsbridge重定向到Native上
 engine.setAdapter(adapter) 
-
 //发起网络请求
-fly.get()....
+fly.get(url)...
 ```
 
 
@@ -112,6 +112,7 @@ function (request, responseCallBack)
   method:"",//请求方法， GET 、POST ...
   headers:{},//请求头
   url:"",//请求地址
+  timeout:"",//超时时间  
   data:""//请求数据，GET请求时为null
 }
 ```

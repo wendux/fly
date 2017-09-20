@@ -5,29 +5,31 @@
     <title>fly ajax-engine</title>
     <meta name="viewport" content="width=device-width,initial-scale=0.5,user-scalable=no"/>
     <script src="../dist/fly.min.js"></script>
-    <script src="../dist/engine.min.js"></script>
+    <script src="../dist/engine-wrapper.min.js"></script>
     <script src="https://cdn.bootcss.com/axios/0.16.2/axios.js"></script>
     <script>
         var log=console.log;
-        AjaxEngine.setAdapter(function (request,responseCallback) {
-            console.log(request)
+        var engine= EngineWrapper(function (request,responseCallback) {
             responseCallback({
-                statusCode:0,
-                errMsg:"exception"
+                statusCode:200,
+                responseText:"你变或者不变，我都不变😜。",
+                extraFeild:"自定义字段"
             })
         })
-        fly.engine=AjaxEngine;
-        XMLHttpRequest=AjaxEngine
+        fly.engine=engine;
 //
 //        fly.post("../package.json",{aa:8,bb:9,tt:{xx:5}}).then((d) => {
 //            console.log("get result:",d)
 //        }).catch((e) => console.log("error", e))
 
-//        var formData = new FormData();
-//        formData.append('username', 'Chris');
-//        axios.post("../package.json",formData).then(log).catch(log)
+//    var formData = new FormData();
+//    formData.append('username', 'Chris');
+//    axios.post("../package.json",formData).then(log).catch(log)
 //        fly.post("../package.json",formData).then(log).catch(log)
-        fly.post("../package.json")
+        fly.get("../package.json").then(d=>{
+            log(d.data)
+            log(d.extraFeild)
+        })
         axios.post("../package.json")
 
 

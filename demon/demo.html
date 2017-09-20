@@ -49,7 +49,7 @@ open console panel to view log.
         console.log("post result:",d)
     }).catch((e) => console.log("error", e))
 
-    fly.ajax("../package.json",{hh:5},{
+    fly.request("../package.json",{hh:5},{
         method:"post"
     }).then(d=>{
         console.log("ajax result:",d)

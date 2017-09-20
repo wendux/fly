@@ -22,7 +22,8 @@ if (env !== "dev") {
     plugins.push(new webpack.optimize.UglifyJsPlugin({
         compress: {
             warnings: true
-        }
+        },
+        sourceMap: true
     }))
     if(env==="umd") {
         output.libraryTarget = "umd"
@@ -39,6 +40,7 @@ if (env !== "dev") {
 var config= {
     entry: entry,
     output: output,
+    devtool: env !== "dev"? '#source-map': false,
     module: {
         rules: [
             {

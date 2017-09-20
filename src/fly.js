@@ -1,8 +1,8 @@
 var utils = require('./utils');
 var isBrowser=typeof document !== "undefined";
 class Fly {
-    constructor(engine = XMLHttpRequest) {
-        this.engine = engine;
+    constructor(engine) {
+        this.engine = engine||XMLHttpRequest;
         this.interceptors = {
             response: {
                 use(handler, onerror) {
@@ -25,9 +25,8 @@ class Fly {
         }
     }
 
-    ajax(url = "", data, options) {
+    request(url, data, options) {
         var xhr = new this.engine;
-
         var promise = new Promise((resolve, reject) => {
             options = options || {};
             var defaultHeaders = {
@@ -49,7 +48,7 @@ class Fly {
                     resolve(d)
                 }
             };
-            url = utils.trim(url);
+            url = utils.trim(url||"");
             options.method= options.method.toUpperCase();
             options.url = url;
             if (rqi.handler) {
@@ -60,16 +59,16 @@ class Fly {
             url = utils.trim(options.url);
             if (!url&&isBrowser) url = location.href;
             var baseUrl = utils.trim(options.baseURL||"");
+            if(baseUrl[baseUrl.length-1]!=="/"){
+                baseUrl+="/"
+            }
             if (url.indexOf("http") !== 0) {
                 if (!baseUrl&&isBrowser) {
                     var arr = location.pathname.split("/");
                     arr.pop();
                     baseUrl = location.protocol + "//" + location.host + arr.join("/")
                 }
-                if (baseUrl[baseUrl - 1] !== "/") {
-                    baseUrl += '/'
-                }
-                url = baseUrl + (url[0] === "/" ? url.substr(1) : url)
+                url = baseUrl + (url[0] === "/" ? url.substr(0) : url)
                 if (isBrowser) {
                     var t = document.createElement("a");
                     t.href = url;
@@ -112,10 +111,11 @@ class Fly {
             xhr.onload = () => {
                 if (xhr.status >= 200 && xhr.status < 300) {
                     var response = xhr.responseText;
-                    if(xhr.getResponseHeader("Content-Type").indexOf("json")!==-1){
+                    if((xhr.getResponseHeader("Content-Type")||"").indexOf("json")!==-1){
                         response=JSON.parse(response);
                     }
                     var data={data: response,xhr, request: options };
+                    utils.merge(data,xhr._response)
                     if (rpi.handler) {
                         data = rpi.handler(data, operate)
                     }
@@ -145,20 +145,20 @@ class Fly {
                 if (abort) return;
                 reject(err)
             }
+            xhr._options=options;
             xhr.send(isGet?null:data)
 
         })
-
         promise.xhr = xhr;
         return promise;
     }
 
     get(url, data) {
-        return this.ajax(url, data);
+        return this.request(url, data);
     }
 
     post(url, data) {
-        return this.ajax(url, data, {method: "POST"});
+        return this.request(url, data, {method: "POST"});
     }
     all(promises){
         return Promise.all(promises)
