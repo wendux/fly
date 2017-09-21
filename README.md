@@ -13,6 +13,10 @@ Fly.js 是一个基于 promise 的，轻量且强大的Javascript http 网络库
 9. 高度可定制。
 10. **非常非常轻量**。
 
+## 官网
+
+详细的文档请移步：[Flyio官网文档](https://wendux.github.io/dist/#/doc/flyio/readme) 。 官网http请求使用的正是fly，为了方便大家验证fly功能特性，官网对fly进行了全局引入，您可以在官网页面打开控制台直接验证。
+
 ## 安装
 
 ### 使用npm
@@ -254,7 +258,5 @@ Fly 非常轻量，min 只有 4.6K 左右，GZIP 压缩后不到 2K, 体积是 a
 ## Finally
 
 如果感觉 Fly 对您有用，欢迎 star 。
-
-
 
 
