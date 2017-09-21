@@ -68,7 +68,7 @@ class Fly {
                 if(baseUrl[baseUrl.length-1]!=="/"){
                     baseUrl+="/"
                 }
-                url = baseUrl + (url[0] === "/" ? url.substr(0) : url)
+                url = baseUrl + (url[0] === "/" ? url.substr(1) : url)
                 if (isBrowser) {
                     var t = document.createElement("a");
                     t.href = url;
