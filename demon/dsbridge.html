@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>fly ajax-engine</title>
+    <meta name="viewport" content="width=device-width,initial-scale=0.5,user-scalable=no"/>
+    <script src="../dist/fly.min.js"></script>
+    <script src="../dist/engine-wrapper.min.js"></script>
+    <script src="../dist/adapter/dsbridge.min.js"></script>
+    <script src="https://cdn.bootcss.com/axios/0.16.2/axios.js"></script>
+</head>
+<body>
+<img alt="加载中..." id="img" />
+xxxxx
+</body>
+<script>
+    var log = console.log;
+    var engine = EngineWrapper(dsbAdapter)
+    fly.engine = engine;
+//    fly.post("../packagex.json?tt=aa", {aa: 8, bb: "xxx"})
+//        .then(function (d) {
+//            alert(JSON.stringify(d.data))
+//        })
+//        .catch(function (err) {
+//            alert(err.message)
+//        })
+
+    //请求图片，native engine可以跨域
+    fly.request("https://assets-cdn.github.com/favicon.ico", null,{
+        method:"GET",
+        responseType:"stream"
+    }).then(function (d) {
+       document.getElementById("img").src=d.data;
+    }).catch(function (e) {
+        alert(e.message)
+    })
+</script>
+</html>

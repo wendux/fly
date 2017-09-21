@@ -73,16 +73,38 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 4);
+/******/ 	return __webpack_require__(__webpack_require__.s = 5);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 4:
-/***/ (function(module, exports) {
+/***/ 2:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/**
+ * Add base64 tag, like data:image/img;base64
+ * @param responseData
+ */
+module.exports = function handleImgBase64Data(responseData) {
+    var headers = responseData.headers || {};
+    var contentType = (headers["content-type"] || headers["Content-Type"] || "").toString().toLowerCase();
+    if (contentType.indexOf("image") !== -1 && responseData.responseText.indexOf("base64") === -1) {
+        responseData.responseText = "data:" + contentType + ";base64," + responseData.responseText;
+    }
+};
+
+/***/ }),
+
+/***/ 5:
+/***/ (function(module, exports, __webpack_require__) {
 
 function KEEP(_,cb){cb();}
 "use strict";
+
+var handleImgBase64Data = __webpack_require__(2);
 
 //确保dsBridge初始化
 window._dsbridge && _dsbridge.init();
@@ -90,7 +112,11 @@ var adapter;
 if (window.dsBridge) {
     adapter = function adapter(request, responseCallBack) {
         dsBridge.call("onAjaxRequest", request, function (responseData) {
-            responseCallBack(JSON.parse(responseData));
+            responseData = JSON.parse(responseData);
+            if (request.responseType === "stream") {
+                handleImgBase64Data(responseData);
+            }
+            responseCallBack(responseData);
         });
     };
 } else {

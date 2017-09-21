@@ -13,7 +13,7 @@ var  fly=require("../dist/fly")
 //     console.log("post result:",d)
 // }).catch((e) => console.log("error", e))
 //
-// fly.request("../package.json",{hh:5},{
+// fly.requ("../package.json",{hh:5},{
 //     method:"post"
 // }).then(d=>{
 //     console.log("ajax result:",d)

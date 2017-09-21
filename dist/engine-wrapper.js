@@ -73,7 +73,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 6);
+/******/ 	return __webpack_require__(__webpack_require__.s = 7);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -132,7 +132,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 6:
+/***/ 7:
 /***/ (function(module, exports, __webpack_require__) {
 
 function KEEP(_,cb){cb();}
@@ -202,7 +202,10 @@ function EngineWrapper(adapter) {
 
                 arg = arg || null;
                 if (isBrowser) {
-                    this.requestHeaders.cookie = document.cookie;
+                    var cookie = document.cookie;
+                    if (cookie) {
+                        this.requestHeaders.cookie = cookie;
+                    }
                 }
                 var self = this;
                 if (adapter) {
@@ -256,7 +259,7 @@ function EngineWrapper(adapter) {
                             var cookies = headers["set-cookie"];
                             if (isBrowser && cookies) {
                                 cookies.forEach(function (e) {
-                                    document.cookie = e.replace(/;\s*httpOnly/g, "");
+                                    document.cookie = e.replace(/;\s*httpOnly/ig, "");
                                 });
                             }
                             self.responseHeaders = headers;

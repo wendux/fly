@@ -47,7 +47,10 @@ function EngineWrapper(adapter) {
         send(arg) {
             arg = arg || null;
             if (isBrowser) {
-                this.requestHeaders.cookie = document.cookie;
+                var cookie=document.cookie
+                if(cookie) {
+                    this.requestHeaders.cookie = cookie;
+                }
             }
             var self = this;
             if (adapter) {
@@ -103,7 +106,7 @@ function EngineWrapper(adapter) {
                         var cookies = headers["set-cookie"];
                         if (isBrowser && cookies) {
                             cookies.forEach((e) => {
-                                document.cookie = e.replace(/;\s*httpOnly/g, "")
+                                document.cookie = e.replace(/;\s*httpOnly/ig, "")
                             })
                         }
                         self.responseHeaders = headers;
