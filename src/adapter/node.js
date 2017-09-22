@@ -30,7 +30,7 @@ module.exports = function (request, responseCallBack) {
 
     rq(request, function (error, response, body) {
         if (error) {
-            ret.errMsg = error.message
+            ret.statusMessage = error.message
         } else {
             ret.statusCode = response.statusCode
             ret.responseText = body;

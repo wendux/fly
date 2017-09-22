@@ -228,12 +228,14 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
                     //不覆盖已存在的属性
                     merge: function merge(a, b) {
                         for (var key in b) {
-                            if (!a[key]) {
+                            //ES5 should use hasOwnProperty()
+                            if (a[key] === undefined) {
                                 a[key] = b[key];
                             } else if (this.isObject(b[key], 1) && this.isObject(a[key], 1)) {
                                 this.merge(a[key], b[key]);
                             }
                         }
+                        return a;
                     }
                 };
 
@@ -324,6 +326,12 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
                                 url = utils.trim(url || "");
                                 options.method = options.method.toUpperCase();
                                 options.url = url;
+
+                                var responseType = utils.trim(options.responseType || "");
+                                if (responseType !== "stream") {
+                                    xhr.responseType = responseType;
+                                }
+
                                 if (rqi.handler) {
                                     options = rqi.handler(options, operate);
                                     if (!options) return;
@@ -333,15 +341,16 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
                                 if (!url && isBrowser) url = location.href;
                                 var baseUrl = utils.trim(options.baseURL || "");
                                 if (url.indexOf("http") !== 0) {
+                                    var isAbsolute = url[0] === "/";
                                     if (!baseUrl && isBrowser) {
                                         var arr = location.pathname.split("/");
                                         arr.pop();
-                                        baseUrl = location.protocol + "//" + location.host + arr.join("/");
+                                        baseUrl = location.protocol + "//" + location.host + (isAbsolute ? "" : arr.join("/"));
                                     }
                                     if (baseUrl[baseUrl.length - 1] !== "/") {
                                         baseUrl += "/";
                                     }
-                                    url = baseUrl + (url[0] === "/" ? url.substr(1) : url);
+                                    url = baseUrl + (isAbsolute ? url.substr(1) : url);
                                     if (isBrowser) {
                                         var t = document.createElement("a");
                                         t.href = url;
@@ -360,6 +369,7 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
                                 } else {
                                     xhr.open("POST", url);
                                 }
+
                                 if (["object", "array"].indexOf(utils.type(options.data)) !== -1) {
                                     options.headers["Content-type"] = 'application/json;charset=utf-8';
                                     data = JSON.stringify(options.data);
@@ -370,7 +380,10 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
                                     if (k.toLowerCase() === "content-type" && (utils.isFormData(options.data) || !options.data || isGet)) {
                                         delete options.headers[k]; // Let the browser set it
                                     } else {
-                                        xhr.setRequestHeader(k, options.headers[k]);
+                                        try {
+                                            //浏览器环境下，有些头字段是只读的，如cookie, 写会抛异常
+                                            xhr.setRequestHeader(k, options.headers[k]);
+                                        } catch (e) {}
                                     }
                                 }
 
@@ -383,7 +396,7 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
 
                                 xhr.onload = function () {
                                     if (xhr.status >= 200 && xhr.status < 300) {
-                                        var response = xhr.responseText;
+                                        var response = xhr.response;
                                         if ((xhr.getResponseHeader("Content-Type") || "").indexOf("json") !== -1) {
                                             response = JSON.parse(response);
                                         }
@@ -426,13 +439,13 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
                         }
                     }, {
                         key: "get",
-                        value: function get(url, data) {
-                            return this.request(url, data);
+                        value: function get(url, data, options) {
+                            return this.request(url, data, options);
                         }
                     }, {
                         key: "post",
-                        value: function post(url, data) {
-                            return this.request(url, data, { method: "POST" });
+                        value: function post(url, data, options) {
+                            return this.request(url, data, utils.merge({ method: "POST" }, options));
                         }
                     }, {
                         key: "all",

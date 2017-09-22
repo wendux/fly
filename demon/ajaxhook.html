@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>fly ajax-engine</title>
+    <meta name="viewport" content="width=device-width,initial-scale=0.5,user-scalable=no"/>
+    <script src="../dist/fly.min.js"></script>
+    <script src="../dist/engine-wrapper.min.js"></script>
+    <script src="https://cdn.bootcss.com/axios/0.16.2/axios.js"></script>
+    <script>
+        //        var log=console.log;
+        //        var realXMLHttpRequest=XMLHttpRequest;
+        //        var engine= EngineWrapper(function (request,responseCallback) {
+        //            console.log(request.url,request.method)
+        //            var xhr=new realXMLHttpRequest()
+        //            xhr.open(request.method,request.url);
+        //            xhr.send(request.data);
+        //            var callback=function () {
+        //                responseCallback({
+        //                    statusCode:xhr.status,
+        //                    responseText:xhr.responseText,
+        //                    statusMessage:xhr.statusText
+        //                })
+        //            }
+        //            xhr.onload=callback;
+        //            xhr.onerror=callback;
+        //        })
+        //        XMLHttpRequest=engine;
+
+
+var log = console.log;
+//fly.engine = XMLHttpRequest;
+var engine = EngineWrapper(function (request, responseCallback) {
+    console.log(request.url, request.method)
+    delete request.headers.cookie
+    fly.request(request.url, request.data, request)
+        .then(function (d) {
+            responseCallback({
+                statusCode: d.xhr.status,
+                responseText: d.xhr.responseText,
+                statusMessage: d.xhr.statusText
+            })
+        })
+        .catch(function (err) {
+            responseCallback({
+                statusCode:err.status,
+                statusMessage:err.message
+            })
+        })
+})
+XMLHttpRequest = engine;
+axios.post("../package.json").then(log)
+
+
+    </script>
+</head>
+<body>
+
+</body>
+</html>

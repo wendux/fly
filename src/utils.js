@@ -41,12 +41,13 @@ module.exports = {
     merge(a, b) {
         for (var key in b) {
             //ES5 should use hasOwnProperty()
-            if (a[key]!==undefined) {
+            if (a[key]===undefined) {
                 a[key] = b[key]
             } else if (this.isObject(b[key],1) && this.isObject(a[key],1)) {
                 this.merge(a[key], b[key])
             }
         }
+        return a;
     }
 
 }

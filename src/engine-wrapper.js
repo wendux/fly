@@ -86,7 +86,7 @@ function EngineWrapper(adapter) {
                     //网络错误,端上返回0时代表错误
                     if (self.status === 0) {
                         self.statusText = response.responseText;
-                        self._call("onerror", {msg: response.errMsg});
+                        self._call("onerror", {msg: response.statusMessage});
 
                     } else {
                         var headers = {};

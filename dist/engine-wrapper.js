@@ -122,12 +122,13 @@ module.exports = {
     merge: function merge(a, b) {
         for (var key in b) {
             //ES5 should use hasOwnProperty()
-            if (a[key] !== undefined) {
+            if (a[key] === undefined) {
                 a[key] = b[key];
             } else if (this.isObject(b[key], 1) && this.isObject(a[key], 1)) {
                 this.merge(a[key], b[key]);
             }
         }
+        return a;
     }
 };
 
@@ -241,7 +242,7 @@ function EngineWrapper(adapter) {
                         //网络错误,端上返回0时代表错误
                         if (self.status === 0) {
                             self.statusText = response.responseText;
-                            self._call("onerror", { msg: response.errMsg });
+                            self._call("onerror", { msg: response.statusMessage });
                         } else {
                             var headers = {};
                             for (var field in response.headers) {

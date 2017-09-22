@@ -53,7 +53,7 @@ class Fly {
             options.url = url;
 
             var responseType=utils.trim(options.responseType||"")
-            if(responseType==="stream"){
+            if(responseType!=="stream"){
                 xhr.responseType=responseType
             }
 
@@ -66,15 +66,16 @@ class Fly {
             if (!url&&isBrowser) url = location.href;
             var baseUrl = utils.trim(options.baseURL||"");
             if (url.indexOf("http") !== 0) {
+                var isAbsolute=url[0] === "/";
                 if (!baseUrl&&isBrowser) {
                     var arr = location.pathname.split("/");
                     arr.pop();
-                    baseUrl = location.protocol + "//" + location.host + arr.join("/")
+                    baseUrl = location.protocol + "//" + location.host + (isAbsolute ? "": arr.join("/"))
                 }
                 if(baseUrl[baseUrl.length-1]!=="/"){
                     baseUrl+="/"
                 }
-                url = baseUrl + (url[0] === "/" ? url.substr(1) : url)
+                url = baseUrl + (isAbsolute ? url.substr(1) : url)
                 if (isBrowser) {
                     var t = document.createElement("a");
                     t.href = url;
@@ -99,15 +100,16 @@ class Fly {
                 data = JSON.stringify(options.data);
             }
 
-            //var isStream=["arraybuffer","blob"].indexOf(utils.type(options.data))!==-1
-
             for (var k in options.headers) {
                 //删除content-type
                 if (k.toLowerCase() === "content-type" &&
                     (utils.isFormData(options.data) || !options.data||isGet)) {
                     delete options.headers[k]; // Let the browser set it
                 } else {
-                    xhr.setRequestHeader(k, options.headers[k])
+                    try {
+                        //浏览器环境下，有些头字段是只读的，如cookie, 写会抛异常
+                        xhr.setRequestHeader(k, options.headers[k])
+                    }catch (e){}
                 }
             }
 
@@ -120,7 +122,7 @@ class Fly {
 
             xhr.onload = () => {
                 if (xhr.status >= 200 && xhr.status < 300) {
-                    var response = xhr.responseText;
+                    var response = xhr.response;
                     if((xhr.getResponseHeader("Content-Type")||"").indexOf("json")!==-1){
                         response=JSON.parse(response);
                     }
@@ -163,12 +165,12 @@ class Fly {
         return promise;
     }
 
-    get(url, data) {
-        return this.request(url, data);
+    get(url, data, options) {
+        return this.request(url, data, options);
     }
 
-    post(url, data) {
-        return this.request(url, data, {method: "POST"});
+    post(url, data, options) {
+        return this.request(url, data,utils.merge({method: "POST"},options) );
     }
     all(promises){
         return Promise.all(promises)

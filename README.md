@@ -126,6 +126,8 @@ fly.request("/test",{hh:5},{
 
 注：Fly目前只在支持FormData的浏览器环境中支持FormData，node环境下对formData的支持方式稍有不同，详情戳这里 [Node 下增强的API ](#/doc/flyio/node)。
 
+
+
 ## 拦截器
 
 Fly支持请求／响应拦截器，可以通过它在请求发起之前和收到响应数据之后做一些预处理。

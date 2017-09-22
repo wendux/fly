@@ -122,12 +122,13 @@ module.exports = {
     merge: function merge(a, b) {
         for (var key in b) {
             //ES5 should use hasOwnProperty()
-            if (a[key] !== undefined) {
+            if (a[key] === undefined) {
                 a[key] = b[key];
             } else if (this.isObject(b[key], 1) && this.isObject(a[key], 1)) {
                 this.merge(a[key], b[key]);
             }
         }
+        return a;
     }
 };
 
@@ -205,7 +206,7 @@ var Fly = function () {
                 options.url = url;
 
                 var responseType = utils.trim(options.responseType || "");
-                if (responseType === "stream") {
+                if (responseType !== "stream") {
                     xhr.responseType = responseType;
                 }
 
@@ -218,15 +219,16 @@ var Fly = function () {
                 if (!url && isBrowser) url = location.href;
                 var baseUrl = utils.trim(options.baseURL || "");
                 if (url.indexOf("http") !== 0) {
+                    var isAbsolute = url[0] === "/";
                     if (!baseUrl && isBrowser) {
                         var arr = location.pathname.split("/");
                         arr.pop();
-                        baseUrl = location.protocol + "//" + location.host + arr.join("/");
+                        baseUrl = location.protocol + "//" + location.host + (isAbsolute ? "" : arr.join("/"));
                     }
                     if (baseUrl[baseUrl.length - 1] !== "/") {
                         baseUrl += "/";
                     }
-                    url = baseUrl + (url[0] === "/" ? url.substr(1) : url);
+                    url = baseUrl + (isAbsolute ? url.substr(1) : url);
                     if (isBrowser) {
                         var t = document.createElement("a");
                         t.href = url;
@@ -251,14 +253,15 @@ var Fly = function () {
                     data = JSON.stringify(options.data);
                 }
 
-                //var isStream=["arraybuffer","blob"].indexOf(utils.type(options.data))!==-1
-
                 for (var k in options.headers) {
                     //删除content-type
                     if (k.toLowerCase() === "content-type" && (utils.isFormData(options.data) || !options.data || isGet)) {
                         delete options.headers[k]; // Let the browser set it
                     } else {
-                        xhr.setRequestHeader(k, options.headers[k]);
+                        try {
+                            //浏览器环境下，有些头字段是只读的，如cookie, 写会抛异常
+                            xhr.setRequestHeader(k, options.headers[k]);
+                        } catch (e) {}
                     }
                 }
 
@@ -271,7 +274,7 @@ var Fly = function () {
 
                 xhr.onload = function () {
                     if (xhr.status >= 200 && xhr.status < 300) {
-                        var response = xhr.responseText;
+                        var response = xhr.response;
                         if ((xhr.getResponseHeader("Content-Type") || "").indexOf("json") !== -1) {
                             response = JSON.parse(response);
                         }
@@ -314,13 +317,13 @@ var Fly = function () {
         }
     }, {
         key: "get",
-        value: function get(url, data) {
-            return this.request(url, data);
+        value: function get(url, data, options) {
+            return this.request(url, data, options);
         }
     }, {
         key: "post",
-        value: function post(url, data) {
-            return this.request(url, data, { method: "POST" });
+        value: function post(url, data, options) {
+            return this.request(url, data, utils.merge({ method: "POST" }, options));
         }
     }, {
         key: "all",
