@@ -5,7 +5,6 @@ var request = require("request");
 var rq = request.defaults({jar: true})
 
 module.exports = function (request, responseCallBack) {
-    console.log(request);
     var headers = request.headers;
     if (!headers['User-Agent'] && !headers['user-agent']) {
         headers['User-Agent'] = 'fly/' + pkg.version;

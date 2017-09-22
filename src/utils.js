@@ -40,7 +40,8 @@ module.exports = {
    //不覆盖已存在的属性
     merge(a, b) {
         for (var key in b) {
-            if (!a[key]) {
+            //ES5 should use hasOwnProperty()
+            if (a[key]!==undefined) {
                 a[key] = b[key]
             } else if (this.isObject(b[key],1) && this.isObject(a[key],1)) {
                 this.merge(a[key], b[key])

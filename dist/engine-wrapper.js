@@ -121,7 +121,8 @@ module.exports = {
     //不覆盖已存在的属性
     merge: function merge(a, b) {
         for (var key in b) {
-            if (!a[key]) {
+            //ES5 should use hasOwnProperty()
+            if (a[key] !== undefined) {
                 a[key] = b[key];
             } else if (this.isObject(b[key], 1) && this.isObject(a[key], 1)) {
                 this.merge(a[key], b[key]);
@@ -149,7 +150,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  * email: 824783146@qq.com
  **/
 var util = __webpack_require__(0);
-var log = console.log;
 var isBrowser = typeof document !== "undefined";
 
 function EngineWrapper(adapter) {

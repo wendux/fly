@@ -121,7 +121,8 @@ module.exports = {
     //不覆盖已存在的属性
     merge: function merge(a, b) {
         for (var key in b) {
-            if (!a[key]) {
+            //ES5 should use hasOwnProperty()
+            if (a[key] !== undefined) {
                 a[key] = b[key];
             } else if (this.isObject(b[key], 1) && this.isObject(a[key], 1)) {
                 this.merge(a[key], b[key]);
@@ -202,6 +203,12 @@ var Fly = function () {
                 url = utils.trim(url || "");
                 options.method = options.method.toUpperCase();
                 options.url = url;
+
+                var responseType = utils.trim(options.responseType || "");
+                if (responseType === "stream") {
+                    xhr.responseType = responseType;
+                }
+
                 if (rqi.handler) {
                     options = rqi.handler(options, operate);
                     if (!options) return;
@@ -238,10 +245,13 @@ var Fly = function () {
                 } else {
                     xhr.open("POST", url);
                 }
+
                 if (["object", "array"].indexOf(utils.type(options.data)) !== -1) {
                     options.headers["Content-type"] = 'application/json;charset=utf-8';
                     data = JSON.stringify(options.data);
                 }
+
+                //var isStream=["arraybuffer","blob"].indexOf(utils.type(options.data))!==-1
 
                 for (var k in options.headers) {
                     //删除content-type

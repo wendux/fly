@@ -51,6 +51,12 @@ class Fly {
             url = utils.trim(url||"");
             options.method= options.method.toUpperCase();
             options.url = url;
+
+            var responseType=utils.trim(options.responseType||"")
+            if(responseType==="stream"){
+                xhr.responseType=responseType
+            }
+
             if (rqi.handler) {
                 options = rqi.handler(options, operate);
                 if (!options) return;
@@ -87,14 +93,18 @@ class Fly {
             } else {
                 xhr.open("POST", url);
             }
+
             if (["object","array"].indexOf(utils.type(options.data))!==-1) {
                 options.headers["Content-type"] = 'application/json;charset=utf-8'
                 data = JSON.stringify(options.data);
             }
 
+            //var isStream=["arraybuffer","blob"].indexOf(utils.type(options.data))!==-1
+
             for (var k in options.headers) {
                 //删除content-type
-                if (k.toLowerCase() === "content-type" && (utils.isFormData(options.data) || !options.data||isGet)) {
+                if (k.toLowerCase() === "content-type" &&
+                    (utils.isFormData(options.data) || !options.data||isGet)) {
                     delete options.headers[k]; // Let the browser set it
                 } else {
                     xhr.setRequestHeader(k, options.headers[k])
@@ -114,7 +124,7 @@ class Fly {
                     if((xhr.getResponseHeader("Content-Type")||"").indexOf("json")!==-1){
                         response=JSON.parse(response);
                     }
-                    var data={data: response,xhr, request: options };
+                    var data={data: response, xhr, request: options };
                     utils.merge(data,xhr._response)
                     if (rpi.handler) {
                         data = rpi.handler(data, operate)

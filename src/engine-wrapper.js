@@ -3,7 +3,6 @@
  * email: 824783146@qq.com
  **/
 var util = require('./utils')
-var log = console.log;
 var isBrowser = typeof document !== "undefined";
 
 function EngineWrapper(adapter) {
