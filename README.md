@@ -123,7 +123,7 @@ fly.request("/test",{hh:5},{
  fly.post("../package.json",formData).then(log).catch(log)
 ```
 
-注：Fly目前只在支持 `FormData` 的浏览器环境中支持 `FormData`，node环境下对  `formData` 的支持方式稍有不同，详情戳这里 [Node 下增强的API ](#/doc/flyio/node)。
+注：Fly目前只在支持 `FormData` 的浏览器环境中支持 `FormData`，node环境下对  `FormData` 的支持方式稍有不同，详情戳这里 [Node 下增强的API ](https://wendux.github.io/dist/#/doc/flyio/node)
 
 ### 请求二进制数据
 
