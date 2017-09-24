@@ -1,6 +1,6 @@
 
 ![fly.js](https://github.com/wendux/fly/raw/master/fly.png)
-[![npm version](https://img.shields.io/npm/v/flyio.svg?style=flat-square)](https://www.npmjs.org/package/flyio)
+[![npm version](https://img.shields.io/npm/v/flyio.svg)](https://www.npmjs.org/package/flyio)
 [![build status](https://travis-ci.org/wendux/fly.svg?branch=master)](https://travis-ci.org/wendux/fly)
 # 简介
 
