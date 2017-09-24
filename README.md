@@ -1,6 +1,7 @@
 
-![fly.js](https://github.com/wendux/fly/raw/master/1.png)
-
+![fly.js](https://github.com/wendux/fly/raw/master/fly.png)
+[![npm version](https://img.shields.io/npm/v/flyio.svg?style=flat-square)](https://www.npmjs.org/package/flyio)
+[![build status](https://travis-ci.org/wendux/fly.svg?branch=master)](https://travis-ci.org/wendux/fly)
 # 简介
 
 Fly.js 是一个基于 promise 的，轻量且强大的Javascript http 网络库，它有如下特点：

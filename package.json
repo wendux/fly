@@ -22,7 +22,8 @@
   "scripts": {
     "dev": "node build.js",
     "build": "node build.js && node build.js build && node build.js umd",
-    "nodeTest": "node ./demon/nodeTest.js"
+    "nodeTest": "node ./demon/nodeTest.js",
+    "test":"npm run build"
   },
   "devDependencies": {
     "babel-core": "^6.0.0",

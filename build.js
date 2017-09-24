@@ -20,9 +20,9 @@ var plugins=[];
 if (env !== "dev") {
     output.filename = "[name].min.js"
     plugins.push(new webpack.optimize.UglifyJsPlugin({
-        compress: {
-            warnings: true
-        },
+        // compress: {
+        //     warnings: true
+        // },
         sourceMap: true
     }))
     if(env==="umd") {
