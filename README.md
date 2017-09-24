@@ -1,4 +1,7 @@
-# Fly.js
+
+![fly.js](https://github.com/wendux/fly/raw/master/1.png)
+
+# 简介
 
 Fly.js 是一个基于 promise 的，轻量且强大的Javascript http 网络库，它有如下特点：
 
