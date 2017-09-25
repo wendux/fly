@@ -326,12 +326,6 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
                                 url = utils.trim(url || "");
                                 options.method = options.method.toUpperCase();
                                 options.url = url;
-
-                                var responseType = utils.trim(options.responseType || "");
-                                if (responseType !== "stream") {
-                                    xhr.responseType = responseType;
-                                }
-
                                 if (rqi.handler) {
                                     options = rqi.handler(options, operate);
                                     if (!options) return;
@@ -357,9 +351,16 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
                                         url = t.href;
                                     }
                                 }
-                                xhr.timeout = options.timeout || 0;
+                                var responseType = utils.trim(options.responseType || "");
+                                try {
+                                    xhr.timeout = options.timeout || 0;
+                                    if (responseType !== "stream") {
+                                        xhr.responseType = responseType;
+                                    }
+                                } catch (e) {}
                                 xhr.withCredentials = !!options.withCredentials;
                                 var isGet = options.method === "GET";
+
                                 if (isGet) {
                                     if (options.data) {
                                         data = utils.formatParams(options.data);
@@ -395,22 +396,23 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
                                 };
 
                                 xhr.onload = function () {
+
                                     if (xhr.status >= 200 && xhr.status < 300) {
-                                        var response = xhr.response;
+                                        var response = xhr.response || xhr.responseText;
                                         if ((xhr.getResponseHeader("Content-Type") || "").indexOf("json") !== -1) {
                                             response = JSON.parse(response);
                                         }
                                         var data = { data: response, xhr: xhr, request: options };
                                         utils.merge(data, xhr._response);
                                         if (rpi.handler) {
-                                            data = rpi.handler(data, operate);
+                                            data = rpi.handler(data, operate) || data;
                                         }
                                         if (abort) return;
                                         _resolve(data);
                                     } else {
                                         var err = new Error(xhr.statusText);
                                         err.status = xhr.status;
-                                        err = onerror(err);
+                                        err = onerror(err) || err;
                                         if (abort) return;
                                         _reject(err);
                                     }
