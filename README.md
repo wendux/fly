@@ -289,6 +289,9 @@ fly.request("/user/register", {name:"doris"}, {method:"PUT"})
 
 request 适合在 [RESTful API](http://en.wikipedia.org/wiki/Representational_state_transfer) 的场景下使用。
 
+### `fly.all([])`
+
+发起多个并发请求，参数是一个promise 数组；当所有请求都成功后才会调用`then`，只要有一个失败，就会调 `catch`。
 
 
 ## 创建Fly实例
@@ -297,7 +300,7 @@ request 适合在 [RESTful API](http://en.wikipedia.org/wiki/Representational_st
 
 ```javascript
 //npm、node环境下
-var  Fly=require("fio/dist/fly") //注意！此时引入的是 "fio/dist/fly"
+var  Fly=require("flyio/dist/fly") //注意！此时引入的是 "flyio/dist/fly"
 var nFly=new Fly();
 
 //CDN引入时直接new
