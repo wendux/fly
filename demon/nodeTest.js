@@ -10,7 +10,6 @@ fly.config.timeout = 5000;
 //设置基地址
 fly.config.baseURL = "http://localhost:63341/Fly"
 
-
 //get请求
 // fly.get("package.json",{wd:"xxx"}).then(d=>{
 //     console.log("get请求成功",d.data)
