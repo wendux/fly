@@ -15,14 +15,14 @@
 
 Fly.js 是一个基于 promise 的，轻量且强大的Javascript http 网络库，它有如下特点：
 
-1. 支持 Promise API。
+1. 提供统一的 Promise API。
 2. 支持浏览器环境，**轻量且非常轻量** 。
-3. 支持 Node，node下支持文件下载／上传、http代理等增强功能。
+3. 支持 Node 环境。
 4. 支持请求／响应拦截器。
 5. 自动转换 JSON 数据。
-6. **支持切换底层 http engine**。
+6. **支持切换底层 Http Engine，可轻松适配各种运行环境**。
 7. **浏览器端支持全局Ajax拦截 。**
-8. **H5页面内嵌到原生 APP 中，支持将 http 请求转发到 Native，支持直接请求图片**。
+8. **H5页面内嵌到原生 APP 中时，支持将 http 请求转发到 Native。支持直接请求图片**。
 9. **高度可定制、可拆卸、可拼装。**
 
 ## 官网
@@ -136,7 +136,7 @@ fly.request("/test",{hh:5},{
  fly.post("../package.json",formData).then(log).catch(log)
 ```
 
-注：Fly目前只在支持 `FormData` 的浏览器环境中支持 `FormData`，node环境下对  `FormData` 的支持方式稍有不同，详情戳这里 [Node 下增强的API ](https://wendux.github.io/dist/#/doc/flyio/node)
+注：Fly目前只在支持 `FormData` 的浏览器环境中支持 `FormData`，Node环境下对  `FormData` 的支持方式稍有不同，详情戳这里 [Node 下增强的API ](https://wendux.github.io/dist/#/doc/flyio/node)
 
 ### 请求二进制数据
 
@@ -185,6 +185,9 @@ fly.interceptors.request.use(null)
 fly.interceptors.response.use(null,null)
 ```
 
+## Node
+
+无论是在浏览器环境，还是在 Node 环境，Fly在上层提供了统一的 Promise API。这意味着无论您是 web 开发还是 node 开发，您都可以以相同的调用方式来发起http请求。不过，由于node和浏览器环境本身的差异，在Node环境下，Fly除了支持基本的API之外，还提供了一些增强的API，这些 API 主要涉及文件下载、多文件上传、http代理等众多强大的功能，详情请参考 [Node下增强的API](https://wendux.github.io/dist/#/doc/flyio/node)
 
 
 ## 错误处理
@@ -315,7 +318,7 @@ Fly 引入了Http engine 的概念，所谓 Http engine，就是真正发起http
 
 ## 体积
 
-Fly 非常轻量，min 只有 4.6K 左右，GZIP 压缩后不到 2K, 体积是 axios 的四分之一。
+在浏览器环境下，一个库的大小是非常重要的。这方面 Fly 做的很好，它在保持强大的功能的同时，将自己的身材控制到了最好。min 只有 4.6K 左右，GZIP 压缩后不到 2K，体积是 axios 的四分之一。
 
 ## Finally
 

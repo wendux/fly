@@ -352,6 +352,7 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
                                     }
                                 }
                                 var responseType = utils.trim(options.responseType || "");
+                                //try catch for ie >=9
                                 try {
                                     xhr.timeout = options.timeout || 0;
                                     if (responseType !== "stream") {
@@ -396,8 +397,8 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
                                 };
 
                                 xhr.onload = function () {
-
                                     if (xhr.status >= 200 && xhr.status < 300) {
+                                        //ie9 has not xhr.response
                                         var response = xhr.response || xhr.responseText;
                                         if ((xhr.getResponseHeader("Content-Type") || "").indexOf("json") !== -1) {
                                             response = JSON.parse(response);
