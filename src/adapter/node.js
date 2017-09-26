@@ -9,20 +9,15 @@ module.exports = function (request, responseCallBack) {
     if (!headers['User-Agent'] && !headers['user-agent']) {
         headers['User-Agent'] = 'fly/' + pkg.version;
     }
-    request.body = request.data;
-
     //支持gzip
     request.gzip = true;
     if (request.hasOwnProperty("timeout") && request.timeout < 1) {
         //use request lib default timeout
         delete request.timeout;
     }
-    delete request.data;
-
     var ret = {
         statusCode: 0
     }
-
     if (request.responseType === "stream") {
         delete request.responseType;
         request.encoding=null;

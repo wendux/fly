@@ -190,7 +190,7 @@ var Fly = function () {
                 utils.merge(options, _this.config);
                 var rqi = _this.interceptors.request;
                 var rpi = _this.interceptors.response;
-                options.data = data;
+                options.body = data;
                 var abort = false;
                 var operate = {
                     reject: function reject(e) {
@@ -241,8 +241,8 @@ var Fly = function () {
                 var isGet = options.method === "GET";
 
                 if (isGet) {
-                    if (options.data) {
-                        data = utils.formatParams(options.data);
+                    if (options.body) {
+                        data = utils.formatParams(options.body);
                         url += (url.indexOf("?") === -1 ? "?" : "&") + data;
                     }
                     xhr.open("GET", url);
@@ -250,14 +250,14 @@ var Fly = function () {
                     xhr.open("POST", url);
                 }
 
-                if (["object", "array"].indexOf(utils.type(options.data)) !== -1) {
+                if (["object", "array"].indexOf(utils.type(options.body)) !== -1) {
                     options.headers["Content-type"] = 'application/json;charset=utf-8';
-                    data = JSON.stringify(options.data);
+                    data = JSON.stringify(options.body);
                 }
 
                 for (var k in options.headers) {
                     //删除content-type
-                    if (k.toLowerCase() === "content-type" && (utils.isFormData(options.data) || !options.data || isGet)) {
+                    if (k.toLowerCase() === "content-type" && (utils.isFormData(options.body) || !options.body || isGet)) {
                         delete options.headers[k]; // Let the browser set it
                     } else {
                         try {

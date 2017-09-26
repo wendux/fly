@@ -57,11 +57,11 @@ function EngineWrapper(adapter) {
                     method: self.method,
                     url: self.responseURL,
                     headers: self.requestHeaders || {},
-                    data: arg
+                    body: arg
                 }
                 util.merge(request, self._options || {})
                 if (request.method === "GET") {
-                    request.data = null;
+                    request.body = null;
                 }
                 self._changeReadyState(3)
                 var timer;
