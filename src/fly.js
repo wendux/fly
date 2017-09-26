@@ -38,7 +38,7 @@ class Fly {
             utils.merge(options, this.config)
             var rqi = this.interceptors.request;
             var rpi = this.interceptors.response;
-            options.body = data;
+            options.body = data||options.body;
             var abort = false;
             var operate = {
                 reject: (e) => {
@@ -182,7 +182,7 @@ class Fly {
     }
 
     spread(callback) {
-        return function wrap(arr) {
+        return function(arr) {
             return callback.apply(null, arr);
         }
     }
