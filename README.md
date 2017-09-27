@@ -25,9 +25,19 @@ Fly.js 是一个基于 promise 的，轻量且强大的Javascript http 网络库
 8. **H5页面内嵌到原生 APP 中时，支持将 http 请求转发到 Native。支持直接请求图片**。
 9. **高度可定制、可拆卸、可拼装。**
 
+
+
+## 定位与目标
+
+Fly 的定位是成为 Javascript http请求的终极解决方案。也就是说，在任何能够执行 Javascript 的环境，只要具有访问网络的能力，Fly都能运行在其上，提供统一的API。
+
+
+
 ## 官网
 
 详细的文档请移步：[Flyio官网文档](https://wendux.github.io/dist/#/doc/flyio/readme) 。 官网http请求使用的正是fly，为了方便大家验证fly功能特性，官网对fly进行了全局引入，您可以在官网页面打开控制台直接验证。
+
+
 
 ## 安装
 

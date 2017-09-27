@@ -312,7 +312,7 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
                                 utils.merge(options, _this.config);
                                 var rqi = _this.interceptors.request;
                                 var rpi = _this.interceptors.response;
-                                options.body = data;
+                                options.body = data || options.body;
                                 var abort = false;
                                 var operate = {
                                     reject: function reject(e) {
@@ -458,7 +458,7 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
                     }, {
                         key: "spread",
                         value: function spread(callback) {
-                            return function wrap(arr) {
+                            return function (arr) {
                                 return callback.apply(null, arr);
                             };
                         }
