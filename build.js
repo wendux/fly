@@ -8,8 +8,10 @@ var env=process.argv[2]||"dev"
 var entry={
     "engine-wrapper": "./src/engine-wrapper.js",
     "fly": "./src/fly.js",
+    "wx":"./src/wx.js",
     "adapter/dsbridge":"./src/adapter/dsbridge.js",
     "adapter/webviewjsbridge":"./src/adapter/webviewjsbridge.js",
+    "adapter/wx":"./src/adapter/wx.js",
 }
 var output = {
     path: path.resolve("./dist"),

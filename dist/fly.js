@@ -73,68 +73,12 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 8);
+/******/ 	return __webpack_require__(__webpack_require__.s = 11);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 0:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-module.exports = {
-    type: function type(ob) {
-        return Object.prototype.toString.call(ob).slice(8, -1).toLowerCase();
-    },
-    isObject: function isObject(ob, real) {
-        if (real) {
-            return this.type(ob) === "object";
-        } else {
-            return ob && (typeof ob === 'undefined' ? 'undefined' : _typeof(ob)) === 'object';
-        }
-    },
-    isFormData: function isFormData(val) {
-        return typeof FormData !== 'undefined' && val instanceof FormData;
-    },
-    trim: function trim(str) {
-        return str.replace(/(^\s*)|(\s*$)/g, '');
-    },
-    encode: function encode(val) {
-        return encodeURIComponent(val).replace(/%40/gi, '@').replace(/%3A/gi, ':').replace(/%24/g, '$').replace(/%2C/gi, ',').replace(/%20/g, '+').replace(/%5B/gi, '[').replace(/%5D/gi, ']');
-    },
-    formatParams: function formatParams(data) {
-        var arr = [];
-        for (var name in data) {
-            var value = data[name];
-            if (this.isObject(value)) {
-                value = JSON.stringify(value);
-            }
-            arr.push(this.encode(name) + "=" + this.encode(value));
-        }
-        return arr.join("&");
-    },
-
-    //不覆盖已存在的属性
-    merge: function merge(a, b) {
-        for (var key in b) {
-            //ES5 should use hasOwnProperty()
-            if (a[key] === undefined) {
-                a[key] = b[key];
-            } else if (this.isObject(b[key], 1) && this.isObject(a[key], 1)) {
-                this.merge(a[key], b[key]);
-            }
-        }
-        return a;
-    }
-};
-
-/***/ }),
-
-/***/ 8:
+/***/ 11:
 /***/ (function(module, exports, __webpack_require__) {
 
 function KEEP(_,cb){cb();}
@@ -144,7 +88,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var utils = __webpack_require__(0);
+var utils = __webpack_require__(2);
 var isBrowser = typeof document !== "undefined";
 
 var Fly = function () {
@@ -353,6 +297,62 @@ var Fly = function () {
 KEEP("!build", function () {
     module.exports = Fly;
 });
+
+/***/ }),
+
+/***/ 2:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+module.exports = {
+    type: function type(ob) {
+        return Object.prototype.toString.call(ob).slice(8, -1).toLowerCase();
+    },
+    isObject: function isObject(ob, real) {
+        if (real) {
+            return this.type(ob) === "object";
+        } else {
+            return ob && (typeof ob === 'undefined' ? 'undefined' : _typeof(ob)) === 'object';
+        }
+    },
+    isFormData: function isFormData(val) {
+        return typeof FormData !== 'undefined' && val instanceof FormData;
+    },
+    trim: function trim(str) {
+        return str.replace(/(^\s*)|(\s*$)/g, '');
+    },
+    encode: function encode(val) {
+        return encodeURIComponent(val).replace(/%40/gi, '@').replace(/%3A/gi, ':').replace(/%24/g, '$').replace(/%2C/gi, ',').replace(/%20/g, '+').replace(/%5B/gi, '[').replace(/%5D/gi, ']');
+    },
+    formatParams: function formatParams(data) {
+        var arr = [];
+        for (var name in data) {
+            var value = data[name];
+            if (this.isObject(value)) {
+                value = JSON.stringify(value);
+            }
+            arr.push(this.encode(name) + "=" + this.encode(value));
+        }
+        return arr.join("&");
+    },
+
+    //不覆盖已存在的属性
+    merge: function merge(a, b) {
+        for (var key in b) {
+            //ES5 should use hasOwnProperty()
+            if (a[key] === undefined) {
+                a[key] = b[key];
+            } else if (this.isObject(b[key], 1) && this.isObject(a[key], 1)) {
+                this.merge(a[key], b[key]);
+            }
+        }
+        return a;
+    }
+};
 
 /***/ })
 

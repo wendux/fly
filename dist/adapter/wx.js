@@ -73,62 +73,42 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 7);
+/******/ 	return __webpack_require__(__webpack_require__.s = 9);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 5:
+/***/ 9:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-/**
- * Add base64 tag, like data:image/img;base64
- * @param responseData
- */
-module.exports = function handleImgBase64Data(responseData) {
-    var headers = responseData.headers || {};
-    var contentType = (headers["content-type"] || headers["Content-Type"] || "").toString().toLowerCase();
-    if (contentType.indexOf("image") !== -1 && responseData.responseText.indexOf("base64") === -1) {
-        responseData.responseText = "data:" + contentType + ";base64," + responseData.responseText;
-    }
-};
-
-/***/ }),
-
-/***/ 7:
-/***/ (function(module, exports, __webpack_require__) {
-
-function KEEP(_,cb){cb();}
-"use strict";
-
-var handleImgBase64Data = __webpack_require__(5);
-
-//确保dsBridge初始化
-window._dsbridge && _dsbridge.init();
-var adapter;
-if (window.dsBridge) {
-    adapter = function adapter(request, responseCallBack) {
-        dsBridge.call("onAjaxRequest", request, function (responseData) {
-            responseData = JSON.parse(responseData);
-            if (request.responseType === "stream") {
-                handleImgBase64Data(responseData);
-            }
-            responseCallBack(responseData);
-        });
+//微信小程序适配器
+module.exports = function (request, responseCallback) {
+    var con = {
+        method: request.method,
+        url: request.url,
+        dataType: request.dataType || "text",
+        header: request.headers,
+        data: request.body || {},
+        success: function success(res) {
+            responseCallback({
+                statusCode: res.statusCode,
+                responseText: res.data,
+                headers: res.header,
+                statusMessage: res.errMsg
+            });
+        },
+        fail: function fail(res) {
+            responseCallback({
+                statusCode: res.statusCode || 0,
+                statusMessage: res.errMsg
+            });
+        }
     };
-} else {
-    console.error("dsBridge is not exist!");
-}
-
-//build环境定义全局变量
-;
-
-KEEP("!build", function () {
-    module.exports = adapter;
-});
+    wx.request(con);
+};
 
 /***/ })
 
