@@ -340,6 +340,11 @@ Fly 引入了Http engine 的概念，所谓 Http engine，就是真正发起http
 
 在浏览器中，可以通过用 Fly  engine 替换 `XMLHttpRequest` 的方式拦截**全局**的的 Ajax 请求，无论上层使用的是何种网络库。详细的内容请参考 [Fly拦截全局Ajax](https://wendux.github.io/dist/#/doc/flyio/hook)
 
+
+## 微信小程序支持
+
+微信小程序的js运行环境(js core)和浏览器的不同，为了方便小程序开发者也能方便的使用Fly，官方提供了微信小程序的 adapter,  现在，您可以在微信小程序中方便的使用fly了。集成文档参考：[在微信小程序中使用fly](https://wendux.github.io/dist/#/doc/flyio/wx) 。
+
 ## 体积
 
 在浏览器环境下，一个库的大小是非常重要的。这方面 Fly 做的很好，它在保持强大的功能的同时，将自己的身材控制到了最好。min 只有 4.6K 左右，GZIP 压缩后不到 2K，体积是 axios 的四分之一。
