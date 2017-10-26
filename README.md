@@ -349,6 +349,10 @@ Fly 引入了Http engine 的概念，所谓 Http engine，就是真正发起http
 
 在浏览器环境下，一个库的大小是非常重要的。这方面 Fly 做的很好，它在保持强大的功能的同时，将自己的身材控制到了最好。min 只有 4.6K 左右，GZIP 压缩后不到 2K，体积是 axios 的四分之一。
 
+## 工程目录结构
+
+工程目录结构及文件说明请参照  [fly源码目录说明](https://wendux.github.io/dist/#/doc/flyio/files) 。
+
 ## Finally
 
 如果感觉 Fly 对您有用，欢迎 star 。
