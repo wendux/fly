@@ -1,14 +1,4 @@
-(function webpackUniversalModuleDefinition(root, factory) {
-	if(typeof exports === 'object' && typeof module === 'object')
-		module.exports = factory();
-	else if(typeof define === 'function' && define.amd)
-		define([], factory);
-	else {
-		var a = factory();
-		for(var i in a) (typeof exports === 'object' ? exports : root)[i] = a[i];
-	}
-})(this, function() {
-return /******/ (function(modules) { // webpackBootstrap
+/******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
 /******/
@@ -73,7 +63,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 6);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -83,35 +73,46 @@ return /******/ (function(modules) { // webpackBootstrap
 "use strict";
 
 
-module.exports = function (module) {
-	if (!module.webpackPolyfill) {
-		module.deprecate = function () {};
-		module.paths = [];
-		// module.parent = undefined by default
-		if (!module.children) module.children = [];
-		Object.defineProperty(module, "loaded", {
-			enumerable: true,
-			get: function get() {
-				return module.l;
-			}
-		});
-		Object.defineProperty(module, "id", {
-			enumerable: true,
-			get: function get() {
-				return module.i;
-			}
-		});
-		module.webpackPolyfill = 1;
-	}
-	return module;
-};
+//For browser entry
+var Fly = __webpack_require__(2);
+module.exports = new Fly();
 
 /***/ }),
 /* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(module) {var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;function KEEP(_,cb){cb();}
-'use strict';
+"use strict";
+
+
+/**
+ * Created by du on 16/12/10.
+ */
+var fly = __webpack_require__(0);
+
+fly.get("../package.json", { aa: 8, bb: 9, tt: { xx: 5 } }).then(function (d) {
+    console.log("get result:", d);
+}).catch(function (e) {
+    return console.log("error", e);
+});
+
+fly.post("../package.json", { aa: 8, bb: 9, tt: { xx: 5 } }).then(function (d) {
+    console.log("post result:", d);
+}).catch(function (e) {
+    return console.log("error", e);
+});
+
+fly.request("../package.json", { hh: 5 }, {
+    method: "post"
+}).then(function (d) {
+    console.log("ajax result:", d);
+});
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(module) {var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;
 
 var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
@@ -205,345 +206,362 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
             /******/__webpack_require__.p = "";
             /******/
             /******/ // Load entry module and return exports
-            /******/return __webpack_require__(__webpack_require__.s = 11);
+            /******/return __webpack_require__(__webpack_require__.s = 3);
             /******/
         }(
         /************************************************************************/
-        /******/{
+        /******/[
+        /* 0 */
+        /***/function (module, exports, __webpack_require__) {
 
-            /***/11:
-            /***/function _(module, exports, __webpack_require__) {
+            "use strict";
 
-                function KEEP(_, cb) {
-                    cb();
+            var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "symbol" ? function (obj) {
+                return typeof obj === 'undefined' ? 'undefined' : _typeof2(obj);
+            } : function (obj) {
+                return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj === 'undefined' ? 'undefined' : _typeof2(obj);
+            };
+
+            module.exports = {
+                type: function type(ob) {
+                    return Object.prototype.toString.call(ob).slice(8, -1).toLowerCase();
+                },
+                isObject: function isObject(ob, real) {
+                    if (real) {
+                        return this.type(ob) === "object";
+                    } else {
+                        return ob && (typeof ob === 'undefined' ? 'undefined' : _typeof(ob)) === 'object';
+                    }
+                },
+                isFormData: function isFormData(val) {
+                    return typeof FormData !== 'undefined' && val instanceof FormData;
+                },
+                trim: function trim(str) {
+                    return str.replace(/(^\s*)|(\s*$)/g, '');
+                },
+                encode: function encode(val) {
+                    return encodeURIComponent(val).replace(/%40/gi, '@').replace(/%3A/gi, ':').replace(/%24/g, '$').replace(/%2C/gi, ',').replace(/%20/g, '+').replace(/%5B/gi, '[').replace(/%5D/gi, ']');
+                },
+                formatParams: function formatParams(data) {
+                    var arr = [];
+                    for (var name in data) {
+                        var value = data[name];
+                        if (this.isObject(value)) {
+                            value = JSON.stringify(value);
+                        }
+                        arr.push(this.encode(name) + "=" + this.encode(value));
+                    }
+                    return arr.join("&");
+                },
+
+                // Do not overwrite existing attributes
+                merge: function merge(a, b) {
+                    for (var key in b) {
+                        if (!a.hasOwnProperty(key)) {
+                            a[key] = b[key];
+                        } else if (this.isObject(b[key], 1) && this.isObject(a[key], 1)) {
+                            this.merge(a[key], b[key]);
+                        }
+                    }
+                    return a;
                 }
-                "use strict";
+            };
 
-                var _createClass = function () {
-                    function defineProperties(target, props) {
-                        for (var i = 0; i < props.length; i++) {
-                            var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
-                        }
-                    }return function (Constructor, protoProps, staticProps) {
-                        if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
-                    };
-                }();
+            /***/
+        },,,
+        /* 1 */
+        /* 2 */
+        /* 3 */
+        /***/function (module, exports, __webpack_require__) {
 
-                function _classCallCheck(instance, Constructor) {
-                    if (!(instance instanceof Constructor)) {
-                        throw new TypeError("Cannot call a class as a function");
+            function KEEP(_, cb) {
+                cb();
+            }
+            "use strict";
+
+            var _createClass = function () {
+                function defineProperties(target, props) {
+                    for (var i = 0; i < props.length; i++) {
+                        var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
                     }
+                }return function (Constructor, protoProps, staticProps) {
+                    if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+                };
+            }();
+
+            function _classCallCheck(instance, Constructor) {
+                if (!(instance instanceof Constructor)) {
+                    throw new TypeError("Cannot call a class as a function");
                 }
-
-                var utils = __webpack_require__(2);
-                var isBrowser = typeof document !== "undefined";
-
-                var Fly = function () {
-                    function Fly(engine) {
-                        _classCallCheck(this, Fly);
-
-                        this.engine = engine || XMLHttpRequest;
-                        this.interceptors = {
-                            response: {
-                                use: function use(handler, onerror) {
-                                    this.handler = handler;
-                                    this.onerror = onerror;
-                                }
-                            },
-                            request: {
-                                use: function use(handler) {
-                                    this.handler = handler;
-                                }
-                            }
-                        };
-                        this.config = {
-                            method: "GET",
-                            baseURL: "",
-                            headers: {},
-                            timeout: 0,
-                            withCredentials: false
-                        };
-                    }
-
-                    _createClass(Fly, [{
-                        key: "request",
-                        value: function request(url, data, options) {
-                            var _this = this;
-
-                            var xhr = new this.engine();
-                            var promise = new Promise(function (_resolve, _reject) {
-                                options = options || {};
-                                var defaultHeaders = {
-                                    'Content-type': 'application/x-www-form-urlencoded'
-                                };
-                                utils.merge(defaultHeaders, _this.config.headers);
-                                _this.config.headers = defaultHeaders;
-                                utils.merge(options, _this.config);
-                                var rqi = _this.interceptors.request;
-                                var rpi = _this.interceptors.response;
-                                options.body = data || options.body;
-                                var abort = false;
-                                var operate = {
-                                    reject: function reject(e) {
-                                        abort = true;
-                                        _reject(e);
-                                    }, resolve: function resolve(d) {
-                                        abort = true;
-                                        _resolve(d);
-                                    }
-                                };
-                                url = utils.trim(url || "");
-                                options.method = options.method.toUpperCase();
-                                options.url = url;
-                                if (rqi.handler) {
-                                    options = rqi.handler(options, operate);
-                                    if (!options) return;
-                                }
-                                if (abort) return;
-                                url = utils.trim(options.url);
-                                if (!url && isBrowser) url = location.href;
-                                var baseUrl = utils.trim(options.baseURL || "");
-                                if (url.indexOf("http") !== 0) {
-                                    var isAbsolute = url[0] === "/";
-                                    if (!baseUrl && isBrowser) {
-                                        var arr = location.pathname.split("/");
-                                        arr.pop();
-                                        baseUrl = location.protocol + "//" + location.host + (isAbsolute ? "" : arr.join("/"));
-                                    }
-                                    if (baseUrl[baseUrl.length - 1] !== "/") {
-                                        baseUrl += "/";
-                                    }
-                                    url = baseUrl + (isAbsolute ? url.substr(1) : url);
-                                    if (isBrowser) {
-                                        var t = document.createElement("a");
-                                        t.href = url;
-                                        url = t.href;
-                                    }
-                                }
-                                var responseType = utils.trim(options.responseType || "");
-                                //try catch for ie >=9
-                                try {
-                                    xhr.timeout = options.timeout || 0;
-                                    if (responseType !== "stream") {
-                                        xhr.responseType = responseType;
-                                    }
-                                } catch (e) {}
-                                xhr.withCredentials = !!options.withCredentials;
-                                var isGet = options.method === "GET";
-
-                                if (isGet) {
-                                    if (options.body) {
-                                        data = utils.formatParams(options.body);
-                                        url += (url.indexOf("?") === -1 ? "?" : "&") + data;
-                                    }
-                                    xhr.open("GET", url);
-                                } else {
-                                    xhr.open("POST", url);
-                                }
-
-                                if (["object", "array"].indexOf(utils.type(options.body)) !== -1) {
-                                    options.headers["Content-type"] = 'application/json;charset=utf-8';
-                                    data = JSON.stringify(options.body);
-                                }
-
-                                for (var k in options.headers) {
-                                    //删除content-type
-                                    if (k.toLowerCase() === "content-type" && (utils.isFormData(options.body) || !options.body || isGet)) {
-                                        delete options.headers[k]; // Let the browser set it
-                                    } else {
-                                        try {
-                                            //浏览器环境下，有些头字段是只读的，如cookie, 写会抛异常
-                                            xhr.setRequestHeader(k, options.headers[k]);
-                                        } catch (e) {}
-                                    }
-                                }
-
-                                var onerror = function onerror(e) {
-                                    if (rpi.onerror) {
-                                        e = rpi.onerror(e, operate);
-                                    }
-                                    return e;
-                                };
-
-                                xhr.onload = function () {
-                                    if (xhr.status >= 200 && xhr.status < 300) {
-                                        //ie9 has not xhr.response
-                                        var response = xhr.response || xhr.responseText;
-                                        if ((xhr.getResponseHeader("Content-Type") || "").indexOf("json") !== -1) {
-                                            response = JSON.parse(response);
-                                        }
-                                        var data = { data: response, xhr: xhr, request: options };
-                                        utils.merge(data, xhr._response);
-                                        if (rpi.handler) {
-                                            data = rpi.handler(data, operate) || data;
-                                        }
-                                        if (abort) return;
-                                        _resolve(data);
-                                    } else {
-                                        var err = new Error(xhr.statusText);
-                                        err.status = xhr.status;
-                                        err = onerror(err) || err;
-                                        if (abort) return;
-                                        _reject(err);
-                                    }
-                                };
-
-                                xhr.onerror = function (e) {
-                                    var err = new Error(e.msg || "Network Error");
-                                    err.status = 0;
-                                    err = onerror(err);
-                                    if (abort) return;
-                                    _reject(err);
-                                };
-
-                                xhr.ontimeout = function () {
-                                    var err = new Error("timeout [ " + xhr.timeout + "ms ]");
-                                    err.status = 1;
-                                    err = onerror(err);
-                                    if (abort) return;
-                                    _reject(err);
-                                };
-                                xhr._options = options;
-                                xhr.send(isGet ? null : data);
-                            });
-                            promise.xhr = xhr;
-                            return promise;
-                        }
-                    }, {
-                        key: "get",
-                        value: function get(url, data, options) {
-                            return this.request(url, data, options);
-                        }
-                    }, {
-                        key: "post",
-                        value: function post(url, data, options) {
-                            return this.request(url, data, utils.merge({ method: "POST" }, options));
-                        }
-                    }, {
-                        key: "all",
-                        value: function all(promises) {
-                            return Promise.all(promises);
-                        }
-                    }, {
-                        key: "spread",
-                        value: function spread(callback) {
-                            return function (arr) {
-                                return callback.apply(null, arr);
-                            };
-                        }
-                    }]);
-
-                    return Fly;
-                }();
-
-                //build环境定义全局变量
-
-
-                ;
-                //build环境定义全局变量
-                KEEP("!build", function () {
-                    module.exports = Fly;
-                });
-
-                /***/
-            },
-
-            /***/2:
-            /***/function _(module, exports, __webpack_require__) {
-
-                "use strict";
-
-                var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "symbol" ? function (obj) {
-                    return typeof obj === 'undefined' ? 'undefined' : _typeof2(obj);
-                } : function (obj) {
-                    return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj === 'undefined' ? 'undefined' : _typeof2(obj);
-                };
-
-                module.exports = {
-                    type: function type(ob) {
-                        return Object.prototype.toString.call(ob).slice(8, -1).toLowerCase();
-                    },
-                    isObject: function isObject(ob, real) {
-                        if (real) {
-                            return this.type(ob) === "object";
-                        } else {
-                            return ob && (typeof ob === 'undefined' ? 'undefined' : _typeof(ob)) === 'object';
-                        }
-                    },
-                    isFormData: function isFormData(val) {
-                        return typeof FormData !== 'undefined' && val instanceof FormData;
-                    },
-                    trim: function trim(str) {
-                        return str.replace(/(^\s*)|(\s*$)/g, '');
-                    },
-                    encode: function encode(val) {
-                        return encodeURIComponent(val).replace(/%40/gi, '@').replace(/%3A/gi, ':').replace(/%24/g, '$').replace(/%2C/gi, ',').replace(/%20/g, '+').replace(/%5B/gi, '[').replace(/%5D/gi, ']');
-                    },
-                    formatParams: function formatParams(data) {
-                        var arr = [];
-                        for (var name in data) {
-                            var value = data[name];
-                            if (this.isObject(value)) {
-                                value = JSON.stringify(value);
-                            }
-                            arr.push(this.encode(name) + "=" + this.encode(value));
-                        }
-                        return arr.join("&");
-                    },
-
-                    //不覆盖已存在的属性
-                    merge: function merge(a, b) {
-                        for (var key in b) {
-                            //ES5 should use hasOwnProperty()
-                            if (a[key] === undefined) {
-                                a[key] = b[key];
-                            } else if (this.isObject(b[key], 1) && this.isObject(a[key], 1)) {
-                                this.merge(a[key], b[key]);
-                            }
-                        }
-                        return a;
-                    }
-                };
-
-                /***/
             }
 
-            /******/ })
+            var utils = __webpack_require__(0);
+            var isBrowser = typeof document !== "undefined";
+
+            var Fly = function () {
+                function Fly(engine) {
+                    _classCallCheck(this, Fly);
+
+                    this.engine = engine || XMLHttpRequest;
+                    this.interceptors = {
+                        response: {
+                            use: function use(handler, onerror) {
+                                this.handler = handler;
+                                this.onerror = onerror;
+                            }
+                        },
+                        request: {
+                            use: function use(handler) {
+                                this.handler = handler;
+                            }
+                        }
+                    };
+                    this.config = {
+                        method: "GET",
+                        baseURL: "",
+                        headers: {},
+                        timeout: 0,
+                        withCredentials: false
+                    };
+                }
+
+                _createClass(Fly, [{
+                    key: "request",
+                    value: function request(url, data, options) {
+                        var _this = this;
+
+                        var engine = new this.engine();
+                        var promise = new Promise(function (_resolve, _reject) {
+                            options = options || {};
+                            var defaultHeaders = {
+                                'Content-type': 'application/x-www-form-urlencoded'
+                            };
+                            utils.merge(defaultHeaders, _this.config.headers);
+                            _this.config.headers = defaultHeaders;
+                            utils.merge(options, _this.config);
+                            var rqi = _this.interceptors.request;
+                            var rpi = _this.interceptors.response;
+                            options.body = data || options.body;
+                            var abort = false;
+
+                            // For interceptors to interrupt the request
+                            var operate = {
+                                reject: function reject(e) {
+                                    abort = true;
+                                    _reject(e);
+                                }, resolve: function resolve(d) {
+                                    abort = true;
+                                    _resolve(d);
+                                }
+                            };
+                            url = utils.trim(url || "");
+                            options.method = options.method.toUpperCase();
+                            options.url = url;
+                            if (rqi.handler) {
+                                options = rqi.handler(options, operate);
+                                if (!options) return;
+                            }
+
+                            // If the interceptors have interrupted the request , return
+                            if (abort) return;
+
+                            // Normalize the request url
+                            url = utils.trim(options.url);
+                            if (!url && isBrowser) url = location.href;
+                            var baseUrl = utils.trim(options.baseURL || "");
+                            if (url.indexOf("http") !== 0) {
+                                var isAbsolute = url[0] === "/";
+                                if (!baseUrl && isBrowser) {
+                                    var arr = location.pathname.split("/");
+                                    arr.pop();
+                                    baseUrl = location.protocol + "//" + location.host + (isAbsolute ? "" : arr.join("/"));
+                                }
+                                if (baseUrl[baseUrl.length - 1] !== "/") {
+                                    baseUrl += "/";
+                                }
+                                url = baseUrl + (isAbsolute ? url.substr(1) : url);
+                                if (isBrowser) {
+
+                                    // Normalize the url which contains the ".." or ".", such as
+                                    // "http://xx.com/aa/bb/../../xx" to "http://xx.com/xx" .
+                                    var t = document.createElement("a");
+                                    t.href = url;
+                                    url = t.href;
+                                }
+                            }
+                            var responseType = utils.trim(options.responseType || "");
+
+                            // try catch for ie >=9
+                            try {
+                                engine.timeout = options.timeout || 0;
+                                if (responseType !== "stream") {
+                                    engine.responseType = responseType;
+                                }
+                            } catch (e) {}
+
+                            engine.withCredentials = !!options.withCredentials;
+                            var isGet = options.method === "GET";
+                            if (isGet) {
+                                if (options.body) {
+                                    data = utils.formatParams(options.body);
+                                    url += (url.indexOf("?") === -1 ? "?" : "&") + data;
+                                }
+                                engine.open("GET", url);
+                            } else {
+                                engine.open("POST", url);
+                            }
+
+                            // If the request data is json object, transforming it  to json string,
+                            // and set request content-type to "json". In browser,  the data will
+                            // be sent as RequestBody instead of FormData
+                            if (["object", "array"].indexOf(utils.type(options.body)) !== -1) {
+                                options.headers["Content-type"] = 'application/json;charset=utf-8';
+                                data = JSON.stringify(options.body);
+                            }
+
+                            for (var k in options.headers) {
+                                if (k.toLowerCase() === "content-type" && (utils.isFormData(options.body) || !options.body || isGet)) {
+                                    // Delete the content-type, Let the browser set it
+                                    delete options.headers[k];
+                                } else {
+                                    try {
+                                        // In browser environment, some header fields are readonly,
+                                        // write will cause the exception .
+                                        engine.setRequestHeader(k, options.headers[k]);
+                                    } catch (e) {}
+                                }
+                            }
+
+                            var onerror = function onerror(e) {
+                                // Call response interceptor
+                                if (rpi.onerror) {
+                                    e = rpi.onerror(e, operate);
+                                }
+                                return e;
+                            };
+
+                            engine.onload = function () {
+                                if (engine.status >= 200 && engine.status < 300) {
+
+                                    // The xhr of IE9 has not response filed
+                                    var response = engine.response || engine.responseText;
+                                    if ((engine.getResponseHeader("Content-Type") || "").indexOf("json") !== -1
+                                    // Some third engine implement may transform the response text to json object automatically,
+                                    // so we should test the type of response before transforming it
+                                    && !utils.isObject(response)) {
+                                        response = JSON.parse(response);
+                                    }
+
+                                    var data = { data: response, engine: engine, request: options };
+                                    // The _response filed of engine is set in  adapter which be called in engine-wrapper.js
+                                    utils.merge(data, engine._response);
+                                    if (rpi.handler) {
+                                        // Call response interceptor
+                                        data = rpi.handler(data, operate) || data;
+                                    }
+                                    if (abort) return;
+                                    _resolve(data);
+                                } else {
+                                    var err = new Error(engine.statusText);
+                                    err.status = engine.status;
+                                    err = onerror(err) || err;
+                                    if (abort) return;
+                                    _reject(err);
+                                }
+                            };
+
+                            engine.onerror = function (e) {
+                                // Handle network error
+                                var err = new Error(e.msg || "Network Error");
+                                err.status = 0;
+                                err = onerror(err);
+                                if (abort) return;
+                                _reject(err);
+                            };
+
+                            engine.ontimeout = function () {
+                                // Handle timeout error
+                                var err = new Error("timeout [ " + engine.timeout + "ms ]");
+                                err.status = 1;
+                                err = onerror(err);
+                                if (abort) return;
+                                _reject(err);
+                            };
+                            engine._options = options;
+                            engine.send(isGet ? null : data);
+                        });
+                        promise.engine = engine;
+                        return promise;
+                    }
+                }, {
+                    key: "get",
+                    value: function get(url, data, options) {
+                        return this.request(url, data, options);
+                    }
+                }, {
+                    key: "post",
+                    value: function post(url, data, options) {
+                        return this.request(url, data, utils.merge({ method: "POST" }, options));
+                    }
+                }, {
+                    key: "all",
+                    value: function all(promises) {
+                        return Promise.all(promises);
+                    }
+                }, {
+                    key: "spread",
+                    value: function spread(callback) {
+                        return function (arr) {
+                            return callback.apply(null, arr);
+                        };
+                    }
+                }]);
+
+                return Fly;
+            }();
+
+            // Learn more about keep-loader: https://github.com/wendux/keep-loader
+
+
+            ;
+            module.exports = Fly;
+
+            /***/
+        }]
+        /******/)
     );
 });
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)(module)))
 
 /***/ }),
-/* 2 */,
-/* 3 */,
-/* 4 */,
-/* 5 */,
-/* 6 */
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-/**
- * Created by du on 16/12/10.
- */
-var fly = __webpack_require__(1);
-
-//
-// fly.get("../package.json",{aa:8,bb:9,tt:{xx:5}}).then((d) => {
-//     console.log("get result:",d)
-// }).catch((e) => console.log("error", e))
-//
-// fly.post("../package.json",{aa:8,bb:9,tt:{xx:5}}).then((d) => {
-//     console.log("post result:",d)
-// }).catch((e) => console.log("error", e))
-//
-// fly.requ("../package.json",{hh:5},{
-//     method:"post"
-// }).then(d=>{
-//     console.log("ajax result:",d)
-// })
+module.exports = function (module) {
+	if (!module.webpackPolyfill) {
+		module.deprecate = function () {};
+		module.paths = [];
+		// module.parent = undefined by default
+		if (!module.children) module.children = [];
+		Object.defineProperty(module, "loaded", {
+			enumerable: true,
+			get: function get() {
+				return module.l;
+			}
+		});
+		Object.defineProperty(module, "id", {
+			enumerable: true,
+			get: function get() {
+				return module.i;
+			}
+		});
+		module.webpackPolyfill = 1;
+	}
+	return module;
+};
 
 /***/ })
 /******/ ]);
-});

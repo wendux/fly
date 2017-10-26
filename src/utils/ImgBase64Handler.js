@@ -10,5 +10,4 @@ module.exports = function handleImgBase64Data(responseData) {
         && responseData.responseText.indexOf("base64") === -1) {
         responseData.responseText = `data:${contentType};base64,` + responseData.responseText;
     }
-
 }

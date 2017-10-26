@@ -1,5 +1,6 @@
+var handleImgBase64Data=require("../utils/ImgBase64Handler")
 
-//reference from  https://github.com/marcuswestin/WebViewJavascriptBridge
+// Reference from  https://github.com/marcuswestin/WebViewJavascriptBridge
 function setupWebViewJavascriptBridge(callback) {
     if (window.WebViewJavascriptBridge) { return callback(WebViewJavascriptBridge); }
     if (window.WVJBCallbacks) { return window.WVJBCallbacks.push(callback); }
@@ -13,15 +14,19 @@ function setupWebViewJavascriptBridge(callback) {
 
 function adapter(request, responseCallBack) {
      setupWebViewJavascriptBridge(function (bridge) {
-         bridge.callHandler("onAjaxRequest",request,(response)=>{
-             responseCallBack(response)
+         bridge.callHandler("onAjaxRequest",request,(responseData)=>{
+             responseData = JSON.parse(responseData);
+             if(request.responseType==="stream") {
+                 handleImgBase64Data(responseData);
+             }
+             responseCallBack(responseData)
          })
      })
 }
 //build环境定义全局变量
-KEEP("build", () => {
+KEEP("cdn||cdn-min", () => {
     window.wjsbAdapter= adapter
 })
-KEEP("!build", () => {
-    module.exports = adapter;
-})
+
+module.exports = adapter;
+

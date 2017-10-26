@@ -56,7 +56,7 @@ npm install flyio
 ### UMD
 
 ```http
-https://unpkg.com/flyio/dist/fly.umd.min.js
+https://unpkg.com/flyio/dist/umd/fly.umd.min.js
 ```
 
 ## 例子
@@ -321,7 +321,7 @@ request 适合在 [RESTful API](http://en.wikipedia.org/wiki/Representational_st
 
 ```javascript
 //npm、node环境下
-var  Fly=require("flyio/dist/fly") //注意！此时引入的是 "flyio/dist/fly"
+var  Fly=require("flyio/dist/npm/fly") //注意！此时引入的是 "flyio/dist/npm/fly"
 var nFly=new Fly();
 
 //CDN引入时直接new

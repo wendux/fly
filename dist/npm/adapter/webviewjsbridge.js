@@ -73,42 +73,72 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 9);
+/******/ 	return __webpack_require__(__webpack_require__.s = 6);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 9:
+/***/ 1:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-//微信小程序适配器
-module.exports = function (request, responseCallback) {
-    var con = {
-        method: request.method,
-        url: request.url,
-        dataType: request.dataType || "text",
-        header: request.headers,
-        data: request.body || {},
-        success: function success(res) {
-            responseCallback({
-                statusCode: res.statusCode,
-                responseText: res.data,
-                headers: res.header,
-                statusMessage: res.errMsg
-            });
-        },
-        fail: function fail(res) {
-            responseCallback({
-                statusCode: res.statusCode || 0,
-                statusMessage: res.errMsg
-            });
-        }
-    };
-    wx.request(con);
+/**
+ * Add base64 tag, like data:image/img;base64
+ * @param responseData
+ */
+module.exports = function handleImgBase64Data(responseData) {
+    var headers = responseData.headers || {};
+    var contentType = (headers["content-type"] || headers["Content-Type"] || "").toString().toLowerCase();
+    if (contentType.indexOf("image") !== -1 && responseData.responseText.indexOf("base64") === -1) {
+        responseData.responseText = "data:" + contentType + ";base64," + responseData.responseText;
+    }
 };
+
+/***/ }),
+
+/***/ 6:
+/***/ (function(module, exports, __webpack_require__) {
+
+function KEEP(_,cb){cb();}
+'use strict';
+
+var handleImgBase64Data = __webpack_require__(1);
+
+// Reference from  https://github.com/marcuswestin/WebViewJavascriptBridge
+function setupWebViewJavascriptBridge(callback) {
+    if (window.WebViewJavascriptBridge) {
+        return callback(WebViewJavascriptBridge);
+    }
+    if (window.WVJBCallbacks) {
+        return window.WVJBCallbacks.push(callback);
+    }
+    window.WVJBCallbacks = [callback];
+    var WVJBIframe = document.createElement('iframe');
+    WVJBIframe.style.display = 'none';
+    WVJBIframe.src = 'https://__bridge_loaded__';
+    document.documentElement.appendChild(WVJBIframe);
+    setTimeout(function () {
+        document.documentElement.removeChild(WVJBIframe);
+    }, 0);
+}
+
+function adapter(request, responseCallBack) {
+    setupWebViewJavascriptBridge(function (bridge) {
+        bridge.callHandler("onAjaxRequest", request, function (responseData) {
+            responseData = JSON.parse(responseData);
+            if (request.responseType === "stream") {
+                handleImgBase64Data(responseData);
+            }
+            responseCallBack(responseData);
+        });
+    });
+}
+//build环境定义全局变量
+;
+
+module.exports = adapter;
 
 /***/ })
 
