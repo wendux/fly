@@ -21,6 +21,7 @@ Object.assign(Fly.prototype,{
                         if(!err) {
                             resolve({size:d.data.length,path:path.resolve(savePath)})
                         }else{
+                            // Failed to save file
                             err.status=2
                             reject(err)
                         }
