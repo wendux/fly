@@ -86,17 +86,8 @@ class Fly {
                     url = t.href;
                 }
             }
+
             var responseType = utils.trim(options.responseType || "")
-
-            // try catch for ie >=9
-            try {
-                engine.timeout = options.timeout || 0;
-                if (responseType !== "stream") {
-                    engine.responseType = responseType
-                }
-            } catch (e) {
-            }
-
             engine.withCredentials = !!options.withCredentials;
             var isGet = options.method === "GET"
             if (isGet) {
@@ -107,6 +98,15 @@ class Fly {
                 engine.open("GET", url);
             } else {
                 engine.open("POST", url);
+            }
+
+            // try catch for ie >=9
+            try {
+                engine.timeout = options.timeout || 0;
+                if (responseType !== "stream") {
+                    engine.responseType = responseType
+                }
+            } catch (e) {
             }
 
             // If the request data is json object, transforming it  to json string,

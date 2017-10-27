@@ -228,16 +228,8 @@ var Fly = function () {
                         url = t.href;
                     }
                 }
+
                 var responseType = utils.trim(options.responseType || "");
-
-                // try catch for ie >=9
-                try {
-                    engine.timeout = options.timeout || 0;
-                    if (responseType !== "stream") {
-                        engine.responseType = responseType;
-                    }
-                } catch (e) {}
-
                 engine.withCredentials = !!options.withCredentials;
                 var isGet = options.method === "GET";
                 if (isGet) {
@@ -249,6 +241,14 @@ var Fly = function () {
                 } else {
                     engine.open("POST", url);
                 }
+
+                // try catch for ie >=9
+                try {
+                    engine.timeout = options.timeout || 0;
+                    if (responseType !== "stream") {
+                        engine.responseType = responseType;
+                    }
+                } catch (e) {}
 
                 // If the request data is json object, transforming it  to json string,
                 // and set request content-type to "json". In browser,  the data will
