@@ -1,21 +1,13 @@
+[![fly.js](https://github.com/wendux/fly/raw/master/fly.png)](https://wendux.github.io/dist/#/doc/flyio/readme)
+[![npm version](https://img.shields.io/npm/v/flyio.svg)](https://www.npmjs.org/package/flyio)
+[![build status](https://travis-ci.org/wendux/fly.svg?branch=master)](https://travis-ci.org/wendux/fly)
 
 
-![fly.js](./static/doc/flyio/fly.png)
-<div style="text-align:center; margin-bottom:40px;">
-<div style="overflow:hidden;    display: inline-block;"><div style="float:left">[![npm version](https://img.shields.io/npm/v/flyio.svg)](https://www.npmjs.org/package/flyio)</div>  <div style="float:left; margin-left:10px">[![build status](https://travis-ci.org/wendux/fly.svg)](https://travis-ci.org/wendux/fly)</div>
-</div>
-</div>
+### 浏览器支持
 
 | ![Chrome](https://raw.github.com/alrra/browser-logos/master/src/chrome/chrome_48x48.png) | ![Firefox](https://raw.github.com/alrra/browser-logos/master/src/firefox/firefox_48x48.png) | ![Safari](https://raw.github.com/alrra/browser-logos/master/src/safari/safari_48x48.png) | ![Opera](https://raw.github.com/alrra/browser-logos/master/src/opera/opera_48x48.png) | ![Edge](https://raw.github.com/alrra/browser-logos/master/src/edge/edge_48x48.png) | ![IE](https://raw.github.com/alrra/browser-logos/master/src/archive/internet-explorer_9-11/internet-explorer_9-11_48x48.png) |
 | ---------------------------------------- | ---------------------------------------- | ---------------------------------------- | ---------------------------------------- | ---------------------------------------- | ---------------------------------------- |
 | ✔                                        | ✔                                        | ✔                                        | ✔                                        | ✔                                        | > 8                                      |
-
-<style>
-
- table:first-of-type{margin: 20px auto !important;}
-
-</style>
-
 ## Fly
 
 Supporting request forwarding and Promise based and light-weight HTTP client for all  JavaScript runtimes.
