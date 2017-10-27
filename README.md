@@ -34,7 +34,7 @@ Fly positioning is the ultimate solution for Javascript http requests. That is t
 
 ## Documentation
 
-You can find the Fly documentation [on the offical website](https://wendux.github.io/dist/#//language).
+You can find the Fly documentation [on the offical website](https://wendux.github.io/dist/#/language).
 
 ## Installing
 
