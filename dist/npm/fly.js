@@ -290,7 +290,7 @@ var Fly = function () {
                 };
 
                 engine.onload = function () {
-                    if (engine.status >= 200 && engine.status < 300) {
+                    if (engine.status >= 200 && engine.status < 300 || engine.status === 304) {
 
                         // The xhr of IE9 has not response filed
                         var response = engine.response || engine.responseText;
