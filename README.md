@@ -19,9 +19,9 @@ Supporting request forwarding and Promise based and light-weight HTTP client for
 3. Make http requests from node.js
 4. Supports  request and response interceptors。
 5. Automatic transforms for JSON data。
-6. Support switching the underlying Http Engine, easy to adapt to various JavaScript Runtime.
+6. Supports switching the underlying Http Engine, easy to adapt to various JavaScript Runtime.
 7. Supports global Ajax interception on browser
-8. Supporting request forwarding in hybrid applications
+8. Supports request forwarding in hybrid applications
 9. Easy to customize, disassemble and assemble
 
 
