@@ -10,19 +10,20 @@
 | ✔                                        | ✔                                        | ✔                                        | ✔                                        | ✔                                        | > 8                                      |
 ## Fly
 
-Supporting request forwarding and Promise based and light-weight HTTP client for all  JavaScript runtimes.
+Supporting request forwarding and Promise based HTTP client for all JavaScript runtimes.
 
 ## Features
 
 1. Supports the [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) API
 2. Make [XMLHttpRequests](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest) from the browser，**light-weight and very light-weight** 
 3. Make http requests from node.js
-4. Supports  request and response interceptors。
-5. Automatic transforms for JSON data。
-6. Supports switching the underlying Http Engine, easy to adapt to various JavaScript Runtime.
-7. Supports global Ajax interception on browser
-8. Supports request forwarding in hybrid applications
-9. Easy to customize, disassemble and assemble
+4. Make http requests from WeChat applet
+5. Supports  request and response interceptors。
+6. Automatic transforms for JSON data。
+7. Supports switching the underlying Http Engine, easy to adapt to various JavaScript Runtime.
+8. Supports global Ajax interception on browser
+9. Supports request forwarding in hybrid applications
+10. Easy to customize, disassemble and assemble
 
 
 
@@ -35,6 +36,8 @@ Fly positioning is the ultimate solution for Javascript http requests. That is t
 ## Documentation
 
 You can find the Fly documentation [on the offical website](https://wendux.github.io/dist/#/language).
+
+[中文文档](https://wendux.github.io/dist/#/doc/flyio/readme)
 
 ## Installing
 
