@@ -441,10 +441,8 @@ var Fly = function () {
                         data = utils.formatParams(options.body);
                         url += (url.indexOf("?") === -1 ? "?" : "&") + data;
                     }
-                    engine.open("GET", url);
-                } else {
-                    engine.open("POST", url);
                 }
+                engine.open(options.method, url);
 
                 // try catch for ie >=9
                 try {

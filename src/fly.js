@@ -89,16 +89,14 @@ class Fly {
 
             var responseType = utils.trim(options.responseType || "")
             engine.withCredentials = !!options.withCredentials;
-            var isGet = options.method === "GET"
+            var isGet=options.method === "GET";
             if (isGet) {
                 if (options.body) {
                     data = utils.formatParams(options.body);
                     url += (url.indexOf("?") === -1 ? "?" : "&") + data;
                 }
-                engine.open("GET", url);
-            } else {
-                engine.open("POST", url);
             }
+            engine.open(options.method, url);
 
             // try catch for ie >=9
             try {
