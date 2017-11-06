@@ -319,7 +319,14 @@ fly.request("/user/register", {name:"doris"}, {method:"PUT"})
 ......
 ```
 
-This API is suitable for use in RESTful API scenarios.
+This API is suitable for use in RESTful API scenarios. For convenience, the corresponding alias methods are provided
+**alias**
+
+`fly.put(url, data, options)`
+
+`fly.delete(url,data,options)`
+
+`fly.patch(url,data,options)`
 
 ### Concurrency
 

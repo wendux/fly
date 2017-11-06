@@ -310,8 +310,15 @@ fly.request("/user/8/delete", null, {method:"delete"})
 fly.request("/user/register", {name:"doris"}, {method:"PUT"})
 ......
 ```
+request 适合在 [RESTful API](http://en.wikipedia.org/wiki/Representational_state_transfer) 的场景下使用，为了方便使用，fly提供了响应的别名方法
 
-request 适合在 [RESTful API](http://en.wikipedia.org/wiki/Representational_state_transfer) 的场景下使用。
+**别名方法**
+
+`fly.put(url, data, options)`
+
+`fly.delete(url,data,options)`
+
+`fly.patch(url,data,options)`
 
 ### `fly.all([])`
 

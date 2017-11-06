@@ -191,14 +191,6 @@ class Fly {
         return promise;
     }
 
-    get(url, data, options) {
-        return this.request(url, data, options);
-    }
-
-    post(url, data, options) {
-        return this.request(url, data, utils.merge({method: "POST"}, options));
-    }
-
     all(promises) {
         return Promise.all(promises)
     }
@@ -209,6 +201,14 @@ class Fly {
         }
     }
 }
+
+["get","post","put","delete","patch"].forEach(e=>{
+    Fly.prototype[e]=function(url,data,option){
+        return this.request(url,data,utils.merge({method:e},option))
+    }
+})
+
+Fly.prototype
 
 // Learn more about keep-loader: https://github.com/wendux/keep-loader
 KEEP("cdn||cdn-min", () => {
