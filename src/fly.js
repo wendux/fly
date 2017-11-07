@@ -30,11 +30,7 @@ class Fly {
         var engine = new this.engine;
         var promise = new Promise((resolve, reject) => {
             options = options || {};
-            var defaultHeaders = {
-                'Content-type': 'application/x-www-form-urlencoded',
-            }
-            utils.merge(defaultHeaders, this.config.headers)
-            this.config.headers = defaultHeaders;
+            this.config.headers=utils.merge(this.config.headers||{},{'Content-Type': 'application/x-www-form-urlencoded'})
             utils.merge(options, this.config)
             var rqi = this.interceptors.request;
             var rpi = this.interceptors.response;

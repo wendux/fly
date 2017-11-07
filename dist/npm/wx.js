@@ -376,11 +376,7 @@ var Fly = function () {
             var engine = new this.engine();
             var promise = new Promise(function (_resolve, _reject) {
                 options = options || {};
-                var defaultHeaders = {
-                    'Content-type': 'application/x-www-form-urlencoded'
-                };
-                utils.merge(defaultHeaders, _this.config.headers);
-                _this.config.headers = defaultHeaders;
+                _this.config.headers = utils.merge(_this.config.headers || {}, { 'Content-Type': 'application/x-www-form-urlencoded' });
                 utils.merge(options, _this.config);
                 var rqi = _this.interceptors.request;
                 var rpi = _this.interceptors.response;
