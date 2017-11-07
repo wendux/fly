@@ -335,7 +335,9 @@ var Fly = function () {
                     _reject(err);
                 };
                 engine._options = options;
-                engine.send(isGet ? null : data);
+                setTimeout(function () {
+                    engine.send(isGet ? null : data);
+                }, 0);
             });
             promise.engine = engine;
             return promise;

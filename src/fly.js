@@ -185,7 +185,7 @@ class Fly {
                 reject(err)
             }
             engine._options = options;
-            engine.send(isGet ? null : data)
+            setTimeout(()=>{engine.send(isGet ? null : data)},0)
         })
         promise.engine = engine;
         return promise;
