@@ -1,8 +1,5 @@
 
 var handleImgBase64Data=require("../utils/ImgBase64Handler")
-
-//确保dsBridge初始化
-window._dsbridge && _dsbridge.init();
 var adapter;
 if (window.dsBridge) {
     adapter = function (request, responseCallBack) {
