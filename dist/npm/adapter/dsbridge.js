@@ -105,9 +105,6 @@ function KEEP(_,cb){cb();}
 "use strict";
 
 var handleImgBase64Data = __webpack_require__(1);
-
-//确保dsBridge初始化
-window._dsbridge && _dsbridge.init();
 var adapter;
 if (window.dsBridge) {
     adapter = function adapter(request, responseCallBack) {
