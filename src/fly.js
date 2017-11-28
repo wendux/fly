@@ -107,7 +107,7 @@ class Fly {
             // and set request content-type to "json". In browser,  the data will
             // be sent as RequestBody instead of FormData
             if (!utils.isFormData(options.body)&&["object", "array"].indexOf(utils.type(options.body)) !== -1) {
-                options.headers["Content-type"] = 'application/json;charset=utf-8'
+                options.headers["Content-Type"] = 'application/json;charset=utf-8'
                 data = JSON.stringify(options.body);
             }
 
