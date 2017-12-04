@@ -361,8 +361,6 @@ var Fly = function () {
     };
 });
 
-Fly.prototype;
-
 // Learn more about keep-loader: https://github.com/wendux/keep-loader
 ;
 module.exports = Fly;

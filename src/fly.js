@@ -204,8 +204,6 @@ class Fly {
     }
 })
 
-Fly.prototype
-
 // Learn more about keep-loader: https://github.com/wendux/keep-loader
 KEEP("cdn||cdn-min", () => {
     // This code block will be removed besides the  "CDN" and "cdn-min" build environment

@@ -351,8 +351,6 @@ var Fly = function () {
     };
 });
 
-Fly.prototype;
-
 // Learn more about keep-loader: https://github.com/wendux/keep-loader
 KEEP("cdn||cdn-min", function () {
     // This code block will be removed besides the  "CDN" and "cdn-min" build environment
