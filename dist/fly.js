@@ -193,10 +193,8 @@ var Fly = function () {
                 options.method = options.method.toUpperCase();
                 options.url = url;
                 if (rqi.handler) {
-                    options = rqi.handler(options, operate);
-                    if (!options) return;
+                    options = rqi.handler(options, operate) || options;
                 }
-
                 // If the interceptors have interrupted the request , return
                 if (abort) return;
 
@@ -345,12 +343,11 @@ var Fly = function () {
     return Fly;
 }();
 
-["get", "post", "put", "delete", "patch"].forEach(function (e) {
+["get", "post", "put", "patch", "head", "delete"].forEach(function (e) {
     Fly.prototype[e] = function (url, data, option) {
         return this.request(url, data, utils.merge({ method: e }, option));
     };
 });
-
 // Learn more about keep-loader: https://github.com/wendux/keep-loader
 KEEP("cdn||cdn-min", function () {
     // This code block will be removed besides the  "CDN" and "cdn-min" build environment

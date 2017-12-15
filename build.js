@@ -28,7 +28,10 @@ if(env==="npm"){
     output.path=path.resolve("./dist/npm")
     output.libraryTarget = "umd"
 } else if (env === "dev") {
-    entry={ "../demon/dist/test": "./demon/test.js"}
+    entry={
+        "../demon/dist/test": "./demon/test.js",
+        "../demon/dist/typeScriptTest": "./demon/typeScriptTest.js"
+    }
 }else{
     if(env==="cdn-min"||env==="umd"){
         output.filename = "[name].min.js"

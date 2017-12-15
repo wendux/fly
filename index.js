@@ -1,3 +1,6 @@
 //For browser entry
 var Fly= require("./dist/npm/fly")
-module.exports = new Fly;
+let fly= new Fly;
+//For typeScript
+fly.default=fly;
+module.exports = fly;
