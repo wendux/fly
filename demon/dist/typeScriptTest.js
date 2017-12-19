@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 3);
+/******/ 	return __webpack_require__(__webpack_require__.s = 4);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -524,33 +524,30 @@ module.exports = function (module) {
 };
 
 /***/ }),
-/* 3 */
+/* 3 */,
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-/**
- * Created by du on 16/12/10.
- */
-var fly = __webpack_require__(0);
-
-fly.get("../package.json", { aa: 8, bb: 9, tt: { xx: 5 } }).then(function (d) {
-    console.log("get result:", d);
-}).catch(function (e) {
-    return console.log("error", e);
+exports.__esModule = true;
+var index_1 = __webpack_require__(0);
+var log = console.log;
+index_1["default"].config.headers = { xx: 6 };
+index_1["default"].interceptors.request.use(function (config) {
+    config.headers['X-Requested-With'] = "XMLHttpRequest";
+    config.headers['apiVersion'] = '1.0';
+    log("request config", config);
+    return config;
 });
-
-fly.post("../package.json", { aa: 8, bb: 9, tt: { xx: 5 } }).then(function (d) {
-    console.log("post result:", d);
-}).catch(function (e) {
-    return console.log("error", e);
+index_1["default"].interceptors.response.use(function (response, preHandler) {
+    log("response", response);
+}, function (err, preHandler) {
+    log(err, err);
 });
-
-fly.request("../package.json", { hh: 5 }, {
-    method: "post"
-}).then(function (d) {
-    console.log("ajax result:", d);
+index_1["default"].get("").then(function (e) {
+    return console.log(e);
 });
 
 /***/ })

@@ -1,4 +1,4 @@
-var utils = require('./utils');
+var utils = require('./utils/utils');
 var isBrowser = typeof document !== "undefined";
 
 class Fly {
@@ -27,19 +27,17 @@ class Fly {
     }
 
     request(url, data, options) {
-        var xhr = new this.engine;
+        var engine = new this.engine;
         var promise = new Promise((resolve, reject) => {
             options = options || {};
-            var defaultHeaders = {
-                'Content-type': 'application/x-www-form-urlencoded',
-            }
-            utils.merge(defaultHeaders, this.config.headers)
-            this.config.headers = defaultHeaders;
+            this.config.headers=utils.merge(this.config.headers||{},{'Content-Type': 'application/x-www-form-urlencoded'})
             utils.merge(options, this.config)
             var rqi = this.interceptors.request;
             var rpi = this.interceptors.response;
-            options.body = data||options.body;
+            options.body = data || options.body;
             var abort = false;
+
+            // For interceptors to interrupt the request
             var operate = {
                 reject: (e) => {
                     abort = true;
@@ -53,10 +51,12 @@ class Fly {
             options.method = options.method.toUpperCase();
             options.url = url;
             if (rqi.handler) {
-                options = rqi.handler(options, operate);
-                if (!options) return;
+                options = rqi.handler(options, operate)||options;
             }
+            // If the interceptors have interrupted the request , return
             if (abort) return;
+
+            // Normalize the request url
             url = utils.trim(options.url);
             if (!url && isBrowser) url = location.href;
             var baseUrl = utils.trim(options.baseURL || "");
@@ -72,82 +72,97 @@ class Fly {
                 }
                 url = baseUrl + (isAbsolute ? url.substr(1) : url)
                 if (isBrowser) {
+
+                    // Normalize the url which contains the ".." or ".", such as
+                    // "http://xx.com/aa/bb/../../xx" to "http://xx.com/xx" .
                     var t = document.createElement("a");
                     t.href = url;
                     url = t.href;
                 }
             }
-            var responseType = utils.trim(options.responseType || "")
-            //try catch for ie >=9
-            try {
-                xhr.timeout = options.timeout || 0;
-                if (responseType !== "stream") {
-                    xhr.responseType = responseType
-                }
-            } catch (e) {}
-            xhr.withCredentials = !!options.withCredentials;
-            var isGet = options.method === "GET"
 
+            var responseType = utils.trim(options.responseType || "")
+            engine.withCredentials = !!options.withCredentials;
+            var isGet=options.method === "GET";
             if (isGet) {
                 if (options.body) {
                     data = utils.formatParams(options.body);
                     url += (url.indexOf("?") === -1 ? "?" : "&") + data;
                 }
-                xhr.open("GET", url);
-            } else {
-                xhr.open("POST", url);
+            }
+            engine.open(options.method, url);
+
+            // try catch for ie >=9
+            try {
+                engine.timeout = options.timeout || 0;
+                if (responseType !== "stream") {
+                    engine.responseType = responseType
+                }
+            } catch (e) {
             }
 
-            if (["object", "array"].indexOf(utils.type(options.body)) !== -1) {
-                options.headers["Content-type"] = 'application/json;charset=utf-8'
+            // If the request data is json object, transforming it  to json string,
+            // and set request content-type to "json". In browser,  the data will
+            // be sent as RequestBody instead of FormData
+            if (!utils.isFormData(options.body)&&["object", "array"].indexOf(utils.type(options.body)) !== -1) {
+                options.headers["Content-Type"] = 'application/json;charset=utf-8'
                 data = JSON.stringify(options.body);
             }
 
             for (var k in options.headers) {
-                //删除content-type
                 if (k.toLowerCase() === "content-type" &&
                     (utils.isFormData(options.body) || !options.body || isGet)) {
-                    delete options.headers[k]; // Let the browser set it
+                    // Delete the content-type, Let the browser set it
+                    delete options.headers[k];
                 } else {
                     try {
-                        //浏览器环境下，有些头字段是只读的，如cookie, 写会抛异常
-                        xhr.setRequestHeader(k, options.headers[k])
-                    } catch (e) {
-                    }
+                        // In browser environment, some header fields are readonly,
+                        // write will cause the exception .
+                        engine.setRequestHeader(k, options.headers[k])
+                    } catch (e) {}
                 }
             }
 
             var onerror = function (e) {
+                // Call response interceptor
                 if (rpi.onerror) {
                     e = rpi.onerror(e, operate)
                 }
                 return e;
             }
 
-            xhr.onload = () => {
-                if (xhr.status >= 200 && xhr.status < 300) {
-                    //ie9 has not xhr.response
-                    var response = xhr.response || xhr.responseText;
-                    if ((xhr.getResponseHeader("Content-Type") || "").indexOf("json") !== -1) {
+            engine.onload = () => {
+                if ((engine.status >= 200 && engine.status < 300) || engine.status === 304) {
+
+                    // The xhr of IE9 has not response filed
+                    var response = engine.response || engine.responseText;
+                    if ((engine.getResponseHeader("Content-Type") || "").indexOf("json") !== -1
+                        // Some third engine implement may transform the response text to json object automatically,
+                        // so we should test the type of response before transforming it
+                        && !utils.isObject(response)) {
                         response = JSON.parse(response);
                     }
-                    var data = {data: response, xhr, request: options};
-                    utils.merge(data, xhr._response)
+
+                    var data = {data: response, engine, request: options};
+                    // The _response filed of engine is set in  adapter which be called in engine-wrapper.js
+                    utils.merge(data, engine._response)
                     if (rpi.handler) {
+                        // Call response interceptor
                         data = rpi.handler(data, operate) || data
                     }
                     if (abort) return;
                     resolve(data);
                 } else {
-                    var err = new Error(xhr.statusText)
-                    err.status = xhr.status;
+                    var err = new Error(engine.statusText)
+                    err.status = engine.status;
                     err = onerror(err) || err
                     if (abort) return;
                     reject(err)
                 }
             }
 
-            xhr.onerror = (e) => {
+            engine.onerror = (e) => {
+                // Handle network error
                 var err = new Error(e.msg || "Network Error")
                 err.status = 0;
                 err = onerror(err)
@@ -155,26 +170,19 @@ class Fly {
                 reject(err);
             }
 
-            xhr.ontimeout = () => {
-                var err = new Error(`timeout [ ${xhr.timeout}ms ]`)
+            engine.ontimeout = () => {
+                // Handle timeout error
+                var err = new Error(`timeout [ ${engine.timeout}ms ]`)
                 err.status = 1;
                 err = onerror(err)
                 if (abort) return;
                 reject(err)
             }
-            xhr._options = options;
-            xhr.send(isGet ? null : data)
+            engine._options = options;
+            setTimeout(()=>{engine.send(isGet ? null : data)},0)
         })
-        promise.xhr = xhr;
+        promise.engine = engine;
         return promise;
-    }
-
-    get(url, data, options) {
-        return this.request(url, data, options);
-    }
-
-    post(url, data, options) {
-        return this.request(url, data, utils.merge({method: "POST"}, options));
     }
 
     all(promises) {
@@ -182,18 +190,23 @@ class Fly {
     }
 
     spread(callback) {
-        return function(arr) {
+        return function (arr) {
             return callback.apply(null, arr);
         }
     }
 }
 
-//build环境定义全局变量
-KEEP("build", () => {
+["get","post","put","patch","head","delete"].forEach(e=>{
+    Fly.prototype[e]=function(url,data,option){
+        return this.request(url,data,utils.merge({method:e},option))
+    }
+})
+// Learn more about keep-loader: https://github.com/wendux/keep-loader
+KEEP("cdn||cdn-min", () => {
+    // This code block will be removed besides the  "CDN" and "cdn-min" build environment
     window.fly = new Fly;
     window.Fly = Fly;
 })
-//build环境定义全局变量
-KEEP("!build", () => {
-    module.exports = Fly;
-})
+module.exports = Fly;
+
+

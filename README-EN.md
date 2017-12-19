@@ -15,7 +15,7 @@ Supporting request forwarding and Promise based HTTP client for all JavaScript r
 ## Features
 
 1. Supports the [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) API
-2. Make [XMLHttpRequests](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest) from the browser，**light-weight and very light-weight**
+2. Make [XMLHttpRequests](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest) from the browser，**light-weight and very light-weight** 
 3. Make http requests from node.js
 4. Make http requests from WeChat applet
 5. Supports  request and response interceptors。
@@ -130,7 +130,7 @@ fly.all([getUserRecords(), getUserProjects()])
 
 ```javascript
 fly.request("/test",{hh:5},{
-    method:"post",
+    method:"post", 
     timeout:5000 // Set timeout to 5 seconds
  })
 .then(d=>{ console.log("request result:",d)})
@@ -250,10 +250,10 @@ If  the request fails, `catch`  will be called;  the error object  is an instanc
   headers:{},
   // `baseURL` will be prepended to `url` unless `url` is absolute.
   // It can be convenient to set `baseURL` for an instance of fly to pass relative URLs
-  // to methods of that instance.
+  // to methods of that instance.   
   baseURL:"",
   // `timeout` specifies the number of milliseconds before the request times out.
-  // If the request takes longer than `timeout`, the request will be aborted.
+  // If the request takes longer than `timeout`, the request will be aborted.  
   timeout:0,  //default
   // `withCredentials` indicates whether or not cross-site Access-Control requests
   // should be made using credentials
@@ -276,7 +276,7 @@ fly.config.timeout=10000;
 fly.config.baseURL="https://wendux.github.io/"
 ```
 
-### Single request
+### Single request 
 
 Single request configuration is valid only once:
 
@@ -332,19 +332,19 @@ This API is suitable for use in RESTful API scenarios. For convenience, the corr
 
 Helper functions for dealing with concurrent requests.
 
-##### `axios.all([])`
+##### `axios.all([])`   
 
 ##### `axios.spread(callback)`
 
 The parameter of all is an array of `promise`,  `then` will be called only when all requests are successful, and` catch` will be called as long as one fails.
 
-## Creating  an instance
+## Creating  an instance 
 
 You can create a new instance of Fly , and then apply different configurations:
 
 ```javascript
 // Notice require path is  "flyio/dist/npm/fly"
-var  Fly=require("flyio/dist/npm/fly")
+var  Fly=require("flyio/dist/npm/fly") 
 var nFly=new Fly();
 // Apply different configurations
 nFly.config.timeout=15000

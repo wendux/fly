@@ -1,4 +1,14 @@
-/******/ (function(modules) { // webpackBootstrap
+(function webpackUniversalModuleDefinition(root, factory) {
+	if(typeof exports === 'object' && typeof module === 'object')
+		module.exports = factory();
+	else if(typeof define === 'function' && define.amd)
+		define([], factory);
+	else {
+		var a = factory();
+		for(var i in a) (typeof exports === 'object' ? exports : root)[i] = a[i];
+	}
+})(this, function() {
+return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
 /******/
@@ -63,12 +73,11 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 4);
+/******/ 	return __webpack_require__(__webpack_require__.s = 2);
 /******/ })
 /************************************************************************/
 /******/ ([
-/* 0 */,
-/* 1 */
+/* 0 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -123,9 +132,8 @@ module.exports = {
 };
 
 /***/ }),
-/* 2 */,
-/* 3 */,
-/* 4 */
+/* 1 */,
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 function KEEP(_,cb){cb();}
@@ -142,7 +150,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  * email: 824783146@qq.com
  **/
 
-var util = __webpack_require__(1);
+var util = __webpack_require__(0);
 var isBrowser = typeof document !== "undefined";
 
 //EngineWrapper can help  generating  a  http engine quickly through a adapter
@@ -316,11 +324,9 @@ function EngineWrapper(adapter) {
 }
 
 // learn more about keep-loader: https://github.com/wendux/keep-loader
-KEEP("cdn||cdn-min", function () {
-    // This code block will be removed besides the  "CDN" and "cdn-min" build environment
-    window.EngineWrapper = EngineWrapper;
-});
+;
 module.exports = EngineWrapper;
 
 /***/ })
 /******/ ]);
+});

@@ -5,42 +5,55 @@ var path = require('path');
 var webpack = require('webpack');
 var env=process.argv[2]||"dev"
 
+//For cdn entry
 var entry={
     "engine-wrapper": "./src/engine-wrapper.js",
     "fly": "./src/fly.js",
     "adapter/dsbridge":"./src/adapter/dsbridge.js",
     "adapter/webviewjsbridge":"./src/adapter/webviewjsbridge.js",
 }
+
 var output = {
     path: path.resolve("./dist"),
     filename: "[name].js"
 }
 
 var plugins=[];
-if (env !== "dev") {
-    output.filename = "[name].min.js"
-    plugins.push(new webpack.optimize.UglifyJsPlugin({
-        // compress: {
-        //     warnings: true
-        // },
-        sourceMap: true
-    }))
-    if(env==="umd") {
-        output.libraryTarget = "umd"
-        output.filename = "[name].umd.min.js"
+
+//for npm require
+if(env==="npm"){
+    Object.assign(entry,{
+        "wx":"./src/wx.js"
+    })
+    output.path=path.resolve("./dist/npm")
+    output.libraryTarget = "umd"
+} else if (env === "dev") {
+    entry={
+        "../demon/dist/test": "./demon/test.js",
+        "../demon/dist/typeScriptTest": "./demon/typeScriptTest.js"
     }
 }else{
-    Object.assign(entry,{
-        "../demon/dist/test": "./demon/test.js",
-    })
-    output.libraryTarget = "umd"
-
+    if(env==="cdn-min"||env==="umd"){
+        output.filename = "[name].min.js"
+        plugins.push(new webpack.optimize.UglifyJsPlugin({
+            // compress: {
+            //     warnings: true
+            // },
+            sourceMap: true
+        }))
+    }
+    if(env==="umd") {
+        entry["wx"]="./src/wx.js"
+        output.libraryTarget = "umd"
+        output.path=path.resolve("./dist/umd")
+        output.filename = "[name].umd.min.js"
+    }
 }
 
 var config= {
     entry: entry,
     output: output,
-    devtool: env !== "dev"? '#source-map': false,
+    //devtool: env !== "dev"? '#source-map': false,
     module: {
         rules: [
             {

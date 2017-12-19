@@ -1,12 +1,14 @@
 {
   "name": "flyio",
-  "version": "0.1.9",
-  "main": "src/node.js",
+  "version": "0.3.0",
+  "main": "node-index.js",
+  "browser": "index.js",
   "author": {
     "name": "wendux",
     "email": "824783146@qq.com",
     "url": "https://github.com/wendux/fly"
   },
+  "license": "MIT",
   "description": "Lightweigh Promise based HTTP client for the browser and node.js",
   "keywords": [
     "flyjs",
@@ -16,15 +18,17 @@
     "type": "git",
     "url": "https://github.com/wendux/fly"
   },
+  "homepage": "https://github.com/wendux/fly",
   "bugs": {
-    "url": "https://github.com/wendux/fly"
+    "url": "https://github.com/wendux/fly/issues"
   },
   "scripts": {
-    "dev": "node build.js",
-    "build": "node build.js && node build.js build && node build.js umd",
+    "dev": "node build.js dev",
+    "build": "node build.js npm && node build.js cdn && node build.js cdn-min && node build.js umd",
     "nodeTest": "node ./demon/nodeTest.js",
     "test":"npm run build"
   },
+  "typings": "./index.d.ts",
   "devDependencies": {
     "babel-core": "^6.0.0",
     "babel-loader": "^6.0.0",
@@ -35,6 +39,5 @@
   },
   "dependencies": {
     "request": "^2.81.0"
-  },
-  "browser": "src/browser.js"
+  }
 }

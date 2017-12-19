@@ -1,4 +1,14 @@
-/******/ (function(modules) { // webpackBootstrap
+(function webpackUniversalModuleDefinition(root, factory) {
+	if(typeof exports === 'object' && typeof module === 'object')
+		module.exports = factory();
+	else if(typeof define === 'function' && define.amd)
+		define([], factory);
+	else {
+		var a = factory();
+		for(var i in a) (typeof exports === 'object' ? exports : root)[i] = a[i];
+	}
+})(this, function() {
+return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
 /******/
@@ -63,12 +73,11 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 5);
+/******/ 	return __webpack_require__(__webpack_require__.s = 3);
 /******/ })
 /************************************************************************/
-/******/ ({
-
-/***/ 1:
+/******/ ([
+/* 0 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -123,8 +132,9 @@ module.exports = {
 };
 
 /***/ }),
-
-/***/ 5:
+/* 1 */,
+/* 2 */,
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 function KEEP(_,cb){cb();}
@@ -134,7 +144,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var utils = __webpack_require__(1);
+var utils = __webpack_require__(0);
 var isBrowser = typeof document !== "undefined";
 
 var Fly = function () {
@@ -349,13 +359,9 @@ var Fly = function () {
     };
 });
 // Learn more about keep-loader: https://github.com/wendux/keep-loader
-KEEP("cdn||cdn-min", function () {
-    // This code block will be removed besides the  "CDN" and "cdn-min" build environment
-    window.fly = new Fly();
-    window.Fly = Fly;
-});
+;
 module.exports = Fly;
 
 /***/ })
-
-/******/ });
+/******/ ]);
+});

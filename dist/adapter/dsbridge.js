@@ -1,14 +1,4 @@
-(function webpackUniversalModuleDefinition(root, factory) {
-	if(typeof exports === 'object' && typeof module === 'object')
-		module.exports = factory();
-	else if(typeof define === 'function' && define.amd)
-		define([], factory);
-	else {
-		var a = factory();
-		for(var i in a) (typeof exports === 'object' ? exports : root)[i] = a[i];
-	}
-})(this, function() {
-return /******/ (function(modules) { // webpackBootstrap
+/******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
 /******/
@@ -73,12 +63,11 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 5);
+/******/ 	return __webpack_require__(__webpack_require__.s = 2);
 /******/ })
 /************************************************************************/
-/******/ ({
-
-/***/ 2:
+/******/ ([
+/* 0 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -97,17 +86,14 @@ module.exports = function handleImgBase64Data(responseData) {
 };
 
 /***/ }),
-
-/***/ 5:
+/* 1 */,
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 function KEEP(_,cb){cb();}
 "use strict";
 
-var handleImgBase64Data = __webpack_require__(2);
-
-//确保dsBridge初始化
-window._dsbridge && _dsbridge.init();
+var handleImgBase64Data = __webpack_require__(0);
 var adapter;
 if (window.dsBridge) {
     adapter = function adapter(request, responseCallBack) {
@@ -124,13 +110,10 @@ if (window.dsBridge) {
 }
 
 //build环境定义全局变量
-;
-
-KEEP("!build", function () {
-    module.exports = adapter;
+KEEP("cdn||cdn-min", function () {
+    window.dsbAdapter = adapter;
 });
+module.exports = adapter;
 
 /***/ })
-
-/******/ });
-});
+/******/ ]);

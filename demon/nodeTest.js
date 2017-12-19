@@ -1,7 +1,6 @@
-var fly = require("../src/node")
+var fly = require("../node-index")
 var FormData = require('form-data');
 var form = new FormData();
-var util = require("../src/utils")
 var log = console.log;
 var fs = require("fs")
 //设置超时
@@ -38,16 +37,13 @@ var formData={
     name:"xxx",
     file: fs.createReadStream('./v.png'),
 }
-fly.upload("http://localhost/ds/test", formData)
-    .then(d => {
-        log(d)
-    }).catch(log)
+// fly.upload("http://localhost/ds/test", formData)
+//     .then(d => {
+//         log(d)
+//     }).catch(log)
 
 
-// fly.request("http://localhost:8089/static/v.png",null,{requestType:"stream"}).then(d=>{
-//    // d.stream.pipe(fs.createWriteStream('doodle.png'))
-//
-// })
+fly.download("http://localhost:8089/static/v.png","./vxx.png");
 
 // fly.request("package.json",null,{
 //     formData:{xx:5}

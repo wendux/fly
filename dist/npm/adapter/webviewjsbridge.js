@@ -1,4 +1,14 @@
-/******/ (function(modules) { // webpackBootstrap
+(function webpackUniversalModuleDefinition(root, factory) {
+	if(typeof exports === 'object' && typeof module === 'object')
+		module.exports = factory();
+	else if(typeof define === 'function' && define.amd)
+		define([], factory);
+	else {
+		var a = factory();
+		for(var i in a) (typeof exports === 'object' ? exports : root)[i] = a[i];
+	}
+})(this, function() {
+return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
 /******/
@@ -63,11 +73,12 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 3);
+/******/ 	return __webpack_require__(__webpack_require__.s = 6);
 /******/ })
 /************************************************************************/
-/******/ ([
-/* 0 */
+/******/ ({
+
+/***/ 1:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -86,15 +97,14 @@ module.exports = function handleImgBase64Data(responseData) {
 };
 
 /***/ }),
-/* 1 */,
-/* 2 */,
-/* 3 */
+
+/***/ 6:
 /***/ (function(module, exports, __webpack_require__) {
 
 function KEEP(_,cb){cb();}
 'use strict';
 
-var handleImgBase64Data = __webpack_require__(0);
+var handleImgBase64Data = __webpack_require__(1);
 
 // Reference from  https://github.com/marcuswestin/WebViewJavascriptBridge
 function setupWebViewJavascriptBridge(callback) {
@@ -126,11 +136,11 @@ function adapter(request, responseCallBack) {
     });
 }
 //build环境定义全局变量
-KEEP("cdn||cdn-min", function () {
-    window.wjsbAdapter = adapter;
-});
+;
 
 module.exports = adapter;
 
 /***/ })
-/******/ ]);
+
+/******/ });
+});

@@ -2,15 +2,17 @@
  * author: wendu
  * email: 824783146@qq.com
  **/
-var util = require('./utils')
+
+var util = require('./utils/utils')
 var isBrowser = typeof document !== "undefined";
 
+//EngineWrapper can help  generating  a  http engine quickly through a adapter
 function EngineWrapper(adapter) {
     class AjaxEngine {
         constructor() {
             this.requestHeaders = {};
             this.readyState = 0;
-            this.timeout = 0;//无超时
+            this.timeout = 0;// 0 stands for no timeout
             this.responseURL = "";
             this.responseHeaders = {};
         }
@@ -31,7 +33,7 @@ function EngineWrapper(adapter) {
             } else {
                 url = util.trim(url);
                 if (url.indexOf("http") !== 0) {
-                    //是浏览器环境
+                    // Normalize the request url
                     if (isBrowser) {
                         var t = document.createElement("a");
                         t.href = url;
@@ -78,23 +80,27 @@ function EngineWrapper(adapter) {
                 }
                 request.timeout = self.timeout;
                 adapter(request, function (response) {
-                    //超时了
+
+                    // If the request has already timeout, return
                     if (self.readyState !== 3) return;
                     clearTimeout(timer)
 
+                    // Make sure the type of status is integer
                     self.status = response.statusCode - 0;
-                    //网络错误,端上返回0时代表错误
+
+                    // Network error, set the status code 0
                     if (self.status === 0) {
                         self.statusText = response.responseText;
                         self._call("onerror", {msg: response.statusMessage});
 
                     } else {
+                        // Parsing the response headers to array in a object,  because
+                        // there may be multiple values with the same header name
                         var headers = {};
                         for (var field in response.headers) {
-
                             var value = response.headers[field];
                             var key = field.toLowerCase();
-                            //是数组直接赋值
+                            // Is array
                             if (typeof value === "object") {
                                 headers[key] = value;
                             } else {
@@ -105,11 +111,13 @@ function EngineWrapper(adapter) {
                         var cookies = headers["set-cookie"];
                         if (isBrowser && cookies) {
                             cookies.forEach((e) => {
+                                // Remove the http-Only property of the  cookie
+                                // so that JavaScript can operate it.
                                 document.cookie = e.replace(/;\s*httpOnly/ig, "")
                             })
                         }
                         self.responseHeaders = headers;
-                        //错误码信息,暂且为状态码
+                        // Set the fields of engine from response
                         self.statusText = response.statusMessage || "";
                         self.response = self.responseText = response.responseText;
                         self._response=response;
@@ -153,14 +161,14 @@ function EngineWrapper(adapter) {
     return AjaxEngine;
 }
 
-//build环境定义全局变量
-KEEP("build", () => {
+// learn more about keep-loader: https://github.com/wendux/keep-loader
+KEEP("cdn||cdn-min", () => {
+    // This code block will be removed besides the  "CDN" and "cdn-min" build environment
     window.EngineWrapper = EngineWrapper
 })
-//非build环境则导出
-KEEP("!build", () => {
-    module.exports = EngineWrapper;
-})
+module.exports = EngineWrapper;
+
+
 
 
 
