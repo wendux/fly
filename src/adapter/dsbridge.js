@@ -1,8 +1,5 @@
 
-var handleImgBase64Data=require("./ImgBase64Handler")
-
-//确保dsBridge初始化
-window._dsbridge && _dsbridge.init();
+var handleImgBase64Data=require("../utils/ImgBase64Handler")
 var adapter;
 if (window.dsBridge) {
     adapter = function (request, responseCallBack) {
@@ -19,10 +16,8 @@ if (window.dsBridge) {
 }
 
 //build环境定义全局变量
-KEEP("build", () => {
+KEEP("cdn||cdn-min", () => {
     window.dsbAdapter = adapter
 })
+module.exports = adapter;
 
-KEEP("!build", () => {
-    module.exports = adapter;
-})

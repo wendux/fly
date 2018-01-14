@@ -35,10 +35,11 @@ var engine = EngineWrapper(function (request, responseCallback) {
     delete request.headers.cookie
     fly.request(request.url, request.data, request)
         .then(function (d) {
+            console.log(d)
             responseCallback({
-                statusCode: d.xhr.status,
-                responseText: d.xhr.responseText,
-                statusMessage: d.xhr.statusText
+                statusCode: d.engine.status,
+                responseText: d.engine.responseText,
+                statusMessage: d.engine.statusText
             })
         })
         .catch(function (err) {
