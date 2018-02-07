@@ -344,7 +344,7 @@ Fly默认会将JavaScript objects 序列化为 `JSON` 发送（RequestBody），
 var params = new URLSearchParams();
 params.append('param1', 'value1');
 params.append('param2', 'value2');
-axios.post('/foo', params);
+fly.post('/foo', params);
 ```
 
 > 注意，现在不是所有浏览器都支持 `URLSearchParams` (参考 [caniuse.com](http://www.caniuse.com/#feat=urlsearchparams)), 但是有一个 [polyfill](https://github.com/WebReflection/url-search-params) 可用 (确保polyfill为全局变量).
