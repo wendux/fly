@@ -379,8 +379,8 @@ Fly 依赖  ES6 Promise  [支持情况](http://caniuse.com/promises). 如果你�
 
 Fly 提供了 [TypeScript](http://typescriptlang.org) 描述文件.你可以在TypeScript中方便使用：
 ```typescript
-import axios from 'axios';
-axios.get('/user?ID=12345');
+import fly from 'flyio';
+fly.get('/user?ID=12345');
 ```
 
 
