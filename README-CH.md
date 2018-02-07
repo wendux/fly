@@ -330,6 +330,59 @@ request 适合在 [RESTful API](http://en.wikipedia.org/wiki/Representational_st
 发起多个并发请求，参数是一个promise 数组；当所有请求都成功后才会调用`then`，只要有一个失败，就会调 `catch`。
 
 
+
+## 使用application/x-www-form-urlencoded 编码
+
+Fly默认会将JavaScript objects 序列化为 `JSON` 发送（RequestBody），如果想以 `application/x-www-form-urlencoded` 编码格式发送，你可以使用如下方式：
+
+### 浏览器中
+
+在浏览器中, 你可以使用 [`URLSearchParams`](https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams) ，如下:
+
+```js
+var params = new URLSearchParams();
+params.append('param1', 'value1');
+params.append('param2', 'value2');
+axios.post('/foo', params);
+```
+
+> 注意，现在不是所有浏览器都支持 `URLSearchParams` (参考 [caniuse.com](http://www.caniuse.com/#feat=urlsearchparams)), 但是有一个 [polyfill](https://github.com/WebReflection/url-search-params) 可用 (确保polyfill为全局变量).
+
+另一种方法，你可以使用 [`qs`](https://github.com/ljharb/qs) 库:
+
+```js
+var qs = require('qs');
+fly.post('/foo', qs.stringify({ 'bar': 123 }));
+```
+
+### Node.js
+
+在node中，你可以使用 [`querystring`](https://nodejs.org/api/querystring.html) 模块，如:
+
+```js
+var querystring = require('querystring');
+fly.post('http://something.com/', querystring.stringify({ foo: 'bar' }));
+```
+
+你仍然可以使用 [`qs`](https://github.com/ljharb/qs) 库.
+
+
+
+## Promises
+
+Fly 依赖  ES6 Promise  [支持情况](http://caniuse.com/promises). 如果你的环境不支持 ES6 Promises, 你需要 [polyfill](https://github.com/jakearchibald/es6-promise).
+
+
+
+## TypeScript
+
+Fly 提供了 [TypeScript](http://typescriptlang.org) 描述文件.你可以在TypeScript中方便使用：
+```typescript
+import axios from 'axios';
+axios.get('/user?ID=12345');
+```
+
+
 ## 创建Fly实例
 
 为方便使用，在引入flyio库之后，会创建一个默认实例，一般情况下大多数请求都是通过默认实例发出的，但在一些场景中需要多个实例（可能使用不同的配置请求），这时你可以手动new一个：

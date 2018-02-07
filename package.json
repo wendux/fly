@@ -1,6 +1,6 @@
 {
   "name": "flyio",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "main": "node-index.js",
   "browser": "index.js",
   "author": {
@@ -26,10 +26,11 @@
     "dev": "node build.js dev",
     "build": "node build.js npm && node build.js cdn && node build.js cdn-min && node build.js umd",
     "nodeTest": "node ./demon/nodeTest.js",
-    "test":"npm run build"
+    "test": "npm run build"
   },
   "typings": "./index.d.ts",
   "devDependencies": {
+    "qs": "^6.5.1",
     "babel-core": "^6.0.0",
     "babel-loader": "^6.0.0",
     "babel-plugin-transform-runtime": "^6.0.0",

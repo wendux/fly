@@ -1,18 +1,17 @@
 "use strict";
 exports.__esModule = true;
-//import fly from "../index"
-var fly = require("../dist/npm/fly");
+var index_1 = require("../index");
 var log = console.log;
-fly.config.headers = { xx: 6 };
-fly.interceptors.request.use(function (config) {
+index_1["default"].config.headers = { xx: 6 };
+index_1["default"].interceptors.request.use(function (config) {
     config.headers['X-Requested-With'] = "XMLHttpRequest";
     config.headers['apiVersion'] = '1.0';
     log("request config", config);
     return config;
 });
-fly.interceptors.response.use(function (response, preHandler) {
+index_1["default"].interceptors.response.use(function (response, preHandler) {
     log("response", response);
 }, function (err, preHandler) {
     log(err, err);
 });
-fly.get("").then(function (e) { return console.log(e); });
+index_1["default"].get("").then(function (e) { return console.log(e); });

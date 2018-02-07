@@ -432,7 +432,9 @@ var Fly = function () {
                 var isGet = options.method === "GET";
                 if (isGet) {
                     if (options.body) {
-                        data = utils.formatParams(options.body);
+                        if (utils.type(options.body) !== "string") {
+                            data = utils.formatParams(options.body);
+                        }
                         url += (url.indexOf("?") === -1 ? "?" : "&") + data;
                     }
                 }

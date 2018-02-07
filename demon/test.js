@@ -2,6 +2,8 @@
  * Created by du on 16/12/10.
  */
 var fly = require("../index")
+var qs = require('qs');
+
 
 fly.get("../package.json", {aa: 8, bb: 9, tt: {xx: 5}}).then((d) => {
     console.log("get result:", d)
@@ -15,4 +17,13 @@ fly.request("../package.json", {hh: 5}, {
     method: "post"
 }).then(d => {
     console.log("ajax result:", d)
+})
+
+
+//send data in the application/x-www-form-urlencoded format
+fly.get("",qs.stringify({aa: 8, bb: 9, tt: {xx: 5}})).then((d)=>{
+
+})
+fly.post("../package.json", qs.stringify({aa: 8, bb: 9, tt: {xx: 5}})).then((d) => {
+
 })
