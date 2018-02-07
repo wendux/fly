@@ -339,9 +339,8 @@ This API is suitable for use in RESTful API scenarios. For convenience, the corr
 
 Helper functions for dealing with concurrent requests.
 
-##### `axios.all([])`
-
-##### `axios.spread(callback)`
+##### `fly.all([])`
+##### `fly.spread(callback)`
 
 The parameter of all is an array of `promise`,  `then` will be called only when all requests are successful, and` catch` will be called as long as one fails.
 

@@ -325,7 +325,8 @@ request 适合在 [RESTful API](http://en.wikipedia.org/wiki/Representational_st
 
 `fly.patch(url,data,options)`
 
-### `fly.all([])`
+#### `fly.all([])`
+#### `fly.spread([])`
 
 发起多个并发请求，参数是一个promise 数组；当所有请求都成功后才会调用`then`，只要有一个失败，就会调 `catch`。
 
