@@ -8,6 +8,11 @@
 [![dependency](https://img.shields.io/badge/dependency-Promise-yellowgreen.svg)](https://github.com/stefanpenner/es6-promise)
 ![platform](https://img.shields.io/badge/platform-browser%7Cnode%7Cwechat--applet-blue.svg)
 
+## Fly.js
+
+一个支持所有JavaScript运行环境的基于Promise的http请求库。
+
+
 
 ### 浏览器支持
 
@@ -15,6 +20,24 @@
 | ---------------------------------------- | ---------------------------------------- | ---------------------------------------- | ---------------------------------------- | ---------------------------------------- | ---------------------------------------- |
 | ✔                                        | ✔                                        | ✔                                        | ✔                                        | ✔                                        | > 8                                      |
 
+
+
+### 其它支持的平台
+<table>
+  <tbody>
+    <tr>
+      <td align="center" valign="middle">
+         <img height="100"  src="https://nodejs.org/static/images/logo-light.svg" alt="node logo">
+     </td>
+    <td align="center" valign="middle">
+        <img height="100" src="https://github.com/wendux/fly/raw/master/imgs/wxmp.png" alt="Vue logo"> 
+    </td>
+   <td align="center" valign="middle">
+      <img height="100"  src="http://img.alicdn.com/tps/TB1zBLaPXXXXXXeXXXXXXXXXXXX-121-59.svg" alt="mpvue logo">
+    </td>
+  </tr>
+ </tbody>
+</table>
 
 # 简介
 
@@ -30,6 +53,7 @@ Fly.js 是一个基于 promise 的，轻量且强大的Javascript http 网络库
 8. **浏览器端支持全局Ajax拦截 。**
 9. **H5页面内嵌到原生 APP 中时，支持将 http 请求转发到 Native。支持直接请求图片**。
 10. **高度可定制、可拆卸、可拼装。**
+
 
 
 

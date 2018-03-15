@@ -48,8 +48,8 @@ function EngineWrapper(adapter) {
         send(arg) {
             arg = arg || null;
             if (isBrowser) {
-                var cookie=document.cookie
-                if(cookie) {
+                var cookie = document.cookie
+                if (cookie) {
                     this.requestHeaders.cookie = cookie;
                 }
             }
@@ -81,24 +81,33 @@ function EngineWrapper(adapter) {
                 request.timeout = self.timeout;
                 adapter(request, function (response) {
 
+                    function getAndDelete(key) {
+                        var t = response[key]
+                        delete response[key]
+                        return t;
+                    }
+
                     // If the request has already timeout, return
                     if (self.readyState !== 3) return;
                     clearTimeout(timer)
 
                     // Make sure the type of status is integer
-                    self.status = response.statusCode - 0;
+                    self.status = getAndDelete("statusCode") - 0;
+
+                    var responseText = getAndDelete("responseText")
+                    var statusMessage = getAndDelete("statusMessage")
 
                     // Network error, set the status code 0
                     if (self.status === 0) {
-                        self.statusText = response.responseText;
-                        self._call("onerror", {msg: response.statusMessage});
-
+                        self.statusText = responseText;
+                        self._call("onerror", {msg: statusMessage});
                     } else {
                         // Parsing the response headers to array in a object,  because
                         // there may be multiple values with the same header name
+                        var responseHeaders = getAndDelete("headers")
                         var headers = {};
-                        for (var field in response.headers) {
-                            var value = response.headers[field];
+                        for (var field in responseHeaders) {
+                            var value = responseHeaders[field];
                             var key = field.toLowerCase();
                             // Is array
                             if (typeof value === "object") {
@@ -118,9 +127,9 @@ function EngineWrapper(adapter) {
                         }
                         self.responseHeaders = headers;
                         // Set the fields of engine from response
-                        self.statusText = response.statusMessage || "";
-                        self.response = self.responseText = response.responseText;
-                        self._response=response;
+                        self.statusText = statusMessage || "";
+                        self.response = self.responseText = responseText;
+                        self._response = response;
                         self._changeReadyState(4);
                         self._call("onload");
                     }

@@ -7,7 +7,7 @@ var fs = require("fs")
 fly.config.timeout = 5000;
 
 //设置基地址
-fly.config.baseURL = "http://localhost:63341/Fly"
+fly.config.baseURL = "http://localhost/ds"
 
 //get请求
 // fly.get("package.json",{wd:"xxx"}).then(d=>{
@@ -33,17 +33,17 @@ fly.config.baseURL = "http://localhost:63341/Fly"
 //     ]
 // }
 
-var formData={
-    name:"xxx",
-    file: fs.createReadStream('./v.png'),
-}
+// var formData={
+//     name:"xxx",
+//     file: fs.createReadStream('./v.png'),
+// }
 // fly.upload("http://localhost/ds/test", formData)
 //     .then(d => {
 //         log(d)
 //     }).catch(log)
 
 
-fly.download("http://localhost:8089/static/v.png","./vxx.png");
+//fly.download("http://localhost:8089/static/v.png","./vxx.png");
 
 // fly.request("package.json",null,{
 //     formData:{xx:5}
@@ -52,9 +52,9 @@ fly.download("http://localhost:8089/static/v.png","./vxx.png");
 // })
 
 //
-// //post请求
-// fly.post("http://localhost/ds/test",{xx:"xxx",aa:{bb:5}}).then(d=>{
-//     console.log("post请求成功",d.data)
-// }).catch((e)=>{
-//     log(`post请求失败，错误码：${e.status}, 错误信息：${e.message}`);
-// })
+//post请求
+fly.post("http://localhost/ds/test", {xx: "xxx", aa: {bb: 5}}).then(d => {
+    console.log("post请求成功", d)
+}).catch((e) => {
+    log(`post请求失败，错误码：${e.status}, 错误信息：${e.message}`);
+})

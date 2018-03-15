@@ -23,7 +23,8 @@ var plugins=[];
 //for npm require
 if(env==="npm"){
     Object.assign(entry,{
-        "wx":"./src/wx.js"
+        "wx": "./src/wx.js",
+        "weex": "./src/weex.js"
     })
     output.path=path.resolve("./dist/npm")
     output.libraryTarget = "umd"
@@ -43,7 +44,10 @@ if(env==="npm"){
         }))
     }
     if(env==="umd") {
-        entry["wx"]="./src/wx.js"
+        Object.assign(entry, {
+            "wx": "./src/wx.js",
+            "weex": "./src/weex.js"
+        })
         output.libraryTarget = "umd"
         output.path=path.resolve("./dist/umd")
         output.filename = "[name].umd.min.js"

@@ -7,36 +7,57 @@
 [![dependency](https://img.shields.io/badge/dependency-Promise-yellowgreen.svg)](https://github.com/stefanpenner/es6-promise)
 ![platform](https://img.shields.io/badge/platform-browser%7Cnode%7Cwechat--applet-blue.svg)
 
+## Fly.js
+
+Supporting request forwarding and Promise based HTTP client for all JavaScript runtimes.
+
+Chinese documentation : [中文文档](https://github.com/wendux/fly/blob/master/README-CH.md)
+
+
 
 ### Browser Support
 
 | ![Chrome](https://raw.github.com/alrra/browser-logos/master/src/chrome/chrome_48x48.png) | ![Firefox](https://raw.github.com/alrra/browser-logos/master/src/firefox/firefox_48x48.png) | ![Safari](https://raw.github.com/alrra/browser-logos/master/src/safari/safari_48x48.png) | ![Opera](https://raw.github.com/alrra/browser-logos/master/src/opera/opera_48x48.png) | ![Edge](https://raw.github.com/alrra/browser-logos/master/src/edge/edge_48x48.png) | ![IE](https://raw.github.com/alrra/browser-logos/master/src/archive/internet-explorer_9-11/internet-explorer_9-11_48x48.png) |
 | ---------------------------------------- | ---------------------------------------- | ---------------------------------------- | ---------------------------------------- | ---------------------------------------- | ---------------------------------------- |
 | ✔                                        | ✔                                        | ✔                                        | ✔                                        | ✔                                        | > 8                                      |
-## Fly
 
-Supporting request forwarding and Promise based HTTP client for all JavaScript runtimes.
+### Other Platforms  Support
+<table>
+  <tbody>
+    <tr>
+      <td align="center" valign="middle">
+         <img height="100"  src="https://nodejs.org/static/images/logo-light.svg" alt="node logo">
+     </td>
+    <td align="center" valign="middle">
+        <img height="100" src="https://github.com/wendux/fly/raw/master/imgs/wxmp.png" alt="Vue logo"> 
+    </td>
+   <td align="center" valign="middle">
+      <img height="100"  src="http://img.alicdn.com/tps/TB1zBLaPXXXXXXeXXXXXXXXXXXX-121-59.svg" alt="mpvue logo">
+    </td>
+  </tr>
+ </tbody>
+</table>
 
-Chinese documentation : [中文文档](https://github.com/wendux/fly/blob/master/README-CH.md)
+
 
 ## Features
 
 1. Supports the [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) API
 2. Make [XMLHttpRequests](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest) from the browser，**light-weight and very light-weight**
-3. Make http requests from node.js
-4. Make http requests from WeChat applet
-5. Supports  request and response interceptors。
-6. Automatic transforms for JSON data。
-7. Supports switching the underlying Http Engine, easy to adapt to various JavaScript Runtime.
-8. Supports global Ajax interception on browser
-9. Supports request forwarding in hybrid applications
-10. Easy to customize, disassemble and assemble
-
+3. Make http requests from [node.js](https://nodejs.org/)
+4. Make http requests from [WeChat Mini Program](https://mp.weixin.qq.com/cgi-bin/wx)
+5. Make http requests from [weex](http://weex.apache.org/)
+6. Supports  request and response interceptors。
+7. Automatic transforms for JSON data。
+8. Supports switching the underlying Http Engine, easy to adapt to various JavaScript Runtime.
+9. Supports global Ajax interception on browser
+10. Supports request forwarding in hybrid applications
+11. Easy to customize, disassemble and assemble
 
 
 ## Positioning & target
 
-Fly positioning is the ultimate solution for Javascript http requests. That is to say, in any environment that can execute Javascript, as long as it has the ability to access the network, Fly can run on it and provide unified APIs. At the same time, keep lightweight on the browser side.
+Fly.is  locates to be the ultimate solution for Javascript http requests. That is to say, in any environment that can execute Javascript, as long as it has the ability to access the network, Fly can run on it and provide unified APIs. At the same time, keep lightweight on the browser side.
 
 
 
@@ -459,9 +480,19 @@ Fly introduces the concept of Http Engine, and Http Engine is the engine that re
 In browsers, you can intercept global Ajax requests by replacing XMLHttpRequest with Fly engine, regardless of what network library the upper layer uses.  More details click here [Ajax hook](https://wendux.github.io/dist/#/doc/flyio-en/hook)
 
 
-## Use in WeChat Mini Program
+## Using in WeChat Mini Program
 
-The  JavaScript runtime of   WeChat Mini Program  is different from browser and node.  you can also easily use fly in WeChat Mini Program, More details click here  [Using fly in WeChat applet ](https://wendux.github.io/dist/#/doc/flyio-en/wx) .
+The  JavaScript runtime of   WeChat Mini Program  is different from browser and node.  you can also easily use fly in WeChat Mini Program, More details click here  [Using fly in WeChat Mini Program ](https://wendux.github.io/dist/#/doc/flyio-en/wx) .
+
+## Using in Weex
+
+The  JavaScript runtime of  [Weex](http://weex.apache.org/)  is  different from browser and node.  you can also easily use fly in WeChat [Weex](http://weex.apache.org/)  application:
+
+```js
+var  Fly=require("flyio/dist/npm/weex")
+var fly=new Fly
+fly.get('/user?ID=12345')
+```
 
 ## Size
 

@@ -1,6 +1,6 @@
 {
   "name": "flyio",
-  "version": "0.3.4",
+  "version": "0.3.5",
   "main": "node-index.js",
   "browser": "index.js",
   "author": {
