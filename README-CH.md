@@ -39,20 +39,23 @@
  </tbody>
 </table>
 
-# 简介
+目前Fly.js支持的平台包括：[Node.js](https://nodejs.org/) 、[微信小程序](https://mp.weixin.qq.com/cgi-bin/wx) 、[Weex](http://weex.apache.org/) 和浏览器，这些平台的 JavaScript 运行时都是不同的。更多的平台正在持续添加中，请保持关注。
+
+## 简介
 
 Fly.js 是一个基于 promise 的，轻量且强大的Javascript http 网络库，它有如下特点：
 
 1. 提供统一的 Promise API。
 2. 支持浏览器环境，**轻量且非常轻量** 。
-3. 支持 Node 环境。
-4. 支持微信小程序
-5. 支持请求／响应拦截器。
-6. 自动转换 JSON 数据。
-7. **支持切换底层 Http Engine，可轻松适配各种运行环境**。
-8. **浏览器端支持全局Ajax拦截 。**
-9. **H5页面内嵌到原生 APP 中时，支持将 http 请求转发到 Native。支持直接请求图片**。
-10. **高度可定制、可拆卸、可拼装。**
+3. 支持 [Node 环境](https://nodejs.org/)。
+4. 支持 [微信小程序](https://mp.weixin.qq.com/cgi-bin/wx)。
+5. 支持 [Weex](http://weex.apache.org/) 。
+6. 支持请求／响应拦截器。
+7. 自动转换 JSON 数据。
+8. **支持切换底层 Http Engine，可轻松适配各种运行环境**。
+9. **浏览器端支持全局Ajax拦截 。**
+10. **H5页面内嵌到原生 APP 中时，支持将 http 请求转发到 Native。支持直接请求图片**。
+11. **高度可定制、可拆卸、可拼装。**
 
 
 
@@ -93,7 +96,7 @@ https://unpkg.com/flyio/dist/umd/fly.umd.min.js
 
 ## 例子
 
-下面示例如无特殊说明，则在浏览器和node环境下都能执行。
+下面示例如无特殊说明，则在所有支持的平台下都能执行。
 
 ### 发起GET请求
 
@@ -286,9 +289,7 @@ fly.interceptors.request.use(null)
 fly.interceptors.response.use(null,null)
 ```
 
-## Node
 
-无论是在浏览器环境，还是在 Node 环境，Fly在上层提供了统一的 Promise API。这意味着无论您是 web 开发还是 node 开发，您都可以以相同的调用方式来发起http请求。不过，由于node和浏览器环境本身的差异，在Node环境下，Fly除了支持基本的API之外，还提供了一些增强的API，这些 API 主要涉及文件下载、多文件上传、http代理等众多强大的功能，详情请参考 [Node下增强的API](https://wendux.github.io/dist/#/doc/flyio/node)
 
 
 ## 错误处理
@@ -482,10 +483,24 @@ Fly 引入了Http engine 的概念，所谓 Http engine，就是真正发起http
 
 在浏览器中，可以通过用 Fly  engine 替换 `XMLHttpRequest` 的方式拦截**全局**的的 Ajax 请求，无论上层使用的是何种网络库。详细的内容请参考 [Fly拦截全局Ajax](https://wendux.github.io/dist/#/doc/flyio/hook)
 
+## Node
+
+无论是在浏览器环境，还是在 Node 环境，Fly在上层提供了统一的 Promise API。这意味着无论您是 web 开发还是 node 开发，您都可以以相同的调用方式来发起http请求。不过，由于node和浏览器环境本身的差异，在Node环境下，Fly除了支持基本的API之外，还提供了一些增强的API，这些 API 主要涉及文件下载、多文件上传、http代理等众多强大的功能，详情请参考 [Node下增强的API](https://wendux.github.io/dist/#/doc/flyio/node)
+
 
 ## 微信小程序支持
 
-微信小程序的js运行环境(js core)和浏览器的不同，为了方便小程序开发者也能方便的使用Fly，官方提供了微信小程序的 adapter,  现在，您可以在微信小程序中方便的使用fly了。集成文档参考：[在微信小程序中使用fly](https://wendux.github.io/dist/#/doc/flyio/wx) 。
+微信小程序的js运行环境(js core)和其它的的不同，为了方便小程序开发者也能方便的使用Fly，官方提供了微信小程序的 adapter,  现在，您可以在微信小程序中方便的使用fly了。集成文档参考：[在微信小程序中使用fly](https://wendux.github.io/dist/#/doc/flyio/wx) 。
+
+## Weex支持
+
+在weex应用程序中使用，你需要引入 “flyio/dist/npm/weex.js”
+
+```javascript
+var  Fly=require("flyio/dist/npm/weex")
+var fly=new Fly
+fly.get('/user?ID=12345')
+```
 
 ## 体积
 
@@ -495,7 +510,7 @@ Fly 引入了Http engine 的概念，所谓 Http engine，就是真正发起http
 
 工程目录结构及文件说明请参照  [fly源码目录说明](https://wendux.github.io/dist/#/doc/flyio/files) 。
 
-## Finally
+## 最后
 
 如果感觉 Fly 对您有用，欢迎 star 。
 

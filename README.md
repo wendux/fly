@@ -5,7 +5,7 @@
 [![typescript](https://img.shields.io/badge/typeScript-support-orange.svg)](https://github.com/wendux/fly/blob/master/index.d.ts)
 [![size](https://img.shields.io/github/size/wendux/fly/dist/fly.min.js.svg)](https://unpkg.com/flyio@0.3.1/dist/fly.min.js)
 [![dependency](https://img.shields.io/badge/dependency-Promise-yellowgreen.svg)](https://github.com/stefanpenner/es6-promise)
-![platform](https://img.shields.io/badge/platform-browser%7Cnode%7Cwechat--applet-blue.svg)
+![platform](https://img.shields.io/badge/platform-Browser%7CNode%7CWechat--Mini--Program%7CWeex-blue.svg)
 
 ## Fly.js
 
@@ -38,21 +38,23 @@ Chinese documentation : [中文文档](https://github.com/wendux/fly/blob/master
  </tbody>
 </table>
 
-
+Currently the platforms that fly.js supported include  [Node.js](https://nodejs.org/) 、[WeChat Mini Program](https://mp.weixin.qq.com/cgi-bin/wx) 、[Weex](http://weex.apache.org/) and browers, all  JavaScript runtimes of these are different. More platforms  are supporting...
 
 ## Features
 
 1. Supports the [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) API
 2. Make [XMLHttpRequests](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest) from the browser，**light-weight and very light-weight**
-3. Make http requests from [node.js](https://nodejs.org/)
+3. Make http requests from [Node.js](https://nodejs.org/)
 4. Make http requests from [WeChat Mini Program](https://mp.weixin.qq.com/cgi-bin/wx)
-5. Make http requests from [weex](http://weex.apache.org/)
+5. Make http requests from [Weex](http://weex.apache.org/)
 6. Supports  request and response interceptors。
 7. Automatic transforms for JSON data。
 8. Supports switching the underlying Http Engine, easy to adapt to various JavaScript Runtime.
 9. Supports global Ajax interception on browser
 10. Supports request forwarding in hybrid applications
 11. Easy to customize, disassemble and assemble
+
+
 
 
 ## Positioning & target
@@ -69,19 +71,19 @@ You can find the Fly documentation [on the offical website](https://wendux.githu
 
 ## Installing
 
-### Using npm
+### Using npm 
 
 ```shell
 npm install flyio
 ```
 
-### Using CDN
+### Using CDN （on browsers）
 
 ```javascript
 <script src="https://unpkg.com/flyio/dist/fly.min.js"></script>
 ```
 
-### UMD
+### UMD （on browsers）
 
 ```http
 https://unpkg.com/flyio/dist/umd/fly.umd.min.js
@@ -91,7 +93,9 @@ https://unpkg.com/flyio/dist/umd/fly.umd.min.js
 
 ## Example
 
-The following example, if not specified, can be executed in both browsers and node runtimes.
+The following example, if not specified, can be executed in all javaScript runtimes.
+
+
 
 ### Performing a `GET` request
 
@@ -279,12 +283,6 @@ If you may need to remove an interceptor later,    just set it to null.
 fly.interceptors.request.use(null)
 fly.interceptors.response.use(null,null)
 ```
-
-
-
-## Node
-
-Whether in browser environment or in Node environment, Fly provides a unified Promise API in the upper layer. This means that, regardless of whether you are in web development or node development, you can perform HTTP requests in the same way. However, because of the difference of node and browser environment, under the environment of Node, Fly in addition to basic API support, also provides some enhancements to the API, the API mainly involves the file download, file upload,  HTTP agents and other powerful features, please refer to [Node enhanced API](https://wendux.github.io/dist/#/doc/flyio-en/node) .
 
 
 
@@ -479,6 +477,10 @@ Fly introduces the concept of Http Engine, and Http Engine is the engine that re
 
 In browsers, you can intercept global Ajax requests by replacing XMLHttpRequest with Fly engine, regardless of what network library the upper layer uses.  More details click here [Ajax hook](https://wendux.github.io/dist/#/doc/flyio-en/hook)
 
+## Using in Node
+
+Whether in browser environment or in Node environment, Fly provides a unified Promise API in the upper layer. This means that, regardless of whether you are in web development or node development, you can perform HTTP requests in the same way. However, because of the difference of node and browser environment, under the environment of Node, Fly in addition to basic API support, also provides some enhancements to the API, the API mainly involves the file download, file upload,  HTTP agents and other powerful features, please refer to [Node enhanced API](https://wendux.github.io/dist/#/doc/flyio-en/node) .
+
 
 ## Using in WeChat Mini Program
 
@@ -489,6 +491,7 @@ The  JavaScript runtime of   WeChat Mini Program  is different from browser and 
 The  JavaScript runtime of  [Weex](http://weex.apache.org/)  is  different from browser and node.  you can also easily use fly in WeChat [Weex](http://weex.apache.org/)  application:
 
 ```js
+// require "flyio/dist/npm/weex" instead
 var  Fly=require("flyio/dist/npm/weex")
 var fly=new Fly
 fly.get('/user?ID=12345')
@@ -498,10 +501,14 @@ fly.get('/user?ID=12345')
 
 In  browser environment, the size of a library is very important. In this regard, Fly is doing a good job, on the on hand  Fly maintains the powerful function, on the other hand, Fly control its body to the minimum. Min is only about 4.6K, and GZIP is less than 2K after compression, and the volume is 1/4 of Axios。
 
+## Project structure
+
+Learn the project structure of Fly.js please refer to : [Fly.js source structure](https://wendux.github.io/dist/#/doc/flyio-en/files) 
+
 
 ## Finally
 
-Welcome star 。
+Welcome stars 。
 
 
 
