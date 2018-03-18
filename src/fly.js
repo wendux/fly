@@ -31,7 +31,6 @@ class Fly {
         var promise = new Promise((resolve, reject) => {
             options = options || {};
             options.headers = options.headers || {};
-            utils.merge(options.headers, this.config.headers)
             utils.merge(options, this.config)
             var rqi = this.interceptors.request;
             var rpi = this.interceptors.response;
