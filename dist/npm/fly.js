@@ -183,7 +183,6 @@ var Fly = function () {
             var promise = new Promise(function (resolve, reject) {
                 options = options || {};
                 options.headers = options.headers || {};
-                utils.merge(options.headers, _this.config.headers);
                 utils.merge(options, _this.config);
                 var rqi = _this.interceptors.request;
                 var rpi = _this.interceptors.response;
