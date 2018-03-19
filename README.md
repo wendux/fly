@@ -260,21 +260,6 @@ The structures of the `response` object in response interceptor.
 }
 ```
 
-### Perform async task in interceptor
-
-You can also return a Promise object  in interceptor, so you can perform a async task in interceptor:
-
-```javascript
-//Delay two seconds to perform network requests
-fly.interceptors.request.use((request)=>{
-  return new Promise((resolve,reject)=>{
-    setTimeout(()=>{
-      resolve(request)
-    },2000)
-  })
-})
-```
-
 ### Remove interceptor 
 
 If you may need to remove an interceptor later,    just set it to null.

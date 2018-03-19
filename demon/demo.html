@@ -37,6 +37,7 @@ open console panel to view log.
         //可以通过promise.reject／resolve直接中止请求
         console.log("interceptors.request", config)
         config.headers["X-Tag"]="fly.js";
+        //return Promise.resolve("xx")
         return config;
     })
 

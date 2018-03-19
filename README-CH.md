@@ -265,20 +265,6 @@ fly.interceptors.response.use(
 }
 ```
 
-### 拦截器中执行异步任务
-
-拦截器中可以返回修改后的数据，也可以返回一个`Promise`对象，这样就可以在拦截器中支持异步任务：
-
-```javascript
-//网络请求延迟两秒后发送
-fly.interceptors.request.use((request)=>{
-  return new Promise((resolve,reject)=>{
-    setTimeout(()=>{
-      resolve(request)
-    },2000)
-  })
-})
-```
 
 ### 移除拦截器
 
