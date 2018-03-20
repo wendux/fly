@@ -22,6 +22,7 @@ class Fly {
             baseURL: "",
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
             timeout: 0,
+            parseJson: true, // Convert response data to JSON object automatically.
             withCredentials: false
         }
     }
@@ -152,8 +153,8 @@ class Fly {
 
                     // The xhr of IE9 has not response filed
                     var response = engine.response || engine.responseText;
-                    if ((engine.getResponseHeader("Content-Type") || "").indexOf("json") !== -1
-                        // Some third engine implement may transform the response text to json object automatically,
+                    if (options.parseJson && (engine.getResponseHeader("Content-Type") || "").indexOf("json") !== -1
+                        // Some third engine implementation may transform the response text to json object automatically,
                         // so we should test the type of response before transforming it
                         && !utils.isObject(response)) {
                         response = JSON.parse(response);

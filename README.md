@@ -309,6 +309,9 @@ If  the request fails, `catch`  will be called;  the error object  is an instanc
   // `timeout` specifies the number of milliseconds before the request times out.
   // If the request takes longer than `timeout`, the request will be aborted.
   timeout:0,  //default
+  // `parseJson` indicates whether or not it is  automatically converted response 
+  //  data , the Content-Type of which is application/json, to JSON object,  
+  parseJson:true,
   // `withCredentials` indicates whether or not cross-site Access-Control requests
   // should be made using credentials
   withCredentials: false, // default
