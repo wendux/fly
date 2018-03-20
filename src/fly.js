@@ -81,14 +81,19 @@ class Fly {
             var responseType = utils.trim(options.responseType || "")
             engine.withCredentials = !!options.withCredentials;
             var isGet = options.method === "GET";
-            if (isGet) {
-                if (options.body) {
-                    if (utils.type(options.body) !== "string") {
-                        data = utils.formatParams(options.body);
-                    }
-                    url += (url.indexOf("?") === -1 ? "?" : "&") + data;
-                }
+            
+            // allow query even is not get
+            var params = options.params;
+            if (isGet && options.body) {
+                params = options.body;
             }
+            if (params) {
+                if (utils.type(params) !== "string") {
+                    data = utils.formatParams(params);
+                }
+                url += (url.indexOf("?") === -1 ? "?" : "&") + data;
+            }
+            
             engine.open(options.method, url);
 
             // try catch for ie >=9
