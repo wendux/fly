@@ -285,8 +285,9 @@ fly.interceptors.response.use(null,null)
 ```javascript
 {
   message:"Not Find 404", //错误消息
-  status:404 //如果服务器可通，则为http请求状态码。网络异常时为0，网络超时为1
-  request:{...} //对应的请求信息
+  status:404, //如果服务器可通，则为http请求状态码。网络异常时为0，网络超时为1
+  request:{...}, //对应的请求信息
+  engine:{}//请求使用的http engine(见下面文档),浏览器中为本次请求的XMLHttpRequest对象
 }
 ```
 

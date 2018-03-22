@@ -47,7 +47,7 @@ open console panel to view log.
             return Promise.resolve(response.data)
         },
         function (err) {
-            console.log("error", err.request)
+            console.log("error-interceptor", err.request, err.engine)
         }
     )
 
@@ -72,7 +72,7 @@ open console panel to view log.
         console.log("error", e)
     })
 
-    fly.request("../package.json",{hh:5},{method:"post"})
+    fly.request("../aa/package.json", {hh: 5}, {method: "post"})
         .then(function(d){
         console.log("ajax result:",d)
         }).catch(function (e) {

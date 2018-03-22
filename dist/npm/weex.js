@@ -593,6 +593,7 @@
                             }
 
                             function onerror(e) {
+                                e.engine = engine;
                                 onresult(rpi.onerror, e, -1);
                             }
 
@@ -627,14 +628,14 @@
                             };
 
                             engine.onerror = function (e) {
-                                var err = new Error(e.msg || "Network Error");
+                                var err = {message: e.msg || "Network Error"};
                                 err.status = 0;
                                 onerror(err);
                             };
 
                             engine.ontimeout = function () {
                                 // Handle timeout error
-                                var err = new Error("timeout [ " + engine.timeout + "ms ]");
+                                var err = {message: "timeout [ " + engine.timeout + "ms ]"};
                                 err.status = 1;
                                 onerror(err);
                             };
