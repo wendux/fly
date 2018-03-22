@@ -7,6 +7,7 @@ export interface FlyRequestConfig {
     body?: any;
     timeout?: number;
     withCredentials?: boolean;
+    parseJson?: boolean;
     responseType?: string;
 }
 
@@ -14,21 +15,17 @@ export interface FlyResponse<T = any>  {
     data: T;
     request: FlyRequestConfig;
     engine: XMLHttpRequest;
+    headers: Object;
 }
 
 export interface FlyPromise<T = any> extends Promise<FlyResponse<T>> {
 }
 
-export interface FlyInterceptorPreHandler{
-   resolve(data?:any):void;
-   reject(data?:any):void;
-}
-
 export interface FlyRequestInterceptor<V> {
-    use(onSend?: (config: V,preHandler?:FlyInterceptorPreHandler) => any):void;
+    use(onSend?: (config: V) => any): void;
 }
 export interface FlyResponseInterceptor<V> {
-    use(onSucceed?: (response: V,preHandler?:FlyInterceptorPreHandler) => any,onError?: (err: Error,preHandler?:FlyInterceptorPreHandler) => any):void;
+    use(onSucceed?: (response: V) => any, onError?: (err: Error) => any): void;
 }
 
 interface Fly {

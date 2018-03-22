@@ -10,11 +10,11 @@ fly.interceptors.request.use(config => {
 
 
 fly.interceptors.response.use(
-    (response, preHandler) => {
+    (response) => {
         log("response",response)
      },
-    (err, preHandler) => {
-        log(err,err);
+    (err) => {
+        log(err);
     }
 )
 fly.get("").then(e => console.log(e))

@@ -9,9 +9,9 @@ index_1["default"].interceptors.request.use(function (config) {
     log("request config", config);
     return config;
 });
-index_1["default"].interceptors.response.use(function (response, preHandler) {
+index_1["default"].interceptors.response.use(function (response) {
     log("response", response);
-}, function (err, preHandler) {
-    log(err, err);
+}, function (err) {
+    log(err);
 });
 index_1["default"].get("").then(function (e) { return console.log(e); });
