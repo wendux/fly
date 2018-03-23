@@ -5,8 +5,7 @@
 [![build status](https://travis-ci.org/wendux/fly.svg?branch=master)](https://travis-ci.org/wendux/fly)
 [![typescript](https://img.shields.io/badge/typeScript-support-orange.svg)](https://github.com/wendux/fly/blob/master/index.d.ts)
 [![size](https://img.shields.io/github/size/wendux/fly/dist/fly.min.js.svg)](https://unpkg.com/flyio@0.3.1/dist/fly.min.js)
-[![dependency](https://img.shields.io/badge/dependency-Promise-yellowgreen.svg)](https://github.com/stefanpenner/es6-promise)
-![platform](https://img.shields.io/badge/platform-Browser%7CNode%7CWechat--Mini--Program%7CWeex-blue.svg)
+![platform](https://img.shields.io/badge/platforms-All%20JavaScript%20untimes-blue.svg)
 
 ## Fly.js
 
@@ -28,22 +27,22 @@
     <tr>
         <td align="center" valign="middle">
             <a href="https://nodejs.org/">
-                <img height="100" src="https://github.com/wendux/fly/raw/master/imgs/node.png" alt="node logo">
+                <img  src="https://github.com/wendux/fly/raw/master/imgs/node.png" alt="node logo">
             </a>
         </td>
         <td align="center" valign="middle">
             <a href="https://mp.weixin.qq.com/cgi-bin/wx">
-                <img height="100" src="https://github.com/wendux/fly/raw/master/imgs/mp.png" alt="Mini Program logo">
+                <img  src="https://github.com/wendux/fly/raw/master/imgs/mp.png" alt="Mini Program logo">
             </a>
         </td>
         <td align="center" valign="middle">
             <a href="http://facebook.github.io/react-native/">
-                <img height="100" src="https://github.com/wendux/fly/raw/master/imgs/rn.png" alt="mpvue logo">
+                <img  src="https://github.com/wendux/fly/raw/master/imgs/rn.png" alt="mpvue logo">
             </a>
         </td>
         <td align="center" valign="middle">
             <a href="https://www.quickapp.cn/">
-                <img height="100" src="https://github.com/wendux/fly/raw/master/imgs/hp.png" alt="quick app logo">
+                <img  src="https://github.com/wendux/fly/raw/master/imgs/hp.png" alt="quick app logo">
             </a>
         </td>
     </tr>
@@ -57,16 +56,14 @@
 Fly.js 是一个基于 promise 的，轻量且强大的Javascript http 网络库，它有如下特点：
 
 1. 提供统一的 Promise API。
-2. 支持浏览器环境，**轻量且非常轻量** 。
-3. 支持 [Node 环境](https://nodejs.org/)。
-4. 支持 [微信小程序](https://mp.weixin.qq.com/cgi-bin/wx)。
-5. 支持 [Weex](http://weex.apache.org/) 。
-6. 支持请求／响应拦截器。
-7. 自动转换 JSON 数据。
-8. **支持切换底层 Http Engine，可轻松适配各种运行环境**。
-9. **浏览器端支持全局Ajax拦截 。**
-10. **H5页面内嵌到原生 APP 中时，支持将 http 请求转发到 Native。支持直接请求图片**。
-11. **高度可定制、可拆卸、可拼装。**
+2. 浏览器环境下，**轻量且非常轻量** 。
+3. 支持多种JavaScript 运行环境
+4. 支持请求／响应拦截器。
+5. 自动转换 JSON 数据。
+6. **支持切换底层 Http Engine，可轻松适配各种运行环境**。
+7. **浏览器端支持全局Ajax拦截 。**
+8. **H5页面内嵌到原生 APP 中时，支持将 http 请求转发到 Native。支持直接请求图片**。
+9. **高度可定制、可拆卸、可拼装。**
 
 
 
