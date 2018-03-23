@@ -41,6 +41,11 @@
             </a>
         </td>
         <td align="center" valign="middle">
+            <a href="http://weex.apache.org/">
+                <img  src="https://github.com/wendux/fly/raw/master/imgs/weex.png" alt="weex logo">
+            </a>
+        </td>
+        <td align="center" valign="middle">
             <a href="https://www.quickapp.cn/">
                 <img  src="https://github.com/wendux/fly/raw/master/imgs/hp.png" alt="quick app logo">
             </a>
