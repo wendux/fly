@@ -4,7 +4,7 @@
 [![build status](https://travis-ci.org/wendux/fly.svg?branch=master)](https://travis-ci.org/wendux/fly)
 [![typescript](https://img.shields.io/badge/typeScript-support-orange.svg)](https://github.com/wendux/fly/blob/master/index.d.ts)
 [![size](https://img.shields.io/github/size/wendux/fly/dist/fly.min.js.svg)](https://unpkg.com/flyio@0.3.1/dist/fly.min.js)
-![platform](https://img.shields.io/badge/platforms-All%20JavaScript%20untimes-blue.svg)
+![platform](https://img.shields.io/badge/platforms-All%20JavaScript%20Runtimes-blue.svg)
 
 ## Fly.js
 
@@ -26,22 +26,22 @@ Chinese documentation : [中文文档](https://github.com/wendux/fly/blob/master
     <tr>
         <td align="center" valign="middle">
             <a href="https://nodejs.org/">
-                <img height="100" src="https://github.com/wendux/fly/raw/master/imgs/node.png" alt="node logo">
+                <img  src="https://github.com/wendux/fly/raw/master/imgs/node.png" alt="node logo">
             </a>
         </td>
         <td align="center" valign="middle">
-            <a href="https://mp.weixin.qq.com/cgi-bin/wx">
-                <img height="100" src="https://github.com/wendux/fly/raw/master/imgs/mp.png" alt="Mini Program logo">
+            <a href="https://mp.weixin.qq.com/">
+                <img  src="https://github.com/wendux/fly/raw/master/imgs/mp.png" alt="Mini Program logo">
             </a>
         </td>
         <td align="center" valign="middle">
             <a href="http://facebook.github.io/react-native/">
-                <img height="100" src="https://github.com/wendux/fly/raw/master/imgs/rn.png" alt="mpvue logo">
+                <img  src="https://github.com/wendux/fly/raw/master/imgs/rn.png" alt="mpvue logo">
             </a>
         </td>
         <td align="center" valign="middle">
             <a href="https://www.quickapp.cn/">
-                <img height="100" src="https://github.com/wendux/fly/raw/master/imgs/hp.png" alt="quick app logo">
+                <img  src="https://github.com/wendux/fly/raw/master/imgs/hp.png" alt="quick app logo">
             </a>
         </td>
     </tr>

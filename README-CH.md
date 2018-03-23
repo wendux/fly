@@ -5,7 +5,7 @@
 [![build status](https://travis-ci.org/wendux/fly.svg?branch=master)](https://travis-ci.org/wendux/fly)
 [![typescript](https://img.shields.io/badge/typeScript-support-orange.svg)](https://github.com/wendux/fly/blob/master/index.d.ts)
 [![size](https://img.shields.io/github/size/wendux/fly/dist/fly.min.js.svg)](https://unpkg.com/flyio@0.3.1/dist/fly.min.js)
-![platform](https://img.shields.io/badge/platforms-All%20JavaScript%20untimes-blue.svg)
+![platform](https://img.shields.io/badge/platforms-All%20JavaScript%20Runtimes-blue.svg)
 
 ## Fly.js
 
@@ -31,7 +31,7 @@
             </a>
         </td>
         <td align="center" valign="middle">
-            <a href="https://mp.weixin.qq.com/cgi-bin/wx">
+            <a href="https://mp.weixin.qq.com/">
                 <img  src="https://github.com/wendux/fly/raw/master/imgs/mp.png" alt="Mini Program logo">
             </a>
         </td>
