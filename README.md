@@ -23,36 +23,44 @@ Chinese documentation : [中文文档](https://github.com/wendux/fly/blob/master
 
 ### Other Platforms  Support
 <table>
-  <tbody>
+    <tbody>
     <tr>
-      <td align="center" valign="middle">
-         <img height="100"  src="https://nodejs.org/static/images/logo-light.svg" alt="node logo">
-     </td>
-    <td align="center" valign="middle">
-        <img height="100" src="https://github.com/wendux/fly/raw/master/imgs/wxmp.png" alt="Vue logo"> 
-    </td>
-   <td align="center" valign="middle">
-      <img height="100"  src="http://img.alicdn.com/tps/TB1zBLaPXXXXXXeXXXXXXXXXXXX-121-59.svg" alt="mpvue logo">
-    </td>
-  </tr>
- </tbody>
-</table>
+        <td align="center" valign="middle">
+            <a href="https://nodejs.org/">
+                <img height="100" src="https://github.com/wendux/fly/raw/master/imgs/node.png" alt="node logo">
+            </a>
+        </td>
+        <td align="center" valign="middle">
+            <a href="https://mp.weixin.qq.com/cgi-bin/wx">
+                <img height="100" src="https://github.com/wendux/fly/raw/master/imgs/mp.png" alt="Mini Program logo">
+            </a>
+        </td>
+        <td align="center" valign="middle">
+            <a href="http://facebook.github.io/react-native/">
+                <img height="100" src="https://github.com/wendux/fly/raw/master/imgs/rn.png" alt="mpvue logo">
+            </a>
+        </td>
+        <td align="center" valign="middle">
+            <a href="https://www.quickapp.cn/">
+                <img height="100" src="https://github.com/wendux/fly/raw/master/imgs/hp.png" alt="quick app logo">
+            </a>
+        </td>
+    </tr>
+    </tbody>
+</table>  
 
-Currently the platforms that fly.js supported include  [Node.js](https://nodejs.org/) 、[WeChat Mini Program](https://mp.weixin.qq.com/cgi-bin/wx) 、[Weex](http://weex.apache.org/) and browers, all  JavaScript runtimes of these are different. More platforms  are supporting...
+Currently the platforms that fly.js supported include  [Node.js](https://nodejs.org/) 、[WeChat Mini Program](https://mp.weixin.qq.com/cgi-bin/wx) 、[Weex](http://weex.apache.org/) 、[React Native](http://facebook.github.io/react-native/) 、[Quick App](https://www.quickapp.cn/) and the browers, all  JavaScript runtimes of these are different. More platforms  are supporting...
 
 ## Features
 
 1. Supports the [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) API
 2. Make [XMLHttpRequests](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest) from the browser，**light-weight and very light-weight**
-3. Make http requests from [Node.js](https://nodejs.org/)
-4. Make http requests from [WeChat Mini Program](https://mp.weixin.qq.com/cgi-bin/wx)
-5. Make http requests from [Weex](http://weex.apache.org/)
-6. Supports  request and response interceptors。
-7. Automatic transforms for JSON data。
-8. Supports switching the underlying Http Engine, easy to adapt to various JavaScript Runtime.
-9. Supports global Ajax interception on browser
-10. Supports request forwarding in hybrid applications
-11. Easy to customize, disassemble and assemble
+3. Supports  various  JavaScript runtimes
+4. Supports  request and response interceptors。
+5. Automatic transforms for JSON data。
+6. Supports switching the underlying Http Engine, easy to adapt to various JavaScript Runtime.
+7. Supports global Ajax interception on browser
+8. Supports request forwarding in hybrid applications
 
 
 
@@ -477,14 +485,32 @@ The  JavaScript runtime of   WeChat Mini Program  is different from browser and 
 
 ## Using in Weex
 
-The  JavaScript runtime of  [Weex](http://weex.apache.org/)  is  different from browser and node.  you can also easily use fly in WeChat [Weex](http://weex.apache.org/)  application:
+The  JavaScript runtime of  [Weex](http://weex.apache.org/)  is  different from other's.  you can also easily use fly in WeChat [Weex](http://weex.apache.org/)  application:
 
 ```js
 // require "flyio/dist/npm/weex" instead
 var  Fly=require("flyio/dist/npm/weex")
 var fly=new Fly
-fly.get('/user?ID=12345')
+...
+fly.get('test').then(...)
 ```
+
+## Using in Quick app
+
+The  JavaScript runtime of  [Quick App](https://www.quickapp.cn/)   is  different from other's.  you can also easily use fly in Quick App :
+
+```javascript
+ var fetch = require("@system.fetch")
+ var Fly=require("flyio/dist/npm/hap")
+ var fly=new Fly(fetch)
+ ...
+ fly.get('test').then(...)
+```
+
+## Using in React Native
+
+Because XmlHttpRequest in the React Native JavaScript runtime is also available, fly is used the same way as in the browser.
+
 
 ## Size
 

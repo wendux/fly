@@ -1,6 +1,6 @@
 {
   "name": "flyio",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "main": "node-index.js",
   "browser": "index.js",
   "author": {
@@ -30,12 +30,13 @@
   },
   "typings": "./index.d.ts",
   "devDependencies": {
-    "qs": "^6.5.1",
     "babel-core": "^6.0.0",
     "babel-loader": "^6.0.0",
     "babel-plugin-transform-runtime": "^6.0.0",
     "babel-preset-es2015": "^6.0.0",
     "keep-loader": "^0.7.1",
+    "qs": "^6.5.1",
+    "shelljs": "^0.8.1",
     "webpack": "^2.6.0"
   },
   "dependencies": {

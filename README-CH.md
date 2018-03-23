@@ -24,22 +24,33 @@
 
 ### 其它支持的平台
 <table>
-  <tbody>
+    <tbody>
     <tr>
-      <td align="center" valign="middle">
-         <img height="100"  src="https://nodejs.org/static/images/logo-light.svg" alt="node logo">
-     </td>
-    <td align="center" valign="middle">
-        <img height="100" src="https://github.com/wendux/fly/raw/master/imgs/wxmp.png" alt="Vue logo"> 
-    </td>
-   <td align="center" valign="middle">
-      <img height="100"  src="http://img.alicdn.com/tps/TB1zBLaPXXXXXXeXXXXXXXXXXXX-121-59.svg" alt="mpvue logo">
-    </td>
-  </tr>
- </tbody>
-</table>
+        <td align="center" valign="middle">
+            <a href="https://nodejs.org/">
+                <img height="100" src="https://github.com/wendux/fly/raw/master/imgs/node.png" alt="node logo">
+            </a>
+        </td>
+        <td align="center" valign="middle">
+            <a href="https://mp.weixin.qq.com/cgi-bin/wx">
+                <img height="100" src="https://github.com/wendux/fly/raw/master/imgs/mp.png" alt="Mini Program logo">
+            </a>
+        </td>
+        <td align="center" valign="middle">
+            <a href="http://facebook.github.io/react-native/">
+                <img height="100" src="https://github.com/wendux/fly/raw/master/imgs/rn.png" alt="mpvue logo">
+            </a>
+        </td>
+        <td align="center" valign="middle">
+            <a href="https://www.quickapp.cn/">
+                <img height="100" src="https://github.com/wendux/fly/raw/master/imgs/hp.png" alt="quick app logo">
+            </a>
+        </td>
+    </tr>
+    </tbody>
+</table>  
 
-目前Fly.js支持的平台包括：[Node.js](https://nodejs.org/) 、[微信小程序](https://mp.weixin.qq.com/cgi-bin/wx) 、[Weex](http://weex.apache.org/) 和浏览器，这些平台的 JavaScript 运行时都是不同的。更多的平台正在持续添加中，请保持关注。
+目前Fly.js支持的平台包括：[Node.js](https://nodejs.org/) 、[微信小程序](https://mp.weixin.qq.com/cgi-bin/wx) 、[Weex](http://weex.apache.org/) 、[React Native](http://facebook.github.io/react-native/) 、[Quick App](https://www.quickapp.cn/) 和浏览器，这些平台的 JavaScript 运行时都是不同的。更多的平台正在持续添加中，请保持关注。
 
 ## 简介
 
@@ -490,6 +501,32 @@ var  Fly=require("flyio/dist/npm/weex")
 var fly=new Fly
 fly.get('/user?ID=12345')
 ```
+
+## 快应用支持
+
+在 [快应用](https://www.quickapp.cn/) 中使用，快应用中依赖 `fetch`模块，需要先在 `manifest.json`中添加引用：
+
+```javascript
+  "features": [
+     ...
+    {"name": "system.fetch"}
+  ]
+```
+
+然后创建fly实例
+
+```javascript
+ //依赖快应用中的fetch模块，需要在
+ var fetch = require("@system.fetch")
+ var Fly=require("flyio/dist/npm/hap")
+ var fly=new Fly(fetch)
+ ...
+ fly.get('test').then(...)
+```
+
+## React Native支持
+
+由于 React Native JavaScript 运行时中存在 `XmlHttpRequest`对象，所以使用方式和浏览器中相同。
 
 ## 体积
 

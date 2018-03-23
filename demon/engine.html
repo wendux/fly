@@ -8,25 +8,25 @@
     <script src="../dist/engine-wrapper.min.js"></script>
     <script src="https://cdn.bootcss.com/axios/0.16.2/axios.js"></script>
     <script>
-        var log=console.log;
-        var engine= EngineWrapper(function (request,responseCallback) {
+        var log = console.log;
+        var engine = EngineWrapper(function (request, responseCallback) {
             responseCallback({
-                statusCode:200,
-                responseText:"你变或者不变，我都不变😜。",
-                extraFeild:"自定义字段"
+                statusCode: 200,
+                responseText: "你变或者不变，我都不变😜。",
+                extraFeild: "自定义字段"
             })
         })
-        fly.engine=engine;
-//
-//        fly.post("../package.json",{aa:8,bb:9,tt:{xx:5}}).then((d) => {
-//            console.log("get result:",d)
-//        }).catch((e) => console.log("error", e))
+        fly.engine = engine;
+        //
+        //        fly.post("../package.json",{aa:8,bb:9,tt:{xx:5}}).then((d) => {
+        //            console.log("get result:",d)
+        //        }).catch((e) => console.log("error", e))
 
-//    var formData = new FormData();
-//    formData.append('username', 'Chris');
-//    axios.post("../package.json",formData).then(log).catch(log)
-//        fly.post("../package.json",formData).then(log).catch(log)
-        fly.get("../package.json").then(d=>{
+        //    var formData = new FormData();
+        //    formData.append('username', 'Chris');
+        //    axios.post("../package.json",formData).then(log).catch(log)
+        //        fly.post("../package.json",formData).then(log).catch(log)
+        fly.get("../package.json").then(d => {
             log(d.data)
             log(d.extraFeild)
         })
@@ -39,3 +39,30 @@
 
 </body>
 </html>
+
+<table>
+    <tbody>
+    <tr>
+        <td align="center" valign="middle">
+            <a href="https://nodejs.org/">
+                <img height="100" src="https://github.com/wendux/fly/raw/master/imgs/node.png" alt="node logo">
+            </a>
+        </td>
+        <td align="center" valign="middle">
+            <a href="https://mp.weixin.qq.com/cgi-bin/wx">
+                <img height="100" src="https://github.com/wendux/fly/raw/master/imgs/mp.png" alt="Mini Program logo">
+            </a>
+        </td>
+        <td align="center" valign="middle">
+            <a href="http://facebook.github.io/react-native/">
+                <img height="100" src="https://github.com/wendux/fly/raw/master/imgs/rn.png" alt="mpvue logo">
+            </a>
+        </td>
+        <td align="center" valign="middle">
+            <a href="https://www.quickapp.cn/">
+                <img height="100" src="https://github.com/wendux/fly/raw/master/imgs/hp.png" alt="quick app logo">
+            </a>
+        </td>
+    </tr>
+    </tbody>
+</table>

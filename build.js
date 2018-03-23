@@ -4,6 +4,7 @@
 var path = require('path');
 var webpack = require('webpack');
 var env=process.argv[2]||"dev"
+require('shelljs/global')
 
 //For cdn entry
 var entry={
@@ -20,12 +21,14 @@ var output = {
 
 var plugins=[];
 
+var npmExtra = {
+    "wx": "./src/wx.js",
+    "weex": "./src/weex.js",
+}
+
 //for npm require
 if(env==="npm"){
-    Object.assign(entry,{
-        "wx": "./src/wx.js",
-        "weex": "./src/weex.js"
-    })
+    Object.assign(entry, npmExtra)
     output.path=path.resolve("./dist/npm")
     output.libraryTarget = "umd"
 } else if (env === "dev") {
@@ -44,10 +47,7 @@ if(env==="npm"){
         }))
     }
     if(env==="umd") {
-        Object.assign(entry, {
-            "wx": "./src/wx.js",
-            "weex": "./src/weex.js"
-        })
+        Object.assign(entry, npmExtra)
         output.libraryTarget = "umd"
         output.path=path.resolve("./dist/umd")
         output.filename = "[name].umd.min.js"
@@ -83,6 +83,8 @@ var config= {
 }
 webpack(config,function (err,stats) {
     if(err) throw err;
+    cp('-rf', 'src/hap.js', "dist/npm/hap.js")
+    cp('-rf', 'src/adapter/hap.js', "dist/npm/adapter/hap.js")
     process.stdout.write(stats.toString({
         colors: true,
         modules: false,
