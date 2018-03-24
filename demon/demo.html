@@ -72,13 +72,19 @@ open console panel to view log.
         console.log("error", e)
     })
 
+    fly.post("../package.json?xx", "xx=8")
+        .then(function (d) {
+            console.log("post result:", d)
+        }).catch(function (e) {
+        console.log("error", e)
+    })
+
     fly.request("../aa/package.json", {hh: 5}, {method: "post"})
         .then(function(d){
         console.log("ajax result:",d)
         }).catch(function (e) {
         console.log("error", e)
     })
-
 </script>
 </body>
 </html>

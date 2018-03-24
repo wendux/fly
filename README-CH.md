@@ -68,7 +68,7 @@ Fly.js 是一个基于 promise 的，轻量且强大的Javascript http 网络库
 6. **支持切换底层 Http Engine，可轻松适配各种运行环境**。
 7. **浏览器端支持全局Ajax拦截 。**
 8. **H5页面内嵌到原生 APP 中时，支持将 http 请求转发到 Native。支持直接请求图片**。
-9. **高度可定制、可拆卸、可拼装。**
+
 
 
 
@@ -95,13 +95,13 @@ Fly 的定位是成为 Javascript http请求的终极解决方案。也就是说
 npm install flyio
 ```
 
-### 使用CDN
+### 使用CDN(浏览器中)
 
 ```javascript
 <script src="https://unpkg.com/flyio/dist/fly.min.js"></script>
 ```
 
-### UMD
+### UMD（浏览器中）
 
 ```http
 https://unpkg.com/flyio/dist/umd/fly.umd.min.js
@@ -109,12 +109,20 @@ https://unpkg.com/flyio/dist/umd/fly.umd.min.js
 
 ## 例子
 
+### 引入flyio
+
+不同JavaScript运行时的入口文件不同，请查看文档后面相应平台的引入方式，但在浏览器、Node、React Native中引入的方式是一样的，如下：
+
+```javascript
+//浏览器、Node、React Native中直接引入即可
+var fly=require("flyio")
+```
+
 下面示例如无特殊说明，则在所有支持的平台下都能执行。
 
 ### 发起GET请求
 
 ```javascript
-var fly=require("flyio")
 //通过用户id获取信息,参数直接写在url中
 fly.get('/user?id=133')
   .then(function (response) {

@@ -105,9 +105,17 @@ https://unpkg.com/flyio/dist/umd/fly.umd.min.js
 
 ## Example
 
-The following example, if not specified, can be executed in all javaScript runtimes.
+### Require flyio
 
+The entry files of  different JavaScript Runtimes may be different, you can refer on the below，
+but the entries of  Browsers, Node, and React Native are the same:
 
+```javascript
+//for Browsers, Node, and React Native
+var fly=require("flyio")
+```
+
+The following example, if not specified, can be executed in all JavaScript Runtimes.
 
 ### Performing a `GET` request
 

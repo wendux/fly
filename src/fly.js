@@ -20,7 +20,7 @@ class Fly {
         this.config = {
             method: "GET",
             baseURL: "",
-            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            headers: {},
             timeout: 0,
             parseJson: true, // Convert response data to JSON object automatically.
             withCredentials: false
@@ -29,10 +29,15 @@ class Fly {
 
     request(url, data, options) {
         var engine = new this.engine;
+        var contentType = "Content-Type";
+        var contentTypeLowerCase = contentType.toLowerCase();
         var promise = new Promise((resolve, reject) => {
             options = options || {};
             options.headers = options.headers || {};
             utils.merge(options, this.config)
+            var headers = options.headers;
+            headers[contentType] = headers[contentType] || headers[contentTypeLowerCase] || 'application/x-www-form-urlencoded';
+            delete headers[contentTypeLowerCase]
             var rqi = this.interceptors.request;
             var rpi = this.interceptors.response;
             options.body = data || options.body;
@@ -105,12 +110,12 @@ class Fly {
             // and set request content-type to "json". In browser,  the data will
             // be sent as RequestBody instead of FormData
             if (!utils.isFormData(options.body) && ["object", "array"].indexOf(utils.type(options.body)) !== -1) {
-                options.headers["Content-Type"] = 'application/json;charset=utf-8'
+                options.headers[contentType] = 'application/json;charset=utf-8'
                 data = JSON.stringify(options.body);
             }
 
             for (var k in options.headers) {
-                if (k.toLowerCase() === "content-type" &&
+                if (k === contentType &&
                     (utils.isFormData(options.body) || !options.body || isGet)) {
                     // Delete the content-type, Let the browser set it
                     delete options.headers[k];
@@ -149,12 +154,17 @@ class Fly {
                 onresult(rpi.onerror, e, -1)
             }
 
+            function Err(msg, status) {
+                this.message = msg
+                this.status = status;
+            }
+
             engine.onload = () => {
                 if ((engine.status >= 200 && engine.status < 300) || engine.status === 304) {
 
                     // The xhr of IE9 has not response filed
                     var response = engine.response || engine.responseText;
-                    if (options.parseJson && (engine.getResponseHeader("Content-Type") || "").indexOf("json") !== -1
+                    if (options.parseJson && (engine.getResponseHeader(contentType) || "").indexOf("json") !== -1
                         // Some third engine implementation may transform the response text to json object automatically,
                         // so we should test the type of response before transforming it
                         && !utils.isObject(response)) {
@@ -173,23 +183,16 @@ class Fly {
                     utils.merge(data, engine._response)
                     onresult(rpi.handler, data, 0)
                 } else {
-                    var err = new Error(engine.statusText)
-                    err.status = engine.status;
-                    onerror(err)
+                    onerror(new Err(engine.statusText, engine.status))
                 }
             }
 
             engine.onerror = (e) => {
-                var err = {message: e.msg || "Network Error"}
-                err.status = 0;
-                onerror(err)
+                onerror(new Err(e.msg || "Network Error", 0))
             }
 
             engine.ontimeout = () => {
-                // Handle timeout error
-                var err = {message: `timeout [ ${engine.timeout}ms ]`}
-                err.status = 1;
-                onerror(err)
+                onerror(new Err(`timeout [ ${engine.timeout}ms ]`, 1))
             }
             engine._options = options;
             setTimeout(() => {
