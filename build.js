@@ -4,7 +4,6 @@
 var path = require('path');
 var webpack = require('webpack');
 var env=process.argv[2]||"dev"
-require('shelljs/global')
 
 //For cdn entry
 var entry={
@@ -24,6 +23,7 @@ var plugins=[];
 var npmExtra = {
     "wx": "./src/wx.js",
     "weex": "./src/weex.js",
+    "hap": "./src/hap.js"
 }
 
 //for npm require
@@ -83,8 +83,6 @@ var config= {
 }
 webpack(config,function (err,stats) {
     if(err) throw err;
-    cp('-rf', 'src/hap.js', "dist/npm/hap.js")
-    cp('-rf', 'src/adapter/hap.js', "dist/npm/adapter/hap.js")
     process.stdout.write(stats.toString({
         colors: true,
         modules: false,

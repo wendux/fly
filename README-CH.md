@@ -118,10 +118,13 @@ https://unpkg.com/flyio/dist/umd/fly.umd.min.js
    var fly=require("flyio")
    ```
 
-   上面方式引入的是Fly的默认实例，你也可以自己创建Fly实例：
+   上面方式引入的是Fly的默认实例（浏览器、Node、React Native中相同），你也可以自己创建Fly实例：
 
    ```javascript
+   // 浏览器和React Native
    var Fly=require("flyio/dist/npm/fly")
+   // Node 入口
+   // var Fly=require("flyio/src/node")
    var fly=new Fly;
    ```
 

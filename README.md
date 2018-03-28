@@ -118,7 +118,10 @@ but the entries of  Browsers, Node, and React Native are the same。each require
    The above method requires the default instance of Fly, and you can also create an Fly instance by yourself:
 
    ```javascript
+   // for browsers and React Native
    var Fly=require("flyio/dist/npm/fly")
+   // for Node
+   //var Fly=require("flyio/src/node")
    var fly=new Fly;
    ```
 

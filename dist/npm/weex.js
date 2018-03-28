@@ -110,7 +110,7 @@
         /******/
         /******/ 	// Load entry module and return exports
         /******/
-        return __webpack_require__(__webpack_require__.s = 8);
+        return __webpack_require__(__webpack_require__.s = 10);
         /******/
     })
     /************************************************************************/
@@ -679,7 +679,8 @@
             /***/
         }),
         /* 3 */,
-        /* 4 */
+        /* 4 */,
+        /* 5 */
         /***/ (function (module, exports, __webpack_require__) {
 
             "use strict";
@@ -710,10 +711,11 @@
 
             /***/
         }),
-        /* 5 */,
         /* 6 */,
         /* 7 */,
-        /* 8 */
+        /* 8 */,
+        /* 9 */,
+        /* 10 */
         /***/ (function (module, exports, __webpack_require__) {
 
             "use strict";
@@ -722,7 +724,7 @@
 //weex entry
             var Fly = __webpack_require__(2);
             var EngineWrapper = __webpack_require__(1);
-            var adapter = __webpack_require__(4);
+            var adapter = __webpack_require__(5);
             var weexEngine = EngineWrapper(adapter);
             module.exports = function (engine) {
                 return new Fly(engine || weexEngine);
