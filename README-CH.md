@@ -89,34 +89,87 @@ Fly 的定位是成为 Javascript http请求的终极解决方案。也就是说
 
 ## 安装
 
-### 使用NPM
+使用NPM
 
 ```shell
 npm install flyio
 ```
 
-### 使用CDN(浏览器中)
+使用CDN(浏览器中)
 
 ```javascript
 <script src="https://unpkg.com/flyio/dist/fly.min.js"></script>
 ```
 
-### UMD（浏览器中）
+UMD（浏览器中）
 
 ```http
 https://unpkg.com/flyio/dist/umd/fly.umd.min.js
 ```
 
+## 引入flyio
+
+**不同JavaScript运行时的入口文件不同** ，请查看文档后面相应平台的引入方式，但在浏览器、Node、React Native中引入的方式是一样的，下面是不同平台下的引入的方式：
+
+1. 浏览器、Node、React Native中引入
+
+   ```javascript
+   //引入fly实例
+   var fly=require("flyio")
+   ```
+
+   上面方式引入的是Fly的默认实例，你也可以自己创建Fly实例：
+
+   ```javascript
+   var Fly=require("flyio/dist/npm/fly")
+   var fly=new Fly;
+   ```
+
+2. 在微信小程序中引入
+
+   ```javascript
+   var Fly=require("flyio/dist/npm/wx") 
+   var fly=new Fly
+   ```
+
+   如果您的微信小程序项目没有使用`npm`来管理依赖，您可以直接下载源码到您的小程序工程，下载链接[wx.js](https://github.com/wendux/fly/tree/master/dist/npm/wx.js) 或 [wx.umd.min.js](https://github.com/wendux/fly/tree/master/dist/umd/wx.umd.min.js) .下载任意一个，保存到本地工程目录，假设在“lib”目录，接下来引入：
+
+   ```javascript
+   var Fly=require("../lib/wx") //wx.js为您下载的源码文件
+   var fly=new Fly; //创建fly实例
+   ```
+
+3. 快应用中引入
+
+   [快应用](https://www.quickapp.cn/) 中Fly依赖 `fetch`模块，需要先在 `manifest.json`中添加引用：
+
+   ```javascript
+     "features": [
+        ...
+       {"name": "system.fetch"}
+     ]
+   ```
+
+   然后创建fly实例
+
+   ```javascript
+    //依赖快应用中的fetch模块，需要在
+    var fetch = require("@system.fetch")
+    var Fly=require("flyio/dist/npm/hap")
+    var fly=new Fly(fetch)
+   ```
+
+4. Weex中引入
+
+   ```javascript
+   var Fly=require("flyio/dist/npm/weex")
+   var fly=new Fly
+   ```
+
+
+引入之后，您就可以对fly实例进行全局配置、添加拦截器、发起网络请求了。
+
 ## 例子
-
-### 引入flyio
-
-不同JavaScript运行时的入口文件不同，请查看文档后面相应平台的引入方式，但在浏览器、Node、React Native中引入的方式是一样的，如下：
-
-```javascript
-//浏览器、Node、React Native中直接引入即可
-var fly=require("flyio")
-```
 
 下面示例如无特殊说明，则在所有支持的平台下都能执行。
 
@@ -355,7 +408,7 @@ fly.config.baseURL="https://wendux.github.io/"
 
 ### 单次请求配置
 
-需要对单次请求配置时，需使用`request`方法，配置只对当次请求有效。
+需要对单次请求配置时，配置只对当次请求有效。
 
 ```javascript
 fly.request("/test",{hh:5},{
@@ -496,47 +549,6 @@ Fly 引入了Http engine 的概念，所谓 Http engine，就是真正发起http
 ## Node
 
 无论是在浏览器环境，还是在 Node 环境，Fly在上层提供了统一的 Promise API。这意味着无论您是 web 开发还是 node 开发，您都可以以相同的调用方式来发起http请求。不过，由于node和浏览器环境本身的差异，在Node环境下，Fly除了支持基本的API之外，还提供了一些增强的API，这些 API 主要涉及文件下载、多文件上传、http代理等众多强大的功能，详情请参考 [Node下增强的API](https://wendux.github.io/dist/#/doc/flyio/node)
-
-
-## 微信小程序支持
-
-微信小程序的js运行环境(js core)和其它的的不同，为了方便小程序开发者也能方便的使用Fly，官方提供了微信小程序的 adapter,  现在，您可以在微信小程序中方便的使用fly了。集成文档参考：[在微信小程序中使用fly](https://wendux.github.io/dist/#/doc/flyio/wx) 。
-
-## Weex支持
-
-在weex应用程序中使用，你需要引入 “flyio/dist/npm/weex.js”
-
-```javascript
-var  Fly=require("flyio/dist/npm/weex")
-var fly=new Fly
-fly.get('/user?ID=12345')
-```
-
-## 快应用支持
-
-在 [快应用](https://www.quickapp.cn/) 中使用，快应用中依赖 `fetch`模块，需要先在 `manifest.json`中添加引用：
-
-```javascript
-  "features": [
-     ...
-    {"name": "system.fetch"}
-  ]
-```
-
-然后创建fly实例
-
-```javascript
- //依赖快应用中的fetch模块，需要在
- var fetch = require("@system.fetch")
- var Fly=require("flyio/dist/npm/hap")
- var fly=new Fly(fetch)
- ...
- fly.get('test').then(...)
-```
-
-## React Native支持
-
-由于 React Native JavaScript 运行时中存在 `XmlHttpRequest`对象，所以使用方式和浏览器中相同。
 
 ## 体积
 
