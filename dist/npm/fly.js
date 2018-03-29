@@ -200,7 +200,9 @@ var Fly = function () {
                     options = rqi.handler(options, Promise) || options;
                 }
                 function isPromise(p) {
-                    return p instanceof Promise;
+                    // some  polyfill implementation of Promise may be not standard,
+                    // so, we test by duck-typing
+                    return p.then && p.catch;
                 }
 
                 if (isPromise(options)) {
