@@ -47,7 +47,7 @@ open console panel to view log.
             return Promise.resolve(response.data)
         },
         function (err) {
-            console.log("error-interceptor", err.request, err.engine)
+            console.log("error-interceptor", err)
         }
     )
 

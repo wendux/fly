@@ -302,7 +302,7 @@ function EngineWrapper(adapter) {
         }, {
             key: "getResponseHeader",
             value: function getResponseHeader(key) {
-                return (this.responseHeaders[key.toLowerCase()] || "").toString();
+                return (this.responseHeaders[key.toLowerCase()] || "").toString() || null;
             }
         }, {
             key: "getAllResponseHeaders",
@@ -311,7 +311,7 @@ function EngineWrapper(adapter) {
                 for (var key in this.responseHeaders) {
                     str += key + ":" + this.getResponseHeader(key) + "\r\n";
                 }
-                return str;
+                return str || null;
             }
         }, {
             key: "abort",
@@ -514,30 +514,34 @@ var Fly = function () {
                 }
 
                 engine.onload = function () {
-                    if (engine.status >= 200 && engine.status < 300 || engine.status === 304) {
-
-                        // The xhr of IE9 has not response filed
-                        var response = engine.response || engine.responseText;
-                        if (options.parseJson && (engine.getResponseHeader(contentType) || "").indexOf("json") !== -1
-                            // Some third engine implementation may transform the response text to json object automatically,
-                            // so we should test the type of response before transforming it
-                            && !utils.isObject(response)) {
-                            response = JSON.parse(response);
-                        }
-
-                        var headers = {};
-                        var items = engine.getAllResponseHeaders().split("\r\n");
-                        items.pop();
-                        items.forEach(function (e) {
-                            var key = e.split(":")[0];
-                            headers[key] = engine.getResponseHeader(key);
-                        });
-                        var data = {data: response, headers: headers, engine: engine, request: options};
-                        // The _response filed of engine is set in  adapter which be called in engine-wrapper.js
-                        utils.merge(data, engine._response);
+                    // The xhr of IE9 has not response filed
+                    var response = engine.response || engine.responseText;
+                    if (options.parseJson && (engine.getResponseHeader(contentType) || "").indexOf("json") !== -1
+                        // Some third engine implementation may transform the response text to json object automatically,
+                        // so we should test the type of response before transforming it
+                        && !utils.isObject(response)) {
+                        response = JSON.parse(response);
+                    }
+                    var headers = {};
+                    var items = engine.getAllResponseHeaders().split("\r\n");
+                    items.pop();
+                    items.forEach(function (e) {
+                        var key = e.split(":")[0];
+                        headers[key] = engine.getResponseHeader(key);
+                    });
+                    var status = engine.status;
+                    var statusText = engine.statusText;
+                    var data = {data: response, headers: headers, status: status, statusText: statusText};
+                    // The _response filed of engine is set in  adapter which be called in engine-wrapper.js
+                    utils.merge(data, engine._response);
+                    if (status >= 200 && status < 300 || status === 304) {
+                        data.engine = engine;
+                        data.request = options;
                         onresult(rpi.handler, data, 0);
                     } else {
-                        onerror(new Err(engine.statusText, engine.status));
+                        var e = new Err(statusText, status);
+                        e.response = data;
+                        onerror(e);
                     }
                 };
 

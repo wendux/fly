@@ -145,7 +145,7 @@ function EngineWrapper(adapter) {
         }
 
         getResponseHeader(key) {
-            return (this.responseHeaders[key.toLowerCase()] || "").toString()
+            return (this.responseHeaders[key.toLowerCase()] || "").toString() || null
         }
 
         getAllResponseHeaders() {
@@ -153,7 +153,7 @@ function EngineWrapper(adapter) {
             for (var key in this.responseHeaders) {
                 str += key + ":" + this.getResponseHeader(key) + "\r\n";
             }
-            return str;
+            return str || null;
         }
 
         abort(msg) {

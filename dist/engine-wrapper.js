@@ -294,7 +294,7 @@ function EngineWrapper(adapter) {
         }, {
             key: "getResponseHeader",
             value: function getResponseHeader(key) {
-                return (this.responseHeaders[key.toLowerCase()] || "").toString();
+                return (this.responseHeaders[key.toLowerCase()] || "").toString() || null;
             }
         }, {
             key: "getAllResponseHeaders",
@@ -303,7 +303,7 @@ function EngineWrapper(adapter) {
                 for (var key in this.responseHeaders) {
                     str += key + ":" + this.getResponseHeader(key) + "\r\n";
                 }
-                return str;
+                return str || null;
             }
         }, {
             key: "abort",

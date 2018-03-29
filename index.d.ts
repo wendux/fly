@@ -11,6 +11,14 @@ export interface FlyRequestConfig {
     responseType?: string;
 }
 
+export interface FlyError {
+    status: number;
+    message: string;
+    engine: XMLHttpRequest;
+    request?: FlyRequestConfig;
+    response?: FlyErrResponse;
+}
+
 export interface FlyResponse<T = any>  {
     data: T;
     request: FlyRequestConfig;
@@ -18,11 +26,18 @@ export interface FlyResponse<T = any>  {
     headers: Object;
 }
 
+export interface FlyErrResponse {
+    data: any;
+    headers: Object;
+    status: number;
+    statusText: string;
+}
+
 export interface FlyPromise<T = any> extends Promise<FlyResponse<T>> {
 }
 
 export interface FlyRequestInterceptor<V> {
-    use(onSend?: (config: V) => any): void;
+    use(onSend?: (request: V) => any): void;
 }
 export interface FlyResponseInterceptor<V> {
     use(onSucceed?: (response: V) => any, onError?: (err: Error) => any): void;
