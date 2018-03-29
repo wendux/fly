@@ -347,7 +347,7 @@ fly.interceptors.response.use(null,null)
 
 ## Error handling
 
-If  the request fails, `catch`  will be called;  the error object  is an instance of Error, and it has there fields :
+If  the request fails, `catch`  will be called;  the error object's fields as follows :
 
 ```javascript
 {

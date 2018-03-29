@@ -357,7 +357,7 @@ fly.interceptors.response.use(null,null)
 
 ## 错误处理
 
-请求失败之后，`catch` 捕获到的 err 为 Error 的一个实例，有三个字段
+请求失败之后，`catch` 捕获到的 err 是一个对象，它的字段如下：
 
 ```javascript
 {
