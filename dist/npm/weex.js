@@ -322,7 +322,7 @@
                                     var statusMessage = getAndDelete("statusMessage");
 
                                     // Network error, set the status code 0
-                                    if (self.status === 0) {
+                                    if (!self.status) {
                                         self.statusText = responseText;
                                         self._call("onerror", {msg: statusMessage});
                                     } else {
@@ -619,7 +619,7 @@
                                     response = JSON.parse(response);
                                 }
                                 var headers = {};
-                                var items = engine.getAllResponseHeaders().split("\r\n");
+                                var items = (engine.getAllResponseHeaders() || "").split("\r\n");
                                 items.pop();
                                 items.forEach(function (e) {
                                     var key = e.split(":")[0];

@@ -171,7 +171,7 @@ class Fly {
                     response = JSON.parse(response);
                 }
                 var headers = {};
-                var items = engine.getAllResponseHeaders().split("\r\n");
+                var items = (engine.getAllResponseHeaders() || "").split("\r\n");
                 items.pop();
                 items.forEach((e) => {
                     var key = e.split(":")[0]

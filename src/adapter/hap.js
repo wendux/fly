@@ -4,10 +4,17 @@ module.exports = function (fetch) {
         request.data = request.body;
         request.header = request.headers;
         request.complete = (ret) => {
+            if (typeof ret !== "object") {
+                ret = {
+                    code: 0,
+                    msg: ret
+                }
+            }
             responseCallback({
-                statusCode: ret.code,
+                statusCode: ret.code || 0,
                 responseText: ret.data,
-                headers: ret.headers
+                headers: ret.headers,
+                statusMessage: ret.msg
             })
         }
         fetch.fetch(request)

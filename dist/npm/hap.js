@@ -322,7 +322,7 @@
                                     var statusMessage = getAndDelete("statusMessage");
 
                                     // Network error, set the status code 0
-                                    if (self.status === 0) {
+                                    if (!self.status) {
                                         self.statusText = responseText;
                                         self._call("onerror", {msg: statusMessage});
                                     } else {
@@ -619,7 +619,7 @@
                                     response = JSON.parse(response);
                                 }
                                 var headers = {};
-                                var items = engine.getAllResponseHeaders().split("\r\n");
+                                var items = (engine.getAllResponseHeaders() || "").split("\r\n");
                                 items.pop();
                                 items.forEach(function (e) {
                                     var key = e.split(":")[0];
@@ -691,16 +691,29 @@
             "use strict";
 
 
+            var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
+                return typeof obj;
+            } : function (obj) {
+                return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+            };
+
 //hap adapter
             module.exports = function (fetch) {
                 return function (request, responseCallback) {
                     request.data = request.body;
                     request.header = request.headers;
                     request.complete = function (ret) {
+                        if ((typeof ret === "undefined" ? "undefined" : _typeof(ret)) !== "object") {
+                            ret = {
+                                code: 0,
+                                msg: ret
+                            };
+                        }
                         responseCallback({
-                            statusCode: ret.code,
+                            statusCode: ret.code || 0,
                             responseText: ret.data,
-                            headers: ret.headers
+                            headers: ret.headers,
+                            statusMessage: ret.msg
                         });
                     };
                     fetch.fetch(request);
