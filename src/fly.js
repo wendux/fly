@@ -202,7 +202,7 @@ class Fly {
             }
             engine._options = options;
             setTimeout(() => {
-                engine.send(isGet ? null : data)
+                engine.send(isGet ? null : options.body)
             }, 0)
 
         })

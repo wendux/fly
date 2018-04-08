@@ -556,7 +556,7 @@ var Fly = function () {
                 };
                 engine._options = options;
                 setTimeout(function () {
-                    engine.send(isGet ? null : data);
+                    engine.send(isGet ? null : options.body);
                 }, 0);
             });
             promise.engine = engine;
@@ -603,7 +603,7 @@ module.exports = function (request, responseCallback) {
     var con = {
         method: request.method,
         url: request.url,
-        dataType: request.dataType || "text",
+        dataType: request.dataType || undefined,
         header: request.headers,
         data: request.body || {},
         success: function success(res) {

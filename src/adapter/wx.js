@@ -3,7 +3,7 @@ module.exports=function(request, responseCallback) {
     var con = {
         method: request.method,
         url: request.url,
-        dataType: request.dataType||"text",
+        dataType: request.dataType || undefined,
         header: request.headers,
         data: request.body||{},
         success(res) {

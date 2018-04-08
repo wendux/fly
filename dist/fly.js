@@ -342,7 +342,7 @@ var Fly = function () {
                 };
                 engine._options = options;
                 setTimeout(function () {
-                    engine.send(isGet ? null : data);
+                    engine.send(isGet ? null : options.body);
                 }, 0);
             });
             promise.engine = engine;
