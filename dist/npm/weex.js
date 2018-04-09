@@ -511,6 +511,7 @@
                                 });
                                 return;
                             }
+                            data = options.body;
                             // Normalize the request url
                             url = utils.trim(options.url);
                             var baseUrl = utils.trim(options.baseURL || "");
@@ -540,9 +541,9 @@
                             engine.withCredentials = !!options.withCredentials;
                             var isGet = options.method === "GET";
                             if (isGet) {
-                                if (options.body) {
-                                    if (utils.type(options.body) !== "string") {
-                                        data = utils.formatParams(options.body);
+                                if (data) {
+                                    if (utils.type(data) !== "string") {
+                                        data = utils.formatParams(data);
                                     }
                                     url += (url.indexOf("?") === -1 ? "?" : "&") + data;
                                 }
@@ -561,13 +562,13 @@
                             // If the request data is json object, transforming it  to json string,
                             // and set request content-type to "json". In browser,  the data will
                             // be sent as RequestBody instead of FormData
-                            if (!utils.isFormData(options.body) && ["object", "array"].indexOf(utils.type(options.body)) !== -1) {
+                            if (!utils.isFormData(data) && ["object", "array"].indexOf(utils.type(data)) !== -1) {
                                 options.headers[contentType] = 'application/json;charset=utf-8';
-                                data = JSON.stringify(options.body);
+                                data = JSON.stringify(data);
                             }
 
                             for (var k in options.headers) {
-                                if (k === contentType && (utils.isFormData(options.body) || !options.body || isGet)) {
+                                if (k === contentType && (utils.isFormData(data) || !data || isGet)) {
                                     // Delete the content-type, Let the browser set it
                                     delete options.headers[k];
                                 } else {
@@ -580,19 +581,19 @@
                                 }
                             }
 
-                            function onresult(handler, data, type) {
+                            function onresult(handler, options, type) {
                                 if (handler) {
                                     //如果失败，添加请求信息
                                     if (type) {
-                                        data.request = options;
+                                        options.request = options;
                                     }
                                     // Call response interceptor
-                                    data = handler.call(rpi, data, Promise) || data;
+                                    options = handler.call(rpi, options, Promise) || options;
                                 }
-                                if (!isPromise(data)) {
-                                    data = Promise[type === 0 ? "resolve" : "reject"](data);
+                                if (!isPromise(options)) {
+                                    options = Promise[type === 0 ? "resolve" : "reject"](options);
                                 }
-                                data.then(function (d) {
+                                options.then(function (d) {
                                     resolve(d);
                                 }).catch(function (e) {
                                     reject(e);
@@ -650,7 +651,7 @@
                             };
                             engine._options = options;
                             setTimeout(function () {
-                                engine.send(isGet ? null : options.body);
+                                engine.send(isGet ? null : data);
                             }, 0);
                         });
                         promise.engine = engine;
