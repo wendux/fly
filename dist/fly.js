@@ -248,7 +248,8 @@ var Fly = function () {
                     if (responseType !== "stream") {
                         engine.responseType = responseType;
                     }
-                } catch (e) {}
+                } catch (e) {
+                }
 
                 // If the request data is json object, transforming it  to json string,
                 // and set request content-type to "json". In browser,  the data will
@@ -267,7 +268,8 @@ var Fly = function () {
                             // In browser environment, some header fields are readonly,
                             // write will cause the exception .
                             engine.setRequestHeader(k, options.headers[k]);
-                        } catch (e) {}
+                        } catch (e) {
+                        }
                     }
                 }
 
@@ -304,9 +306,9 @@ var Fly = function () {
                     // The xhr of IE9 has not response filed
                     var response = engine.response || engine.responseText;
                     if (options.parseJson && (engine.getResponseHeader(contentType) || "").indexOf("json") !== -1
-                    // Some third engine implementation may transform the response text to json object automatically,
-                    // so we should test the type of response before transforming it
-                    && !utils.isObject(response)) {
+                        // Some third engine implementation may transform the response text to json object automatically,
+                        // so we should test the type of response before transforming it
+                        && !utils.isObject(response)) {
                         response = JSON.parse(response);
                     }
                     var headers = {};
@@ -318,7 +320,7 @@ var Fly = function () {
                     });
                     var status = engine.status;
                     var statusText = engine.statusText;
-                    var data = { data: response, headers: headers, status: status, statusText: statusText };
+                    var data = {data: response, headers: headers, status: status, statusText: statusText};
                     // The _response filed of engine is set in  adapter which be called in engine-wrapper.js
                     utils.merge(data, engine._response);
                     if (status >= 200 && status < 300 || status === 304) {
