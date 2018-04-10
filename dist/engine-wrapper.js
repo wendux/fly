@@ -247,7 +247,7 @@ function EngineWrapper(adapter) {
                         // Network error, set the status code 0
                         if (!self.status) {
                             self.statusText = responseText;
-                            self._call("onerror", {msg: statusMessage});
+                            self._call("onerror", { msg: statusMessage });
                         } else {
                             // Parsing the response headers to array in a object,  because
                             // there may be multiple values with the same header name

@@ -73,13 +73,12 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-    /******/
-    return __webpack_require__(__webpack_require__.s = 7);
+/******/ 	return __webpack_require__(__webpack_require__.s = 7);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-    /***/ 3:
+/***/ 3:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -99,13 +98,13 @@ module.exports = function handleImgBase64Data(responseData) {
 
 /***/ }),
 
-    /***/ 7:
+/***/ 7:
 /***/ (function(module, exports, __webpack_require__) {
 
 function KEEP(_,cb){cb();}
 "use strict";
 
-        var handleImgBase64Data = __webpack_require__(3);
+var handleImgBase64Data = __webpack_require__(3);
 var adapter;
 if (window.dsBridge) {
     adapter = function adapter(request, responseCallBack) {
