@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head lang="zh-cmn-Hans">
+    <meta charset="UTF-8">
+    <title>Fly.js Demo</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="viewport" content="width=device-width,initial-scale=0.5,user-scalable=no"/>
+    <!--[if lt IE 9]>
+    <script src="//cdn.bootcss.com/es5-shim/4.5.9/es5-shim.min.js"></script>
+    <script src="//cdn.bootcss.com/es5-shim/4.5.9/es5-sham.min.js"></script>
+    <script src="//cdn.bootcss.com/json3/3.3.2/json3.min.js"></script>
+    <![endif]-->
+    <!--[if lt IE 10]>
+    <script src="//cdn.bootcss.com/jquery-placeholder/2.3.1/jquery.placeholder.min.js"></script>
+    <![endif]-->
+    <!--<script src="https://cdn.bootcss.com/axios/0.16.2/axios.js"></script>-->
+    <script src="../dist/fly.js"></script>
+
+</head>
+<style>
+    html {
+        font-size: 20px;
+        -webkit-user-select: none;
+    }
+</style>
+<body>
+<div style="background: teal; font-size: 38px; color: #ffef68; text-shadow: 2px 2px 5px #ffef68; width: 400px; height: 400px; text-align: center">
+    <div style="padding-top: 100px"> Fly.js</div>
+</div>
+open console panel to view log.
+<script>
+
+    var csrfToken = "";
+    //定义公共headers
+    fly.config.headers = {"x-tag": "flyio"}
+    fly.config.baseURL = "http://www.dtworkroom.com/doris/1/2.0.0/"
+    var newFly = new Fly;
+    newFly.config = fly.config;
+    var log = console.log
+    fly.interceptors.request.use(function (request) {
+        log(`发起请求：path:${request.url}，baseURL:${request.baseURL}`)
+        if (!csrfToken) {
+            log("没有token，先请求token...");
+            return this.await(
+                newFly.get("/token").then((d) => {
+                    request.headers["csrfToken"] = csrfToken = d.data.data.token;
+                    log("token请求成功，值为: " + d.data.data.token);
+                    log(`继续完成请求：path:${request.url}，baseURL:${request.baseURL}`)
+                    return request
+                })
+            );
+        } else {
+            request.headers["csrfToken"] = csrfToken;
+        }
+    })
+
+    fly.interceptors.response.use(
+        function (response) {
+            log("interceptors.response", response)
+            //验证失效
+            if (response.data.data.tokenExpired) {
+                log("token失效，重新请求token...");
+                return this.await(
+                    newFly.get("/token").then((d) => {
+                        csrfToken = d.data.data.token;
+                        log("token已更新，值为: " + csrfToken);
+                    })
+                ).then(() => {
+                    log(`重新请求：path:${response.request.url}，baseURL:${response.request.baseURL}`)
+                    return fly.request(response.request);
+                })
+            } else {
+                return response.data.data;
+            }
+        },
+        function (err) {
+            log("error-interceptor", err)
+        }
+    )
+
+    fly.get("/test?tag=1")
+        .then(function (d) {
+            log("请求成功:", d)
+        }).catch(function (e) {
+        log("请求失败", e)
+    })
+    fly.get("/test?tag=2")
+        .then(function (d) {
+            log("请求成功:", d)
+        }).catch(function (e) {
+        log("请求失败", e)
+    })
+    fly.get("/test?tag=3")
+        .then(function (d) {
+            log("请求成功:", d)
+        }).catch(function (e) {
+        log("请求失败", e)
+    })
+
+</script>
+</body>
+</html>
+
+new Promise()

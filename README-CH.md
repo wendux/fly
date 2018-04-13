@@ -327,7 +327,8 @@ fly.interceptors.response.use(
   method, // 请求方法
   timeout, //本次请求的超时时间
   url, // 本次请求的地址
-  withCredentials //跨域请求是否发送第三方cookie
+  withCredentials, //跨域请求是否发送第三方cookie
+  ... //options中自定义的属性
 }
 ```
 
@@ -338,7 +339,7 @@ fly.interceptors.response.use(
   data, //服务器返回的数据
   engine, //请求使用的http engine(见下面文档),浏览器中为本次请求的XMLHttpRequest对象
   headers, //响应头信息
-  request  //本次响应对应的请求信息
+  request  //本次响应对应的请求信息，即上面的request结构
 }
 ```
 
@@ -352,8 +353,34 @@ fly.interceptors.request.use(null)
 fly.interceptors.response.use(null,null)
 ```
 
+### 在拦截器中执行异步任务
 
+如果您想在拦截器里发起一个异步任务，然后等该异步任务结束后才继续往下执行，那么，您可以使用拦截器对象的`await(promise)`方法，它会等待异步任务（即`promise`参数）执行完毕后，才继续往下执行。下面我们看一个例子：由于安全原因，我们需要所有的请求都需要在header中设置一个`csrfToken`，如果`csrfToken`不存在时，我们需要先请求一个`csrfToken`，然后再发起网络请求，由于请求`csrfToken`是异步的，所以我们需要在拦截器中执行异步请求，代码如下：
 
+```javascript
+var csrfToken="";
+var tokenFly=new Fly();
+var fly=new Fly();
+fly.interceptors.request.use(function (request) {
+    //如果没有csrfToken，先请求csrfToken
+    if(!csrfToken) {
+      return this.await(
+          //使用单独fly实例请求token. 
+          //如果使用同一个fly实例，可能会出现死循环：
+          //请求会先走到拦截器，在拦截器中发起新的请求时又会再次进入拦截器...
+          tokenFly.get("/token").then((d)=>{
+            request.headers["csrfToken"]=csrfToken=d.data.data.token;
+            return request
+          })    
+        )
+    }else {
+        request.headers["csrfToken"]= csrfToken;
+        return request //可以省略，如果拦截器没有返回值，则默认使用request 
+    }
+})
+```
+
+注：`await`的返回值必须是一个promise对象，并拦截器中将其返回。值得一提的是拦截器中的异步任务默认是加锁定当前fly实例，并且您也可以在响应拦截器中发起异步任务，有关拦截器的更多信息及示例请参阅 [flyio interceptor](https://wendux.github.io/dist/#/doc/flyio-en/interceptor).
 
 ## 错误处理
 

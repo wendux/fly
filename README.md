@@ -319,7 +319,8 @@ The structures of the `request ` object in request interceptor.
   method, // http request method
   timeout, // request time
   url, // request url (or relative path)
-  withCredentials // determine whether sending thirdparty cookies in cross-domain request
+  withCredentials, // determine whether sending thirdparty cookies in cross-domain request
+  ... // custom field defined in options
 }
 ```
 
@@ -334,7 +335,7 @@ The structures of the `response` object in response interceptor.
 }
 ```
 
-### Remove interceptor 
+### Remove interceptors 
 
 If you may need to remove an interceptor later,    just set it to null.
 
@@ -343,7 +344,40 @@ fly.interceptors.request.use(null)
 fly.interceptors.response.use(null,null)
 ```
 
+### Perform  an async task in  interceptors
 
+If you want to perform an async task in interceptors and then wait until the async task is finished, you can use the `await (promise)` method of the interceptor object, which will wait for the async task (this is, the promise parameter) to execute until it is executed.Let's see an example: 
+
+because of security reasons, we need all the requests to set up a csrfToken in the header, if csrfToken does not exist, we need to request a csrfToken first, and then perform the network request, because the request csrfToken progress is asynchronous, so we need to execute  this async request in request interceptor. the code is as follows:
+
+```javascript
+var csrfToken="";
+var tokenFly=new Fly();
+var fly=new Fly();
+fly.interceptors.request.use(function (request) {
+    //if csrfToken does not exist, we need to request a csrfToken first
+    if(!csrfToken) {
+      return this.await(
+          //Using  another fly instance to request csrfToken.
+          //If use the same fly instance, there may lead a infinite loop:
+          //(The request will go to the interceptor first, and then
+          //enter the interceptor again when launching the new request 
+          //in the interceptor....)
+          tokenFly.get("/token").then((d)=>{
+            request.headers["csrfToken"]=csrfToken=d.data.data.token;
+            return request
+          })    
+        )
+    }else {
+        request.headers["csrfToken"]= csrfToken;
+        //This line can be omitted. 
+        //If the interceptor doesn't return value, `request` will be used by default.
+        return request 
+    }
+})
+```
+
+**Note**: the return value of `await` method must be a Promise object, and it will be returned by interceptor. It is worth mentioning that the current fly instance will be locked when executing an async task in an interceptor, and you can also make an async task in the **response** interceptor. More information about interceptors and examples refer to [flyio interceptor](https://wendux.github.io/dist/#/doc/flyio/interceptor).
 
 ## Error handling
 

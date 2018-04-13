@@ -33,12 +33,12 @@ open console panel to view log.
     //定义公共headers
     fly.config.headers={xx:5,bb:6,dd:7}
 
-    fly.interceptors.request.use(function(config,promise){
+    fly.interceptors.request.use(function (request) {
         //可以通过promise.reject／resolve直接中止请求
-        console.log("interceptors.request", config)
-        config.headers["X-Tag"]="fly.js";
+        console.log("interceptors.request", request)
+        request.headers["X-Tag"] = "fly.js";
         //return Promise.resolve("xx")
-        return config;
+        return request;
     })
 
     fly.interceptors.response.use(
