@@ -38,23 +38,54 @@ open console panel to view log.
     var newFly = new Fly;
     newFly.config = fly.config;
     var log = console.log
+    fly.interceptors.request.use(function (request) {
+        log(`发起请求：path:${request.url}，baseURL:${request.baseURL}`)
+        if (!csrfToken) {
+            log("没有token，先请求token...");
+            return this.await(
+                newFly.get("/token").then((d) => {
+                    request.headers["csrfToken"] = csrfToken = d.data.data.token;
+                    log("token请求成功，值为: " + d.data.data.token);
+                    log(`继续完成请求：path:${request.url}，baseURL:${request.baseURL}`)
+                    return request
+                })
+            );
+        } else {
+            request.headers["csrfToken"] = csrfToken;
+        }
+    })
+
+    // Can't lock fly instance when an async task is performing.
+    //   var tokenPromise;
     //    fly.interceptors.request.use(function (request) {
     //        log(`发起请求：path:${request.url}，baseURL:${request.baseURL}`)
     //        if (!csrfToken) {
-    //            log("没有token，先请求token...");
-    //            return this.await(
-    //                newFly.get("/token").then((d) => {
-    //                    request.headers["csrfToken"] = csrfToken = d.data.data.token;
-    //                    log("token请求成功，值为: " + d.data.data.token);
-    //                    log(`继续完成请求：path:${request.url}，baseURL:${request.baseURL}`)
-    //                    return request
-    //                })
-    //            );
+    //            if(tokenPromise){
+    //               return this.await(tokenPromise.then(()=>{
+    //                   request.headers["csrfToken"] = csrfToken;
+    //                   return request;
+    //                }),false); //Can't lock
+    //            }else {
+    //                log("没有token，先请求token...");
+    //                tokenPromise = this.await(
+    //                    newFly.get("/token").then((d) => {
+    //                        request.headers["csrfToken"] = csrfToken = d.data.data.token;
+    //                        log("token请求成功，值为: " + d.data.data.token);
+    //                        log(`继续完成请求：path:${request.url}，baseURL:${request.baseURL}`)
+    //                        tokenPromise = null;
+    //                        return request
+    //                    })
+    //                ,false);//Can't lock
+    //                return tokenPromise;
+    //            }
+    //
     //        } else {
     //            request.headers["csrfToken"] = csrfToken;
     //        }
     //    })
 
+
+    // response interceptors
     fly.interceptors.response.use(
         function (response) {
             log("interceptors.response", response)

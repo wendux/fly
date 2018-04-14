@@ -346,7 +346,7 @@ fly.interceptors.response.use(null,null)
 
 ### Perform  an async task in  interceptors
 
-If you want to perform an async task in interceptors and then wait until the async task is finished, you can use the `await (promise)` method of the interceptor object, which will wait for the async task (this is, the promise parameter) to execute until it is executed.Let's see an example: 
+If you want to perform an async task in interceptors and then wait until the async task is finished, you can use the `await` method of the interceptor object, which will wait the async task (this is, the promise parameter) until it is completed, an then continue the previous request with the  data that `promise` returned. Let's see an example:
 
 because of security reasons, we need all the requests to set up a csrfToken in the header, if csrfToken does not exist, we need to request a csrfToken first, and then perform the network request, because the request csrfToken progress is asynchronous, so we need to execute  this async request in request interceptor. the code is as follows:
 
@@ -377,7 +377,7 @@ fly.interceptors.request.use(function (request) {
 })
 ```
 
-**Note**: the return value of `await` method must be a Promise object, and it will be returned by interceptor. It is worth mentioning that the current fly instance will be locked when executing an async task in an interceptor, and you can also make an async task in the **response** interceptor. More information about interceptors and examples refer to [flyio interceptor](https://wendux.github.io/dist/#/doc/flyio/interceptor).
+**Note**: the return value of `await` method must be a Promise object, and it will be returned by interceptor. Note that the current fly instance will be locked by default  when executing an async task in an interceptor, and you can also make an async task in the **response** interceptor. More information about interceptors and examples refer to [flyio interceptor](https://wendux.github.io/dist/#/doc/flyio/interceptor).
 
 ## Error handling
 

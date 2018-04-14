@@ -466,7 +466,7 @@
                          * Submit async task for interceptors.
                          * [promise] async task itself is a promise
                          */
-                        return function (promise) {
+                        return function (promise, lock) {
                             // `this` either is interceptors.request or interceptors.response
                             var _this = this;
                             /**
@@ -474,39 +474,41 @@
                              * The current fly instance will be locked when an async task be submit
                              * in interceptors.
                              */
-                            _this.p = new Promise(function (resolve) {
-                                function t() {
-                                    if (interceptor.p) {
-                                        if (isResponseInterceptor) {
-                                            if (interceptor.p !== _this.p) {
-                                                _this.p = null;
-                                                resolve();
+                            if (lock !== false) {
+                                _this.p = new Promise(function (resolve) {
+                                    function t() {
+                                        if (interceptor.p) {
+                                            if (isResponseInterceptor) {
+                                                if (interceptor.p !== _this.p) {
+                                                    _this.p = null;
+                                                    resolve();
+                                                } else {
+                                                    interceptor.p = _this.p = null;
+                                                    resolve();
+                                                }
                                             } else {
-                                                interceptor.p = _this.p = null;
-                                                resolve();
+                                                interceptor.p.then(function () {
+                                                    _this.p = null;
+                                                    resolve();
+                                                });
                                             }
                                         } else {
-                                            interceptor.p.then(function () {
-                                                _this.p = null;
-                                                resolve();
-                                            });
+                                            resolve();
+                                            _this.p = null;
                                         }
-                                    } else {
-                                        resolve();
-                                        _this.p = null;
+                                    }
+
+                                    //promise.finally() may not be implemented in some Promise polyfill, so we don't use it at now.
+                                    promise.then(t, t);
+                                });
+                                if (isResponseInterceptor) {
+                                    //
+                                    if (!interceptor.p) {
+                                        interceptor.p = _this.p;
                                     }
                                 }
-
-                                //promise.finally() may not be implemented in some Promise polyfill, so we don't use it at now.
-                                promise.then(t, t);
-                            });
-                            if (isResponseInterceptor) {
-                                //
-                                if (!interceptor.p) {
-                                    interceptor.p = _this.p;
-                                }
-                            } else {
-                                //add tag, and use it later
+                            }
+                            if (!isResponseInterceptor) {
                                 fly.t = 1;
                             }
                             return promise;
