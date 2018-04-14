@@ -38,22 +38,22 @@ open console panel to view log.
     var newFly = new Fly;
     newFly.config = fly.config;
     var log = console.log
-    fly.interceptors.request.use(function (request) {
-        log(`发起请求：path:${request.url}，baseURL:${request.baseURL}`)
-        if (!csrfToken) {
-            log("没有token，先请求token...");
-            return this.await(
-                newFly.get("/token").then((d) => {
-                    request.headers["csrfToken"] = csrfToken = d.data.data.token;
-                    log("token请求成功，值为: " + d.data.data.token);
-                    log(`继续完成请求：path:${request.url}，baseURL:${request.baseURL}`)
-                    return request
-                })
-            );
-        } else {
-            request.headers["csrfToken"] = csrfToken;
-        }
-    })
+    //    fly.interceptors.request.use(function (request) {
+    //        log(`发起请求：path:${request.url}，baseURL:${request.baseURL}`)
+    //        if (!csrfToken) {
+    //            log("没有token，先请求token...");
+    //            return this.await(
+    //                newFly.get("/token").then((d) => {
+    //                    request.headers["csrfToken"] = csrfToken = d.data.data.token;
+    //                    log("token请求成功，值为: " + d.data.data.token);
+    //                    log(`继续完成请求：path:${request.url}，baseURL:${request.baseURL}`)
+    //                    return request
+    //                })
+    //            );
+    //        } else {
+    //            request.headers["csrfToken"] = csrfToken;
+    //        }
+    //    })
 
     fly.interceptors.response.use(
         function (response) {

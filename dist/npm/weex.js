@@ -531,7 +531,7 @@
                     var irp = interceptors.response;
                     // Generate async task creator for interceptor.
                     irq.await = wrap(irp);
-                    irp.await = wrap(irp, 1);
+                    irp.await = wrap(irq, 1);
                     this.config = {
                         method: "GET",
                         baseURL: "",
