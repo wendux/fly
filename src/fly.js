@@ -139,7 +139,7 @@ class Fly {
 
             // make the http request
             function makeRequest(options) {
-                utils.merge(data || {}, options.body);
+                utils.merge(data || (data = {}), options.body);
                 // Normalize the request url
                 url = utils.trim(options.url);
                 var baseUrl = utils.trim(options.baseURL || "");
