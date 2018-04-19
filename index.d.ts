@@ -1,5 +1,4 @@
-
-export interface FlyRequestConfig {
+export interface FlyRequestConfig extends Object {
     url?: string;
     method?: string;
     baseURL?: string;
@@ -19,7 +18,7 @@ export interface FlyError {
     response?: FlyErrResponse;
 }
 
-export interface FlyResponse<T = any>  {
+export interface FlyResponse<T = any> {
     data: T;
     request: FlyRequestConfig;
     engine: XMLHttpRequest;
@@ -38,9 +37,13 @@ export interface FlyPromise<T = any> extends Promise<FlyResponse<T>> {
 
 export interface FlyRequestInterceptor<V> {
     use(onSend?: (request: V) => any): void;
+
+    await(task: Promise<any>, lock?: boolean): Promise<FlyRequestConfig>;
 }
 export interface FlyResponseInterceptor<V> {
     use(onSucceed?: (response: V) => any, onError?: (err: Error) => any): void;
+
+    await(task: Promise<any>, lock?: boolean): Promise<any>;
 }
 
 interface Fly {

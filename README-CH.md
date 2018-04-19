@@ -355,32 +355,36 @@ fly.interceptors.response.use(null,null)
 
 ### 在拦截器中执行异步任务
 
-如果您想在拦截器里发起一个异步任务，然后等该异步任务结束后才继续往下执行，那么，您可以使用拦截器对象的`await()`方法，它会等待异步任务（即`promise`参数）执行完毕后，才继续往下执行(需要将修改后的`request`对象返回给fly)。下面我们看一个例子：由于安全原因，我们需要所有的请求都需要在header中设置一个`csrfToken`，如果`csrfToken`不存在时，我们需要先请求一个`csrfToken`，然后再发起网络请求，由于请求`csrfToken`是异步的，所以我们需要在拦截器中执行异步请求，代码如下：
+现在，您可以在拦截器中执行异步任务了!
+
+下面我们看一个例子：由于安全原因，我们需要所有的请求都需要在header中设置一个`csrfToken`，如果`csrfToken`不存在时，我们需要先请求一个`csrfToken`，然后再发起网络请求，由于请求`csrfToken`是异步的，所以我们需要在拦截器中执行异步请求，代码如下：
 
 ```javascript
 var csrfToken="";
 var tokenFly=new Fly();
 var fly=new Fly();
 fly.interceptors.request.use(function (request) {
-    //如果没有csrfToken，先请求csrfToken
-    if(!csrfToken) {
-      return this.await(
-          //使用单独fly实例请求token. 
-          //如果使用同一个fly实例，可能会出现死循环：
-          //请求会先走到拦截器，在拦截器中发起新的请求时又会再次进入拦截器...
-          tokenFly.get("/token").then((d)=>{
-            request.headers["csrfToken"]=csrfToken=d.data.data.token;
-            return request
-          })    
-        )
-    }else {
-        request.headers["csrfToken"]= csrfToken;
-        return request //可以省略，如果拦截器没有返回值，则默认使用request 
-    }
+  log(`发起请求：path:${request.url}，baseURL:${request.baseURL}`)
+  if (!csrfToken) {
+    log("没有token，先请求token...");
+    fly.lock(); //锁定
+    return newFly.get("/token").then((d) => {
+      request.headers["csrfToken"] = csrfToken = d.data.data.token;
+      log("token请求成功，值为: " + d.data.data.token);
+      log(`继续完成请求：path:${request.url}，baseURL:${request.baseURL}`)
+      fly.unlock() //解锁当前实例 
+      return request  //只有返回 `request`对象，请求才会继续。
+    })
+  } else {
+    request.headers["csrfToken"] = csrfToken;
+  }
 })
 ```
 
-注：`await`的返回值必须是一个promise对象，并拦截器中将其返回。值得一提的是拦截器中的异步任务默认是加锁定当前fly实例，并且您也可以在响应拦截器中发起异步任务，有关拦截器的更多信息及示例请参阅 [flyio interceptor](https://wendux.github.io/dist/#/doc/flyio-en/interceptor).
+注意：
+
+1. 当前Fly实例会在调用`fly.lock`时会被锁定，fly实例锁定后，接下来的请求在进入请求拦截器前会进入一个队列排队，当解锁后(通过调用`fly.unlock`)，才会进入拦截器，这提供一种同步任务的方式。
+2. 只有当最终返回`request`对象时(拦截器传递给你的回调参数)，请求才会继续（如代码中注释）。
 
 ## 错误处理
 

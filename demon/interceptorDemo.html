@@ -31,6 +31,8 @@
 open console panel to view log.
 <script>
 
+    //import fly from "../index";
+
     var csrfToken = "";
     //定义公共headers
     fly.config.headers = {"x-tag": "flyio"}
@@ -42,63 +44,33 @@ open console panel to view log.
         log(`发起请求：path:${request.url}，baseURL:${request.baseURL}`)
         if (!csrfToken) {
             log("没有token，先请求token...");
-            return this.await(
-                newFly.get("/token").then((d) => {
-                    request.headers["csrfToken"] = csrfToken = d.data.data.token;
-                    log("token请求成功，值为: " + d.data.data.token);
-                    log(`继续完成请求：path:${request.url}，baseURL:${request.baseURL}`)
-                    return request
-                })
-            );
+            fly.lock();
+            return newFly.get("/token").then((d) => {
+                request.headers["csrfToken"] = csrfToken = d.data.data.token;
+                log("token请求成功，值为: " + d.data.data.token);
+                log(`继续完成请求：path:${request.url}，baseURL:${request.baseURL}`)
+                fly.unlock()
+                return request
+            })
         } else {
             request.headers["csrfToken"] = csrfToken;
         }
     })
 
-    // Can't lock fly instance when an async task is performing.
-    //   var tokenPromise;
-    //    fly.interceptors.request.use(function (request) {
-    //        log(`发起请求：path:${request.url}，baseURL:${request.baseURL}`)
-    //        if (!csrfToken) {
-    //            if(tokenPromise){
-    //               return this.await(tokenPromise.then(()=>{
-    //                   request.headers["csrfToken"] = csrfToken;
-    //                   return request;
-    //                }),false); //Can't lock
-    //            }else {
-    //                log("没有token，先请求token...");
-    //                tokenPromise = this.await(
-    //                    newFly.get("/token").then((d) => {
-    //                        request.headers["csrfToken"] = csrfToken = d.data.data.token;
-    //                        log("token请求成功，值为: " + d.data.data.token);
-    //                        log(`继续完成请求：path:${request.url}，baseURL:${request.baseURL}`)
-    //                        tokenPromise = null;
-    //                        return request
-    //                    })
-    //                ,false);//Can't lock
-    //                return tokenPromise;
-    //            }
-    //
-    //        } else {
-    //            request.headers["csrfToken"] = csrfToken;
-    //        }
-    //    })
-
-
-    // response interceptors
+    //  response interceptors
     fly.interceptors.response.use(
         function (response) {
             log("interceptors.response", response)
             //验证失效
             if (response.data.data.tokenExpired) {
                 log("token失效，重新请求token...");
-                return this.await(
-                    newFly.get("/token").then((d) => {
-                        csrfToken = d.data.data.token;
-                        log("token已更新，值为: " + csrfToken);
-                    })
-                ).then(() => {
+                this.lock(); //锁定响应拦截器
+                return newFly.get("/token").then((d) => {
+                    csrfToken = d.data.data.token;
+                    log("token已更新，值为: " + csrfToken);
+                }).then(() => {
                     log(`重新请求：path:${response.request.url}，baseURL:${response.request.baseURL}`)
+                    this.unlock(); //解锁响应拦截器
                     return fly.request(response.request);
                 })
             } else {

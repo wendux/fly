@@ -1,10 +1,10 @@
 /**
  * Created by du on 16/12/10.
  */
-var fly = require("../index")
+//var fly = require("../index")
+
 var qs = require('qs');
-
-
+import fly from "../index"
 fly.get("../package.json", {aa: 8, bb: 9, tt: {xx: 5}}).then((d) => {
     console.log("get result:", d)
 }).catch((e) => console.log("error", e))

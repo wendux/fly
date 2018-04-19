@@ -4,8 +4,8 @@ var isBrowser = typeof document !== "undefined";
 class Fly {
     constructor(engine) {
         this.engine = engine || XMLHttpRequest;
-        var fly = this;
-
+        var fly =
+            this.default = this   //For typeScript
         /**
          * Factory to generate async task creators for interceptors.
          * The current fly instance will be locked when an async task be created.
@@ -16,58 +16,37 @@ class Fly {
          * @param [isResponseInterceptor] whether is interceptors.response or not
          * @returns {Function} async task creators
          */
-        function wrap(interceptor, isResponseInterceptor) {
-            /**
-             * Submit async task for interceptors.
-             * [promise] async task itself is a promise
-             */
-            return function (promise, lock) {
-                // `this` either is interceptors.request or interceptors.response
-                var _this = this;
-                /**
-                 * [interceptor].p is a lock tag which actually is a Promise object.
-                 * The current fly instance will be locked when an async task be submit
-                 * in interceptors.
-                 */
-                if (lock !== false) {
-                    _this.p = new Promise(function (resolve) {
-                        function t() {
-                            if (interceptor.p) {
-                                if (isResponseInterceptor) {
-                                    if (interceptor.p !== _this.p) {
-                                        _this.p = null;
-                                        resolve()
-                                    } else {
-                                        interceptor.p = _this.p = null;
-                                        resolve()
-                                    }
-                                } else {
-                                    interceptor.p.then(() => {
-                                        _this.p = null;
-                                        resolve()
-                                    })
-                                }
-                            } else {
-                                resolve()
-                                _this.p = null;
-                            }
-                        }
+        function wrap(interceptor) {
 
-                        //promise.finally() may not be implemented in some Promise polyfill, so we don't use it at now.
-                        promise.then(t, t)
-                    })
-                    if (isResponseInterceptor) {
-                        //
-                        if (!interceptor.p) {
-                            interceptor.p = _this.p
-                        }
+            var completer;
+            utils.merge(interceptor, {
+                lock() {
+                    if (!completer) {
+                        interceptor.p = new Promise((resolve) => {
+                            completer = resolve
+                        })
+                    }
+                },
+                unlock() {
+                    if (completer) {
+                        completer()
+                        interceptor.p = completer = null;
                     }
                 }
-                if (!isResponseInterceptor) {
-                    fly.t = 1;
-                }
-                return promise
-            }
+            })
+            // /**
+            //  * Submit async task for interceptors.
+            //  * [promise] async task itself is a promise
+            //  */
+            // return function (promise, lock) {
+            //     // `this` either is interceptors.request or interceptors.response
+            //     var _this = this;
+            //     /**
+            //      * [interceptor].p is a lock tag which actually is a Promise object.
+            //      * The current fly instance will be locked when an async task be submit
+            //      * in interceptors.
+            //      */
+            // }
         }
 
         var interceptors = this.interceptors = {
@@ -86,9 +65,9 @@ class Fly {
 
         var irq = interceptors.request;
         var irp = interceptors.response;
-        // Generate async task creator for interceptor.
-        irq.await = wrap(irp);
-        irp.await = wrap(irq, 1);
+        wrap(irp);
+        wrap(irq);
+
         this.config = {
             method: "GET",
             baseURL: "",
@@ -118,7 +97,7 @@ class Fly {
             function isPromise(p) {
                 // some  polyfill implementation of Promise may be not standard,
                 // so, we test by duck-typing
-                return p.then && p.catch
+                return p && p.then && p.catch
             }
 
             /**
@@ -295,25 +274,23 @@ class Fly {
                 url = utils.trim(url || "");
                 options.method = options.method.toUpperCase();
                 options.url = url;
+                var ret = options;
                 if (requestInterceptorHandler) {
-                    options = requestInterceptorHandler.call(requestInterceptor, options, Promise) || options;
+                    ret = requestInterceptorHandler.call(requestInterceptor, options, Promise) || options;
                 }
-                var async = this.t;
-                delete this.t;
-                if (isPromise(options)) {
-                    options.then((d) => {
-                        //support async  interceptors
-                        if (async) {
-                            makeRequest(d)
-                        } else {
-                            resolve(d)
-                        }
-                    }, (err) => {
-                        reject(err)
-                    })
-                } else {
-                    makeRequest(options)
+                if (!isPromise(ret)) {
+                    ret = Promise.resolve(ret)
                 }
+                ret.then((d) => {
+                    //if options continue
+                    if (d === options) {
+                        makeRequest(d)
+                    } else {
+                        resolve(d)
+                    }
+                }, (err) => {
+                    reject(err)
+                })
             })
         })
         promise.engine = engine;
@@ -329,7 +306,18 @@ class Fly {
             return callback.apply(null, arr);
         }
     }
+
+    lock() {
+        this.interceptors.request.lock()
+    }
+
+    unlock() {
+        this.interceptors.request.unlock();
+    }
 }
+
+//For typeScript
+Fly.default = Fly;
 
 ["get", "post", "put", "patch", "head", "delete"].forEach(e => {
     Fly.prototype[e] = function (url, data, option) {
