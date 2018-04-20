@@ -38,12 +38,16 @@ export interface FlyPromise<T = any> extends Promise<FlyResponse<T>> {
 export interface FlyRequestInterceptor<V> {
     use(onSend?: (request: V) => any): void;
 
-    await(task: Promise<any>, lock?: boolean): Promise<FlyRequestConfig>;
+    lock(): void;
+
+    unlock(): void;
 }
 export interface FlyResponseInterceptor<V> {
     use(onSucceed?: (response: V) => any, onError?: (err: Error) => any): void;
 
-    await(task: Promise<any>, lock?: boolean): Promise<any>;
+    lock(): void;
+
+    unlock(): void;
 }
 
 interface Fly {
@@ -62,6 +66,10 @@ interface Fly {
     patch<T = any>(url: string, data?: any, config?: FlyRequestConfig): FlyPromise<T>;
     all<T>(values: (T | Promise<T>)[]): Promise<T[]>;
     spread<T, R>(callback: (...args: T[]) => R): (array: T[]) => R;
+
+    lock(): void;
+
+    unlock(): void;
 }
 declare const fly:Fly;
 export default fly;

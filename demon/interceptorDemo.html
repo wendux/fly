@@ -44,14 +44,14 @@ open console panel to view log.
         log(`发起请求：path:${request.url}，baseURL:${request.baseURL}`)
         if (!csrfToken) {
             log("没有token，先请求token...");
+            //锁定当天实例，后续请求会在拦截器外排队
             fly.lock();
             return newFly.get("/token").then((d) => {
                 request.headers["csrfToken"] = csrfToken = d.data.data.token;
                 log("token请求成功，值为: " + d.data.data.token);
                 log(`继续完成请求：path:${request.url}，baseURL:${request.baseURL}`)
-                fly.unlock()
                 return request
-            })
+            }).finally(() => fly.unlock()) //解锁后，会继续发起请求队列中的任务
         } else {
             request.headers["csrfToken"] = csrfToken;
         }
@@ -65,14 +65,16 @@ open console panel to view log.
             if (response.data.data.tokenExpired) {
                 log("token失效，重新请求token...");
                 this.lock(); //锁定响应拦截器
-                return newFly.get("/token").then((d) => {
-                    csrfToken = d.data.data.token;
-                    log("token已更新，值为: " + csrfToken);
-                }).then(() => {
-                    log(`重新请求：path:${response.request.url}，baseURL:${response.request.baseURL}`)
-                    this.unlock(); //解锁响应拦截器
-                    return fly.request(response.request);
-                })
+                return newFly.get("/token")
+                    .then((d) => {
+                        csrfToken = d.data.data.token;
+                        log("token已更新，值为: " + csrfToken);
+                    })
+                    .finally(() => this.unlock())
+                    .then(() => {
+                        log(`重新请求：path:${response.request.url}，baseURL:${response.request.baseURL}`)
+                        return fly.request(response.request);
+                    })
             } else {
                 return response.data.data;
             }

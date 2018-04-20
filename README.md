@@ -369,11 +369,13 @@ fly.interceptors.request.use(function (request) {
          //in the interceptor....)
          return tokenFly.get("/token").then((d)=>{
             request.headers["csrfToken"]=csrfToken=d.data.data.token;
-            fly.unlock() // unlock the current instance, flush the request queue.
             //only return the origin `request` object can make the http request continue.
             // otherwise, the return data will be teated as "response" data.
             return request 
-          })    
+          }).finally(()=>{
+           // unlock the current instance, flush the request queue.   
+           fly.unlock()
+         })  
         
     }else {
         request.headers["csrfToken"]= csrfToken;
@@ -386,8 +388,7 @@ fly.interceptors.request.use(function (request) {
 
 **Note**: 
 
-1. The current fly instance will be locked  when call `fly.lock()` . 
-
+1. The current fly instance will be locked  when call `fly.lock()` . Once  the fly instance is locked,  the incomming request task maked by it will  enter a queue before they enter the request interceptors, which will avoid the 
 2. **Only when you return the `request` object  passed by interceptor at the final , the origin http request  will be continued**.  
 
 And you can also make an async task in the **response** interceptor. More information about interceptors and examples refer to [flyio interceptor](https://wendux.github.io/dist/#/doc/flyio/interceptor).

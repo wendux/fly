@@ -367,14 +367,16 @@ fly.interceptors.request.use(function (request) {
   log(`发起请求：path:${request.url}，baseURL:${request.baseURL}`)
   if (!csrfToken) {
     log("没有token，先请求token...");
-    fly.lock(); //锁定
+    //锁定当天实例，后续请求会在拦截器外排队
+    fly.lock();
     return newFly.get("/token").then((d) => {
       request.headers["csrfToken"] = csrfToken = d.data.data.token;
       log("token请求成功，值为: " + d.data.data.token);
       log(`继续完成请求：path:${request.url}，baseURL:${request.baseURL}`)
-      fly.unlock() //解锁当前实例 
-      return request  //只有返回 `request`对象，请求才会继续。
-    })
+      return request; //只有最终返回request对象时，原来的请求才会继续
+    }).finally(()=>{
+      fly.unlock();//解锁后，会继续发起请求队列中的任务
+    }) 
   } else {
     request.headers["csrfToken"] = csrfToken;
   }
@@ -383,8 +385,10 @@ fly.interceptors.request.use(function (request) {
 
 注意：
 
-1. 当前Fly实例会在调用`fly.lock`时会被锁定，fly实例锁定后，接下来的请求在进入请求拦截器前会进入一个队列排队，当解锁后(通过调用`fly.unlock`)，才会进入拦截器，这提供一种同步任务的方式。
-2. 只有当最终返回`request`对象时(拦截器传递给你的回调参数)，请求才会继续（如代码中注释）。
+1. 当前Fly实例会在调用`fly.lock`时会被锁定，fly实例锁定后，接下来的请求在进入请求拦截器前会进入一个队列排队，当解锁后(通过调用`fly.unlock`)，才会进入拦截器，这提供一种同步多个任务的方式。
+2. 只有当最终返回`request`对象时(拦截器传递给你的回调参数)，请求才会继续（如代码中注释）， 否则将会把返回的值作为本次请求。
+
+有关拦截器的详细信息和示例，请参阅[flyio interceptor](https://wendux.github.io/dist/#/doc/flyio/interceptor)。
 
 ## 错误处理
 

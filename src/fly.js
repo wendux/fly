@@ -4,20 +4,19 @@ var isBrowser = typeof document !== "undefined";
 class Fly {
     constructor(engine) {
         this.engine = engine || XMLHttpRequest;
-        var fly =
-            this.default = this   //For typeScript
+
+        this.default = this   //For typeScript
+
         /**
-         * Factory to generate async task creators for interceptors.
-         * The current fly instance will be locked when an async task be created.
-         * Once locked, the incoming request will be added to a request queue, and the
-         * async task will not been dequeue and performed until the fly instance is unlocked.
+         * Add  lock/unlock API for interceptor.
+         *
+         * Once an request/response interceptor is locked, the incoming request/response
+         * will be added to a queue before they enter the interceptor, they will not be
+         * continued  until the interceptor is unlocked.
          *
          * @param [interceptor] either is interceptors.request or interceptors.response
-         * @param [isResponseInterceptor] whether is interceptors.response or not
-         * @returns {Function} async task creators
          */
         function wrap(interceptor) {
-
             var completer;
             utils.merge(interceptor, {
                 lock() {
@@ -34,19 +33,6 @@ class Fly {
                     }
                 }
             })
-            // /**
-            //  * Submit async task for interceptors.
-            //  * [promise] async task itself is a promise
-            //  */
-            // return function (promise, lock) {
-            //     // `this` either is interceptors.request or interceptors.response
-            //     var _this = this;
-            //     /**
-            //      * [interceptor].p is a lock tag which actually is a Promise object.
-            //      * The current fly instance will be locked when an async task be submit
-            //      * in interceptors.
-            //      */
-            // }
         }
 
         var interceptors = this.interceptors = {
@@ -101,9 +87,9 @@ class Fly {
             }
 
             /**
-             * If the current fly instance has been locked，the new request will enter the request queue
-             * @param [promise] Once the current fly instance is unlocked, this promise will be resolved.
-             *                  if the promise exist, indicate the current fly instance is locked.
+             * If the request/response interceptor has been locked，
+             * the new request/response will enter a queue. otherwise, it will be performed directly.
+             * @param [promise] if the promise exist, means the interceptor is  locked.
              * @param [callback]
              */
             function enqueueIfLocked(promise, callback) {
