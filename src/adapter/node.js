@@ -1,10 +1,10 @@
 
 var pkg = require('./../../package.json');
-var request = require("request");
-//自动管理cookie
-var rq = request.defaults({jar: true})
-
+var req = require("request");
 module.exports = function (request, responseCallBack) {
+    //自动管理cookie
+    var config = {jar: true, proxy: request.proxy}
+    var rq = req.defaults(config)
     var headers = request.headers;
     if (!headers['User-Agent'] && !headers['user-agent']) {
         headers['User-Agent'] = 'fly/' + pkg.version;

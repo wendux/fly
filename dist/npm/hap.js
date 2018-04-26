@@ -630,7 +630,8 @@
                                             if (type) {
                                                 data.request = options;
                                             }
-                                            data = handler.call(responseInterceptor, data, Promise) || data;
+                                            var ret = handler.call(responseInterceptor, data, Promise);
+                                            data = ret === undefined ? data : ret;
                                         }
                                         if (!isPromise(data)) {
                                             data = Promise[type === 0 ? "resolve" : "reject"](data);
