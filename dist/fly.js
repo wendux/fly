@@ -97,17 +97,37 @@ module.exports = {
         return encodeURIComponent(val).replace(/%40/gi, '@').replace(/%3A/gi, ':').replace(/%24/g, '$').replace(/%2C/gi, ',').replace(/%20/g, '+').replace(/%5B/gi, '[').replace(/%5D/gi, ']');
     },
     formatParams: function formatParams(data) {
-        var arr = [];
-        for (var name in data) {
-            var value = data[name];
-            if (this.isObject(value)) {
-                value = JSON.stringify(value);
-            }
-            arr.push(this.encode(name) + "=" + this.encode(value));
-        }
-        return arr.join("&");
-    },
+        var str = "";
+        var first = true;
+        var that = this;
 
+        function _encode(sub, path) {
+            var encode = that.encode;
+            var type = that.type(sub);
+            if (type == "array") {
+                sub.forEach(function (e, i) {
+                    _encode(e, path + "%5B%5D");
+                });
+            } else if (type == "object") {
+                for (var key in sub) {
+                    if (path) {
+                        _encode(sub[key], path + "%5B" + encode(key) + "%5D");
+                    } else {
+                        _encode(sub[key], encode(key));
+                    }
+                }
+            } else {
+                if (!first) {
+                    str += "&";
+                }
+                first = false;
+                str += path + "=" + encode(sub);
+            }
+        }
+
+        _encode(data, "");
+        return str;
+    },
 
     // Do not overwrite existing attributes
     merge: function merge(a, b) {
@@ -294,12 +314,16 @@ var Fly = function () {
                     } catch (e) {
                     }
 
-                    // If the request data is json object, transforming it  to json string,
-                    // and set request content-type to "json". In browser,  the data will
-                    // be sent as RequestBody instead of FormData
-                    if (!utils.isFormData(data) && ["object", "array"].indexOf(utils.type(data)) !== -1) {
-                        options.headers[contentType] = 'application/json;charset=utf-8';
-                        data = JSON.stringify(data);
+                    if (!isGet) {
+                        // If the request data is json object, transforming it  to json string,
+                        // and set request content-type to "json". In browser,  the data will
+                        // be sent as RequestBody instead of FormData
+                        if (options.headers[contentType].toLowerCase() === "application/x-www-form-urlencoded") {
+                            data = utils.formatParams(data);
+                        } else if (!utils.isFormData(data) && ["object", "array"].indexOf(utils.type(data)) !== -1) {
+                            options.headers[contentType] = 'application/json;charset=utf-8';
+                            data = JSON.stringify(data);
+                        }
                     }
 
                     for (var k in options.headers) {
@@ -395,7 +419,7 @@ var Fly = function () {
                 enqueueIfLocked(requestInterceptor.p, function () {
                     utils.merge(options, _this.config);
                     var headers = options.headers;
-                    headers[contentType] = headers[contentType] || headers[contentTypeLowerCase] || 'application/x-www-form-urlencoded';
+                    headers[contentType] = headers[contentType] || headers[contentTypeLowerCase] || "";
                     delete headers[contentTypeLowerCase];
                     options.body = data || options.body;
                     url = utils.trim(url || "");

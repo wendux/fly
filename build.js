@@ -26,6 +26,7 @@ var npmExtra = {
     "hap": "./src/hap.js"
 }
 
+
 //for npm require
 if(env==="npm"){
     Object.assign(entry, npmExtra)
@@ -36,7 +37,14 @@ if(env==="npm"){
         "../demon/dist/test": "./demon/test.js",
         "../demon/dist/typeScriptTest": "./demon/typeScriptTest.js"
     }
-}else{
+} else if (env === "test") {
+    entry = {"test": "./test/test.js"}
+    output = {
+        path: path.resolve("./test/output"),
+        filename: "[name].js"
+    }
+}
+else {
     if(env==="cdn-min"||env==="umd"){
         output.filename = "[name].min.js"
         plugins.push(new webpack.optimize.UglifyJsPlugin({
@@ -62,6 +70,7 @@ var config= {
         rules: [
             {
                 test: /\.js$/,
+                include: [path.resolve('./src'), path.resolve('./test'), path.resolve('./index.js')],
                 use:[
                     {
                         loader: 'keep-loader',

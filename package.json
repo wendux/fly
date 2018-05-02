@@ -26,7 +26,8 @@
     "dev": "node build.js dev",
     "build": "node build.js npm && node build.js cdn && node build.js cdn-min && node build.js umd",
     "nodeTest": "node ./demon/nodeTest.js",
-    "test": "npm run build"
+    "test": "karma start && codecov",
+    "report-coverage": "codecov"
   },
   "typings": "./index.d.ts",
   "devDependencies": {
@@ -34,7 +35,16 @@
     "babel-loader": "^6.0.0",
     "babel-plugin-transform-runtime": "^6.0.0",
     "babel-preset-es2015": "^6.0.0",
+    "babel-preset-es2017": "^6.24.1",
+    "karma": "^2.0.2",
+    "karma-babel-preprocessor": "^7.0.0",
+    "karma-coverage": "^1.1.1",
+    "karma-mocha": "^1.3.0",
+    "karma-phantomjs-launcher": "^1.0.4",
+    "karma-webpack": "^3.0.0",
     "keep-loader": "^0.7.1",
+    "mocha": "^5.1.1",
+    "promise-polyfill": "^7.1.2",
     "qs": "^6.5.1",
     "shelljs": "^0.8.1",
     "webpack": "^2.6.0"

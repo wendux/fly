@@ -531,7 +531,22 @@ request 适合在 [RESTful API](http://en.wikipedia.org/wiki/Representational_st
 
 Fly默认会将JavaScript objects 序列化为 `JSON` 发送（RequestBody），如果想以 `application/x-www-form-urlencoded` 编码格式发送，你可以使用如下方式：
 
-### 浏览器中
+### 通过设置请求头
+
+将请求头`content-type`设置为"application/x-www-form-urlencoded"后fly会自动对请求数据进行编码，如：
+
+```javascript
+fly.post("../package.json",{aa:8,bb:9,tt:{xx:5}},{headers:{
+    "content-type":"application/x-www-form-urlencoded"
+}})
+.then(console.log)
+```
+
+这种方法是通用的，意味着在任何JavaScript运行环境下都能正常工作，还有一些其它特定平台的方法：
+
+### 其它方法
+
+#### 浏览器中
 
 在浏览器中, 你可以使用 [`URLSearchParams`](https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams) ，如下:
 
@@ -551,7 +566,7 @@ var qs = require('qs');
 fly.post('/foo', qs.stringify({ 'bar': 123 }));
 ```
 
-### Node.js
+#### Node.js
 
 在node中，你可以使用 [`querystring`](https://nodejs.org/api/querystring.html) 模块，如:
 

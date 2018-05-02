@@ -541,7 +541,22 @@ The parameter of all is an array of `promise`,  `then` will be called only when 
 
 By default, fly serializes JavaScript objects to `JSON`. To send data in the `application/x-www-form-urlencoded` format instead, you can use one of the following options.
 
-### Browser
+### By specify request header
+
+When you specify  `content-type` value as "application/x-www-form-urlencoded", fly will encode the request data automatically, for example：
+
+```javascript
+fly.post("../package.json",{aa:8,bb:9,tt:{xx:5}},{headers:{
+    "content-type":"application/x-www-form-urlencoded"
+}})
+.then(console.log)
+```
+
+This method is universal, which means that it can work well in any JavaScript runtime. There are also some other ways for some specific platforms:
+
+### Other ways
+
+#### Browser
 
 In a browser, you can use the [`URLSearchParams`](https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams) API as follows:
 
@@ -561,7 +576,7 @@ var qs = require('qs');
 fly.post('/foo', qs.stringify({ 'bar': 123 }));
 ```
 
-### Node.js
+#### Node.js
 
 In node.js, you can use the [`querystring`](https://nodejs.org/api/querystring.html) module as follows:
 

@@ -152,12 +152,16 @@ class Fly {
                 } catch (e) {
                 }
 
-                // If the request data is json object, transforming it  to json string,
-                // and set request content-type to "json". In browser,  the data will
-                // be sent as RequestBody instead of FormData
-                if (!utils.isFormData(data) && ["object", "array"].indexOf(utils.type(data)) !== -1) {
-                    options.headers[contentType] = 'application/json;charset=utf-8'
-                    data = JSON.stringify(data);
+                if (!isGet) {
+                    // If the request data is json object, transforming it  to json string,
+                    // and set request content-type to "json". In browser,  the data will
+                    // be sent as RequestBody instead of FormData
+                    if (options.headers[contentType].toLowerCase() === "application/x-www-form-urlencoded") {
+                        data = utils.formatParams(data);
+                    } else if (!utils.isFormData(data) && ["object", "array"].indexOf(utils.type(data)) !== -1) {
+                        options.headers[contentType] = 'application/json;charset=utf-8'
+                        data = JSON.stringify(data);
+                    }
                 }
 
                 for (var k in options.headers) {
@@ -255,7 +259,7 @@ class Fly {
             enqueueIfLocked(requestInterceptor.p, () => {
                 utils.merge(options, this.config)
                 var headers = options.headers;
-                headers[contentType] = headers[contentType] || headers[contentTypeLowerCase] || 'application/x-www-form-urlencoded';
+                headers[contentType] = headers[contentType] || headers[contentTypeLowerCase] || "";
                 delete headers[contentTypeLowerCase]
                 options.body = data || options.body;
                 url = utils.trim(url || "");

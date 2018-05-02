@@ -97,17 +97,37 @@ module.exports = {
         return encodeURIComponent(val).replace(/%40/gi, '@').replace(/%3A/gi, ':').replace(/%24/g, '$').replace(/%2C/gi, ',').replace(/%20/g, '+').replace(/%5B/gi, '[').replace(/%5D/gi, ']');
     },
     formatParams: function formatParams(data) {
-        var arr = [];
-        for (var name in data) {
-            var value = data[name];
-            if (this.isObject(value)) {
-                value = JSON.stringify(value);
-            }
-            arr.push(this.encode(name) + "=" + this.encode(value));
-        }
-        return arr.join("&");
-    },
+        var str = "";
+        var first = true;
+        var that = this;
 
+        function _encode(sub, path) {
+            var encode = that.encode;
+            var type = that.type(sub);
+            if (type == "array") {
+                sub.forEach(function (e, i) {
+                    _encode(e, path + "%5B%5D");
+                });
+            } else if (type == "object") {
+                for (var key in sub) {
+                    if (path) {
+                        _encode(sub[key], path + "%5B" + encode(key) + "%5D");
+                    } else {
+                        _encode(sub[key], encode(key));
+                    }
+                }
+            } else {
+                if (!first) {
+                    str += "&";
+                }
+                first = false;
+                str += path + "=" + encode(sub);
+            }
+        }
+
+        _encode(data, "");
+        return str;
+    },
 
     // Do not overwrite existing attributes
     merge: function merge(a, b) {
