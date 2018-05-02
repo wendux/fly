@@ -39,6 +39,7 @@ fly.interceptors.request.use(function (request) {
 
 describe("request", function () {
     it("request", function (done) {
+        this.timeout(15000);
         var data = {
             "a": "你好",
             "b": [5, "6"],
