@@ -2,7 +2,7 @@
 
 [![npm version](https://img.shields.io/npm/v/flyio.svg)](https://www.npmjs.org/package/flyio)
 [![build status](https://travis-ci.org/wendux/fly.svg?branch=master)](https://travis-ci.org/wendux/fly)
-[![typescript](https://img.shields.io/badge/typeScript-support-orange.svg)](https://github.com/wendux/fly/blob/master/index.d.ts)
+[![coverage](https://img.shields.io/codecov/c/github/wendux/fly/master.svg)](https://codecov.io/github/wendux/fly?branch=master)
 [![size](https://img.shields.io/github/size/wendux/fly/dist/fly.min.js.svg)](https://unpkg.com/flyio@0.3.1/dist/fly.min.js)
 ![platform](https://img.shields.io/badge/platforms-All%20JavaScript%20Runtimes-blue.svg)
 
