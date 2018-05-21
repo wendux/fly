@@ -153,15 +153,18 @@ class Fly {
                 }
 
                 if (!isGet) {
+                    // default content type
+                    var _contentType = "application/x-www-form-urlencoded";
                     // If the request data is json object, transforming it  to json string,
                     // and set request content-type to "json". In browser,  the data will
                     // be sent as RequestBody instead of FormData
-                    if (options.headers[contentType].toLowerCase() === "application/x-www-form-urlencoded") {
+                    if (utils.trim((options.headers[contentType] || "").toLowerCase()) === _contentType) {
                         data = utils.formatParams(data);
                     } else if (!utils.isFormData(data) && ["object", "array"].indexOf(utils.type(data)) !== -1) {
-                        options.headers[contentType] = 'application/json;charset=utf-8'
+                        _contentType = 'application/json;charset=utf-8'
                         data = JSON.stringify(data);
                     }
+                    options.headers[contentType] = _contentType;
                 }
 
                 for (var k in options.headers) {

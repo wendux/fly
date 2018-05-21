@@ -33,14 +33,14 @@ fly.config.baseURL = "http://localhost/ds"
 //     ]
 // }
 
-// var formData={
-//     name:"xxx",
-//     file: fs.createReadStream('./v.png'),
-// }
-// fly.upload("http://localhost/ds/test", formData)
-//     .then(d => {
-//         log(d)
-//     }).catch(log)
+var formData = {
+    name: "haha",
+    file: fs.createReadStream('./v.png'),
+}
+fly.upload("http://localhost/ds/test", formData, {proxy: "http://localhost:8888"})
+    .then(d => {
+        log(d.data)
+    }).catch(log)
 
 
 //fly.download("http://localhost:8089/static/v.png","./vxx.png");
@@ -53,8 +53,8 @@ fly.config.baseURL = "http://localhost/ds"
 
 //
 //post请求
-fly.post("http://localhost/ds/test", {xx: "xxx", aa: {bb: 5}}).then(d => {
-    console.log("post请求成功", d)
-}).catch((e) => {
-    log(`post请求失败，错误码：${e.status}, 错误信息：${e.message}`);
-})
+// fly.post("http://localhost/ds/test", {xx: "xxx", aa: {bb: 5}}).then(d => {
+//     console.log("post请求成功", d)
+// }).catch((e) => {
+//     log(`post请求失败，错误码：${e.status}, 错误信息：${e.message}`);
+// })

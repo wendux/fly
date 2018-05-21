@@ -541,7 +541,7 @@ The parameter of all is an array of `promise`,  `then` will be called only when 
 
 By default, fly serializes JavaScript objects to `JSON`. To send data in the `application/x-www-form-urlencoded` format instead, you can use one of the following options.
 
-### By specify request header
+### By specifying `content-type` request header
 
 When you specify  `content-type` value as "application/x-www-form-urlencoded", fly will encode the request data automatically, for example：
 

@@ -86,6 +86,13 @@ describe("request", function () {
                 log("fail")
             }),
 
+            fly.post("/test?fm=true", {aa: 8, bb: 9, tt: {xx: 5}})
+                .then(function () {
+                    log("success")
+                }).catch(function () {
+                log("fail")
+            }),
+
             fly.get("http://xxx.bxxcom").catch(function (e) {
                 log(e.message);
             })
