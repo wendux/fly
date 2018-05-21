@@ -110,7 +110,9 @@ module.exports = {
         var str = "";
         var first = true;
         var that = this;
-
+        if ((typeof data === 'undefined' ? 'undefined' : _typeof(data)) != "object") {
+            return data;
+        }
         function _encode(sub, path) {
             var encode = that.encode;
             var type = that.type(sub);
