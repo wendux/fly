@@ -3,6 +3,7 @@
   "version": "0.5.9",
   "main": "node-index.js",
   "browser": "index.js",
+  "weapp": "dist/npm/wx.js",
   "author": {
     "name": "wendux",
     "email": "824783146@qq.com",
