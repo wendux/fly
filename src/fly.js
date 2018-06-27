@@ -215,7 +215,7 @@ class Fly {
                 }
 
                 engine.onload = () => {
-                    // The xhr of IE9 has not response filed
+                    // The xhr of IE9 has not response field
                     var response = engine.response || engine.responseText;
                     if (options.parseJson && (engine.getResponseHeader(contentType) || "").indexOf("json") !== -1
                         // Some third engine implementation may transform the response text to json object automatically,
@@ -227,6 +227,7 @@ class Fly {
                     var items = (engine.getAllResponseHeaders() || "").split("\r\n");
                     items.pop();
                     items.forEach((e) => {
+                        if(!e) return;
                         var key = e.split(":")[0]
                         headers[key] = engine.getResponseHeader(key)
                     })
