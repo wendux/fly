@@ -73,8 +73,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-    /******/
-    return __webpack_require__(__webpack_require__.s = 11);
+/******/ 	return __webpack_require__(__webpack_require__.s = 11);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -155,7 +154,7 @@ module.exports = {
 };
 
 /***/ }),
-    /* 1 */
+/* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
 function KEEP(_,cb){cb();}
@@ -277,7 +276,7 @@ function EngineWrapper(adapter) {
                         // Network error, set the status code 0
                         if (!self.status) {
                             self.statusText = responseText;
-                            self._call("onerror", {msg: statusMessage});
+                            self._call("onerror", { msg: statusMessage });
                         } else {
                             // Parsing the response headers to array in a object,  because
                             // there may be multiple values with the same header name
@@ -360,7 +359,7 @@ function EngineWrapper(adapter) {
 module.exports = EngineWrapper;
 
 /***/ }),
-    /* 2 */
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 function KEEP(_,cb){cb();}
@@ -527,8 +526,7 @@ var Fly = function () {
                         if (responseType !== "stream") {
                             engine.responseType = responseType;
                         }
-                    } catch (e) {
-                    }
+                    } catch (e) {}
 
                     if (!isGet) {
                         // default content type
@@ -554,8 +552,7 @@ var Fly = function () {
                                 // In browser environment, some header fields are readonly,
                                 // write will cause the exception .
                                 engine.setRequestHeader(k, options.headers[k]);
-                            } catch (e) {
-                            }
+                            } catch (e) {}
                         }
                     }
 
@@ -591,7 +588,7 @@ var Fly = function () {
                     }
 
                     engine.onload = function () {
-                        // The xhr of IE9 has not response filed
+                        // The xhr of IE9 has not response field
                         var response = engine.response || engine.responseText;
                         if (options.parseJson && (engine.getResponseHeader(contentType) || "").indexOf("json") !== -1
                         // Some third engine implementation may transform the response text to json object automatically,
@@ -603,12 +600,13 @@ var Fly = function () {
                         var items = (engine.getAllResponseHeaders() || "").split("\r\n");
                         items.pop();
                         items.forEach(function (e) {
+                            if (!e) return;
                             var key = e.split(":")[0];
                             headers[key] = engine.getResponseHeader(key);
                         });
                         var status = engine.status;
                         var statusText = engine.statusText;
-                        var data = {data: response, headers: headers, status: status, statusText: statusText};
+                        var data = { data: response, headers: headers, status: status, statusText: statusText };
                         // The _response filed of engine is set in  adapter which be called in engine-wrapper.js
                         utils.merge(data, engine._response);
                         if (status >= 200 && status < 300 || status === 304) {
@@ -696,70 +694,68 @@ var Fly = function () {
 //For typeScript
 
 
-        Fly.default = Fly;
+Fly.default = Fly;
 
-        ["get", "post", "put", "patch", "head", "delete"].forEach(function (e) {
-            Fly.prototype[e] = function (url, data, option) {
-                return this.request(url, data, utils.merge({method: e}, option));
-            };
-        });
+["get", "post", "put", "patch", "head", "delete"].forEach(function (e) {
+    Fly.prototype[e] = function (url, data, option) {
+        return this.request(url, data, utils.merge({ method: e }, option));
+    };
+});
 // Learn more about keep-loader: https://github.com/wendux/keep-loader
-        ;
-        module.exports = Fly;
+;
+module.exports = Fly;
 
-        /***/
-    }),
-    /* 3 */,
-    /* 4 */,
-    /* 5 */,
-    /* 6 */
-    /***/ (function (module, exports, __webpack_require__) {
+/***/ }),
+/* 3 */,
+/* 4 */,
+/* 5 */,
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
 
-        "use strict";
+"use strict";
 
 
 //微信小程序适配器
-        module.exports = function (request, responseCallback) {
-            var con = {
-                method: request.method,
-                url: request.url,
-                dataType: request.dataType || undefined,
-                header: request.headers,
-                data: request.body || {},
-                success: function success(res) {
-                    responseCallback({
-                        statusCode: res.statusCode,
-                        responseText: res.data,
-                        headers: res.header,
-                        statusMessage: res.errMsg
-                    });
-                },
-                fail: function fail(res) {
-                    responseCallback({
-                        statusCode: res.statusCode || 0,
-                        statusMessage: res.errMsg
-                    });
-                }
-            };
-            wx.request(con);
-        };
+module.exports = function (request, responseCallback) {
+    var con = {
+        method: request.method,
+        url: request.url,
+        dataType: request.dataType || undefined,
+        header: request.headers,
+        data: request.body || {},
+        success: function success(res) {
+            responseCallback({
+                statusCode: res.statusCode,
+                responseText: res.data,
+                headers: res.header,
+                statusMessage: res.errMsg
+            });
+        },
+        fail: function fail(res) {
+            responseCallback({
+                statusCode: res.statusCode || 0,
+                statusMessage: res.errMsg
+            });
+        }
+    };
+    wx.request(con);
+};
 
-        /***/
-    }),
-    /* 7 */,
-    /* 8 */,
-    /* 9 */,
-    /* 10 */,
-    /* 11 */
-    /***/ (function (module, exports, __webpack_require__) {
+/***/ }),
+/* 7 */,
+/* 8 */,
+/* 9 */,
+/* 10 */,
+/* 11 */
+/***/ (function(module, exports, __webpack_require__) {
 
-        "use strict";
+"use strict";
 
 
 //微信小程序入口
-        var Fly = __webpack_require__(2);
-        var EngineWrapper = __webpack_require__(1);
-        var adapter = __webpack_require__(6);
+var Fly = __webpack_require__(2);
+var EngineWrapper = __webpack_require__(1);
+var adapter = __webpack_require__(6);
 var wxEngine = EngineWrapper(adapter);
 module.exports = function (engine) {
     return new Fly(engine || wxEngine);

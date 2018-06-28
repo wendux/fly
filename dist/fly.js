@@ -313,8 +313,7 @@ var Fly = function () {
                         if (responseType !== "stream") {
                             engine.responseType = responseType;
                         }
-                    } catch (e) {
-                    }
+                    } catch (e) {}
 
                     if (!isGet) {
                         // default content type
@@ -340,8 +339,7 @@ var Fly = function () {
                                 // In browser environment, some header fields are readonly,
                                 // write will cause the exception .
                                 engine.setRequestHeader(k, options.headers[k]);
-                            } catch (e) {
-                            }
+                            } catch (e) {}
                         }
                     }
 
@@ -377,7 +375,7 @@ var Fly = function () {
                     }
 
                     engine.onload = function () {
-                        // The xhr of IE9 has not response filed
+                        // The xhr of IE9 has not response field
                         var response = engine.response || engine.responseText;
                         if (options.parseJson && (engine.getResponseHeader(contentType) || "").indexOf("json") !== -1
                         // Some third engine implementation may transform the response text to json object automatically,
@@ -389,12 +387,13 @@ var Fly = function () {
                         var items = (engine.getAllResponseHeaders() || "").split("\r\n");
                         items.pop();
                         items.forEach(function (e) {
+                            if (!e) return;
                             var key = e.split(":")[0];
                             headers[key] = engine.getResponseHeader(key);
                         });
                         var status = engine.status;
                         var statusText = engine.statusText;
-                        var data = {data: response, headers: headers, status: status, statusText: statusText};
+                        var data = { data: response, headers: headers, status: status, statusText: statusText };
                         // The _response filed of engine is set in  adapter which be called in engine-wrapper.js
                         utils.merge(data, engine._response);
                         if (status >= 200 && status < 300 || status === 304) {
@@ -482,7 +481,7 @@ var Fly = function () {
 //For typeScript
 
 
-        Fly.default = Fly;
+Fly.default = Fly;
 
 ["get", "post", "put", "patch", "head", "delete"].forEach(function (e) {
     Fly.prototype[e] = function (url, data, option) {
