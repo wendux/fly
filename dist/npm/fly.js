@@ -304,7 +304,6 @@ var Fly = function () {
                     }
 
                     var responseType = utils.trim(options.responseType || "");
-                    engine.withCredentials = !!options.withCredentials;
                     var isGet = options.method === "GET";
                     if (isGet) {
                         if (data) {
@@ -318,6 +317,7 @@ var Fly = function () {
 
                     // try catch for ie >=9
                     try {
+                        engine.withCredentials = !!options.withCredentials;
                         engine.timeout = options.timeout || 0;
                         if (responseType !== "stream") {
                             engine.responseType = responseType;
