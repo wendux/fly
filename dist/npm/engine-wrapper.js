@@ -73,8 +73,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-    /******/
-    return __webpack_require__(__webpack_require__.s = 1);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -155,7 +154,7 @@ module.exports = {
 };
 
 /***/ }),
-    /* 1 */
+/* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
 function KEEP(_,cb){cb();}
@@ -277,7 +276,7 @@ function EngineWrapper(adapter) {
                         // Network error, set the status code 0
                         if (!self.status) {
                             self.statusText = responseText;
-                            self._call("onerror", {msg: statusMessage});
+                            self._call("onerror", { msg: statusMessage });
                         } else {
                             // Parsing the response headers to array in a object,  because
                             // there may be multiple values with the same header name
