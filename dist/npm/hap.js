@@ -390,19 +390,31 @@ var Fly = function () {
          * @param [interceptor] either is interceptors.request or interceptors.response
          */
         function wrap(interceptor) {
-            var completer;
+            var resolve;
+            var reject;
+
+            function _clear() {
+                interceptor.p = resolve = reject = null;
+            }
             utils.merge(interceptor, {
                 lock: function lock() {
-                    if (!completer) {
-                        interceptor.p = new Promise(function (resolve) {
-                            completer = resolve;
+                    if (!resolve) {
+                        interceptor.p = new Promise(function (_resolve, _reject) {
+                            resolve = _resolve;
+                            reject = _reject;
                         });
                     }
                 },
                 unlock: function unlock() {
-                    if (completer) {
-                        completer();
-                        interceptor.p = completer = null;
+                    if (resolve) {
+                        resolve();
+                        _clear();
+                    }
+                },
+                clear: function clear() {
+                    if (reject) {
+                        reject("cancel");
+                        _clear();
                     }
                 }
             });
@@ -528,23 +540,26 @@ var Fly = function () {
                         }
                     } catch (e) {}
 
-                    if (!isGet) {
-                        // default content type
-                        var _contentType = "application/x-www-form-urlencoded";
-                        // If the request data is json object, transforming it  to json string,
-                        // and set request content-type to "json". In browser,  the data will
-                        // be sent as RequestBody instead of FormData
-                        if (utils.trim((options.headers[contentType] || "").toLowerCase()) === _contentType) {
-                            data = utils.formatParams(data);
-                        } else if (!utils.isFormData(data) && ["object", "array"].indexOf(utils.type(data)) !== -1) {
-                            _contentType = 'application/json;charset=utf-8';
-                            data = JSON.stringify(data);
-                        }
+                    var customContentType = options.headers[contentType] || options.headers[contentTypeLowerCase];
+
+                    // default content type
+                    var _contentType = "application/x-www-form-urlencoded";
+                    // If the request data is json object, transforming it  to json string,
+                    // and set request content-type to "json". In browser,  the data will
+                    // be sent as RequestBody instead of FormData
+                    if (utils.trim((customContentType || "").toLowerCase()) === _contentType) {
+                        data = utils.formatParams(data);
+                    } else if (!utils.isFormData(data) && ["object", "array"].indexOf(utils.type(data)) !== -1) {
+                        _contentType = 'application/json;charset=utf-8';
+                        data = JSON.stringify(data);
+                    }
+                    //If user doesn't set content-type, set default.
+                    if (!customContentType) {
                         options.headers[contentType] = _contentType;
                     }
 
                     for (var k in options.headers) {
-                        if (k === contentType && (utils.isFormData(data) || !data || isGet)) {
+                        if (k === contentType && utils.isFormData(data)) {
                             // Delete the content-type, Let the browser set it
                             delete options.headers[k];
                         } else {
@@ -590,7 +605,7 @@ var Fly = function () {
                     engine.onload = function () {
                         // The xhr of IE9 has not response field
                         var response = engine.response || engine.responseText;
-                        if (options.parseJson && (engine.getResponseHeader(contentType) || "").indexOf("json") !== -1
+                        if (response && options.parseJson && (engine.getResponseHeader(contentType) || "").indexOf("json") !== -1
                         // Some third engine implementation may transform the response text to json object automatically,
                         // so we should test the type of response before transforming it
                         && !utils.isObject(response)) {
@@ -676,16 +691,6 @@ var Fly = function () {
                 return callback.apply(null, arr);
             };
         }
-    }, {
-        key: "lock",
-        value: function lock() {
-            this.interceptors.request.lock();
-        }
-    }, {
-        key: "unlock",
-        value: function unlock() {
-            this.interceptors.request.unlock();
-        }
     }]);
 
     return Fly;
@@ -701,6 +706,11 @@ Fly.default = Fly;
         return this.request(url, data, utils.merge({ method: e }, option));
     };
 });
+        ["lock", "unlock", "clear"].forEach(function (e) {
+            Fly.prototype[e] = function () {
+                this.interceptors.request[e]();
+            };
+        });
 // Learn more about keep-loader: https://github.com/wendux/keep-loader
 ;
 module.exports = Fly;

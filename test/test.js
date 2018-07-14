@@ -29,6 +29,7 @@ fly.interceptors.request.use(function (request) {
             log("发起请求：path:" + request.url + "，baseURL:" + request.baseURL)
             return request
         }).finally(function () {
+            //fly.clear(); //clear the request queue
             // unlock the current instance, flush the request queue.
             fly.unlock();
         })

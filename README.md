@@ -373,6 +373,7 @@ fly.interceptors.request.use(function (request) {
             // otherwise, the return data will be teated as "response" data.
             return request 
           }).finally(()=>{
+           //fly.clear(); //clear the request queue
            // unlock the current instance, flush the request queue.   
            fly.unlock()
          })  
@@ -388,7 +389,7 @@ fly.interceptors.request.use(function (request) {
 
 **Note**: 
 
-1. The current fly instance will be locked  when call `fly.lock()` . Once  the fly instance is locked,  the incomming request task maked by it will  enter a queue before they enter the request interceptors, which will avoid the 
+1. The current fly instance will be locked  when call `fly.lock()` . Once  the fly instance is locked,  the incomming request task maked by it will be hang up and enter a queue before they enter the request interceptors, you can call `fly.unlock()` to continue the requests or call `fly.clear()` to cancel the requests in the queue.
 2. **Only when you return the `request` object  passed by interceptor at the final , the origin http request  will be continued**.  
 
 And you can also make an async task in the **response** interceptor. More information about interceptors and examples refer to [flyio interceptor](https://wendux.github.io/dist/#/doc/flyio/interceptor).

@@ -37,17 +37,17 @@ export interface FlyPromise<T = any> extends Promise<FlyResponse<T>> {
 
 export interface FlyRequestInterceptor<V> {
     use(onSend?: (request: V) => any): void;
-
     lock(): void;
-
     unlock(): void;
+
+    clear(): void;
 }
 export interface FlyResponseInterceptor<V> {
     use(onSucceed?: (response: V) => any, onError?: (err: Error) => any): void;
-
     lock(): void;
-
     unlock(): void;
+
+    clear(): void;
 }
 
 interface Fly {
@@ -68,8 +68,9 @@ interface Fly {
     spread<T, R>(callback: (...args: T[]) => R): (array: T[]) => R;
 
     lock(): void;
-
     unlock(): void;
+
+    clear(): void;
 }
 declare const fly:Fly;
 export default fly;
