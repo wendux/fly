@@ -50,7 +50,7 @@ export interface FlyResponseInterceptor<V> {
     clear(): void;
 }
 
-interface Fly {
+export interface Fly {
     config: FlyRequestConfig;
     interceptors: {
         request: FlyRequestInterceptor<FlyRequestConfig>;
