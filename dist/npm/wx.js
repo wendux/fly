@@ -298,7 +298,8 @@ function EngineWrapper(adapter) {
                                 cookies.forEach(function (e) {
                                     // Remove the http-Only property of the  cookie
                                     // so that JavaScript can operate it.
-                                    document.cookie = e.replace(/;\s*httpOnly/ig, "");
+                                    //see:https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie
+                                    document.cookie = e.replace(/;\s*httpOnly/ig, "").replace(/;\s*Secure/ig, "");
                                 });
                             }
                             self.responseHeaders = headers;
@@ -323,16 +324,20 @@ function EngineWrapper(adapter) {
         }, {
             key: "getResponseHeader",
             value: function getResponseHeader(key) {
-                return (this.responseHeaders[key.toLowerCase()] || "").toString() || null;
+                return this.responseHeaders[key.toLowerCase()] || "" || null;
             }
         }, {
             key: "getAllResponseHeaders",
             value: function getAllResponseHeaders() {
-                var str = "";
+                var headers = {};
                 for (var key in this.responseHeaders) {
-                    str += key + ":" + this.getResponseHeader(key) + "\r\n";
+                    var value = this.getResponseHeader(key);
+                    if (value == null) {
+                        continue;
+                    }
+                    headers[key.toLowerCase()] = value;
                 }
-                return str || null;
+                return headers;
             }
         }, {
             key: "abort",
@@ -611,14 +616,8 @@ var Fly = function () {
                         && !utils.isObject(response)) {
                             response = JSON.parse(response);
                         }
-                        var headers = {};
-                        var items = (engine.getAllResponseHeaders() || "").split("\r\n");
-                        items.pop();
-                        items.forEach(function (e) {
-                            if (!e) return;
-                            var key = e.split(":")[0];
-                            headers[key] = engine.getResponseHeader(key);
-                        });
+                        var headers = engine.getAllResponseHeaders();
+
                         var status = engine.status;
                         var statusText = engine.statusText;
                         var data = { data: response, headers: headers, status: status, statusText: statusText };
@@ -706,11 +705,11 @@ Fly.default = Fly;
         return this.request(url, data, utils.merge({ method: e }, option));
     };
 });
-        ["lock", "unlock", "clear"].forEach(function (e) {
-            Fly.prototype[e] = function () {
-                this.interceptors.request[e]();
-            };
-        });
+["lock", "unlock", "clear"].forEach(function (e) {
+    Fly.prototype[e] = function () {
+        this.interceptors.request[e]();
+    };
+});
 // Learn more about keep-loader: https://github.com/wendux/keep-loader
 ;
 module.exports = Fly;
