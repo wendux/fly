@@ -10,7 +10,7 @@
 
 Supporting request forwarding and Promise based HTTP client for all JavaScript runtimes.
 
-Chinese documentation : [中文文档](https://github.com/wendux/fly/blob/master/README-CH.md)
+Chinese documentation : [中文文档](https://github.com/wendux/fly/blob/master/README.md)
 
 
 
@@ -92,13 +92,13 @@ npm install flyio
 Using CDN （on browsers）
 
 ```javascript
-<script src="https://unpkg.com/flyio/dist/fly.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/flyio/dist/fly.min.js"></script>
 ```
 
 UMD （on browsers）
 
 ```http
-https://unpkg.com/flyio/dist/umd/fly.umd.min.js
+https://cdn.jsdelivr.net/npm/flyio/dist/umd/fly.umd.min.js
 ```
 
 
@@ -211,6 +211,19 @@ fly.post('/user', {
     console.log(error);
   });
 ```
+
+### `POST` request with Url params
+
+```javascript
+fly.get("../package.json", "xxx=5", {
+        params: {
+            c: 1
+        }
+    }
+)
+```
+
+The final url is "package.json?c=1&xxx=5".
 
 ### Performing multiple concurrent requests
 
@@ -454,8 +467,10 @@ fly.get('/user/12345')
   // If the request takes longer than `timeout`, the request will be aborted.
   timeout:0,  //default
   // `parseJson` indicates whether or not it is  automatically converted response 
-  //  data , the Content-Type of which is application/json, to JSON object,  
+  //  data , the Content-Type of which is application/json, to JSON object,     
   parseJson:true,
+  //Common URL params
+  params:{}     
   // `withCredentials` indicates whether or not cross-site Access-Control requests
   // should be made using credentials
   withCredentials: false, // default
@@ -475,6 +490,8 @@ fly.config.headers={xx:5,bb:6,dd:7}
 fly.config.timeout=10000;
 // Set base url
 fly.config.baseURL="https://wendux.github.io/"
+// Common URL params
+fly.config.params={"token":"testtoken"}
 ```
 
 ### Single request configuration

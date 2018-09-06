@@ -1,3 +1,4 @@
+[English](https://github.com/wendux/fly/blob/master/README-EN.md)|中文简体
 
 [![fly.js](https://github.com/wendux/fly/raw/master/fly.png)](https://wendux.github.io/dist/#/doc/flyio/readme)
 
@@ -10,7 +11,6 @@
 ## Fly.js
 
 一个支持所有JavaScript运行环境的基于Promise的、支持请求转发、强大的http请求库。可以让您在多个端上尽可能大限度的实现代码复用。
-
 
 
 ### 浏览器支持
@@ -217,6 +217,19 @@ fly.post('/user', {
   });
 ```
 
+### Post请求添加Url参数
+
+```dart
+fly.get("../package.json", "xxx=5", {
+        params: {
+            c: 1
+        }
+    }
+)
+```
+
+最终的URL是“package.json?c=1&xxx=5”。
+
 ### 发起多个并发请求
 
 ```javascript
@@ -327,6 +340,7 @@ fly.interceptors.response.use(
   method, // 请求方法
   timeout, //本次请求的超时时间
   url, // 本次请求的地址
+  params, //url get参数(post请求或默认的get参数)    
   withCredentials, //跨域请求是否发送第三方cookie
   ... //options中自定义的属性
 }
@@ -446,6 +460,7 @@ fly.get('/user/12345')
   timeout:0,//超时时间，为0时则无超时限制
   //是否自动将Content-Type为“application/json”的响应数据转化为JSON对象，默认为true    
   parseJson:true,
+  params:{}, //默认公共的url get参数     
   withCredentials:false //跨域时是否发送cookie
 }
 ```
@@ -463,6 +478,8 @@ fly.config.headers={xx:5,bb:6,dd:7}
 fly.config.timeout=10000;
 //设置请求基地址
 fly.config.baseURL="https://wendux.github.io/"
+//设置公共的Get参数
+fly.config.params={"token":"testtoken"};
 ```
 
 ### 单次请求配置

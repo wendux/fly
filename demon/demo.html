@@ -26,12 +26,15 @@
 </style>
 <body>
 <div style="background: teal; font-size: 38px; color: #ffef68; text-shadow: 2px 2px 5px #ffef68; width: 400px; height: 400px; text-align: center">
-   <div style="padding-top: 100px"> Fly.js</div>
+    <div style="padding-top: 100px"> Fly.js</div>
 </div>
 open console panel to view log.
 <script>
     //定义公共headers
-    fly.config.headers={xx:5,bb:6,dd:7}
+    fly.config.headers = {xx: 5, bb: 6, dd: 7}
+
+    //设置
+    fly.config.params = {"token": "testtoken"};
 
     fly.interceptors.request.use(function (request) {
         //可以通过promise.reject／resolve直接中止请求
@@ -58,34 +61,41 @@ open console panel to view log.
         console.log("error", e)
     })
 
-    fly.get("../package.json",{aa:8,bb:9,tt:{xx:5}})
-        .then(function(d){
-        console.log("get result:",d)
-    }).catch(function(e){
+    fly.get("../package.json", {aa: 8, bb: 9, tt: {xx: 5}})
+        .then(function (d) {
+            console.log("get result:", d)
+        }).catch(function (e) {
         console.log("error", e)
     })
 
-    fly.get("../package.json?fm=true&", {aa: 8, bb: 9, tt: {xx: 5}}, {
+    fly.get("../package.json?fm=true", {aa: 8, bb: 9, tt: {xx: 5}}, {
         headers: {
             "content-type": "application/x-www-form-urlencoded"
         }
     })
-        .then(function(d){
-        console.log("post result:",d)
-    }).catch(function(e) {
-        console.log("error", e)
-    })
-
-    fly.post("../package.json?xx", "xx=8")
         .then(function (d) {
             console.log("post result:", d)
         }).catch(function (e) {
         console.log("error", e)
     })
 
+    fly.post("../package.json", "xx=8")
+        .then(function (d) {
+            console.log("post result:", d)
+        }).catch(function (e) {
+        console.log("error", e)
+    })
+
+    fly.get("../package.json", "xxx=5", {
+            params: {
+                c: 1
+            }
+        }
+    )
+
     fly.request("../aa/package.json", {hh: 5}, {method: "post"})
-        .then(function(d){
-        console.log("ajax result:",d)
+        .then(function (d) {
+            console.log("ajax result:", d)
         }).catch(function (e) {
         console.log("error", e)
     })

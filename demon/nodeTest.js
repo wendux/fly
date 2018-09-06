@@ -36,6 +36,10 @@ fly.config.baseURL = "http://localhost/ds"
 var formData = {
     name: "haha",
     file: fs.createReadStream('./v.png'),
+    files: [
+        fs.createReadStream('./upload.txt'),
+        fs.createReadStream('./upload.txt')
+    ]
 }
 fly.upload("http://localhost/ds/test", formData, {proxy: "http://localhost:8888"})
     .then(d => {

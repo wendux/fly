@@ -23,6 +23,7 @@ class Fly {
             function _clear() {
                 interceptor.p = resolve = reject = null;
             }
+
             utils.merge(interceptor, {
                 lock() {
                     if (!resolve) {
@@ -71,6 +72,7 @@ class Fly {
             baseURL: "",
             headers: {},
             timeout: 0,
+            params: {}, // Default Url params
             parseJson: true, // Convert response data to JSON object automatically.
             withCredentials: false
         }
@@ -144,14 +146,31 @@ class Fly {
 
                 var responseType = utils.trim(options.responseType || "")
                 var isGet = options.method === "GET";
-                if (isGet) {
-                    if (data) {
-                        if (utils.type(data) !== "string") {
-                            data = utils.formatParams(data);
-                        }
-                        url += (url.indexOf("?") === -1 ? "?" : "&") + data;
-                    }
+                var dataType = utils.type(data);
+                var params = options.params || {};
+
+                // merge url params when the method is "GET" (data is object)
+                if (isGet && dataType === "object") {
+                    params = utils.merge(data, params)
                 }
+                // encode params to String
+                params = utils.formatParams(params);
+
+                // save url params
+                var _params = [];
+                if (params) {
+                    _params.push(params);
+                }
+                // Add data to url params when the method is "GET" (data is String)
+                if (isGet && data && dataType === "string") {
+                    _params.push(data);
+                }
+
+                // make the final url
+                if (_params.length > 0) {
+                    url += (url.indexOf("?") === -1 ? "?" : "&") + _params.join("&");
+                }
+
                 engine.open(options.method, url);
 
                 // try catch for ie >=9
@@ -237,14 +256,19 @@ class Fly {
                         && !utils.isObject(response)) {
                         response = JSON.parse(response);
                     }
-                    var headers = {};
-                    var items = (engine.getAllResponseHeaders() || "").split("\r\n");
-                    items.pop();
-                    items.forEach((e) => {
-                        if(!e) return;
-                        var key = e.split(":")[0]
-                        headers[key] = engine.getResponseHeader(key)
-                    })
+
+                    var headers = engine.responseHeaders;
+                    // In browser
+                    if (!headers) {
+                        headers = {};
+                        var items = (engine.getAllResponseHeaders() || "").split("\r\n");
+                        items.pop();
+                        items.forEach((e) => {
+                            if (!e) return;
+                            var key = e.split(":")[0]
+                            headers[key] = engine.getResponseHeader(key)
+                        })
+                    }
                     var status = engine.status
                     var statusText = engine.statusText
                     var data = {data: response, headers, status, statusText};
