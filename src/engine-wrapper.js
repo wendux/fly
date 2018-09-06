@@ -122,7 +122,8 @@ function EngineWrapper(adapter) {
                             cookies.forEach((e) => {
                                 // Remove the http-Only property of the  cookie
                                 // so that JavaScript can operate it.
-                                document.cookie = e.replace(/;\s*httpOnly/ig, "")
+                                //see:https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie
+                                document.cookie = e.replace(/;\s*httpOnly/ig, "").replace(/;\s*Secure/ig, "");
                             })
                         }
                         self.responseHeaders = headers;
@@ -145,15 +146,19 @@ function EngineWrapper(adapter) {
         }
 
         getResponseHeader(key) {
-            return (this.responseHeaders[key.toLowerCase()] || "").toString() || null
+            return (this.responseHeaders[key.toLowerCase()] || "")  || null
         }
 
         getAllResponseHeaders() {
-            var str = "";
+            var headers = {};
             for (var key in this.responseHeaders) {
-                str += key + ":" + this.getResponseHeader(key) + "\r\n";
+                var value = this.getResponseHeader(key);
+                if(value == null) {
+                    continue;
+                }
+                headers[key.toLowerCase()] = value;
             }
-            return str || null;
+            return headers;
         }
 
         abort(msg) {

@@ -237,14 +237,8 @@ class Fly {
                         && !utils.isObject(response)) {
                         response = JSON.parse(response);
                     }
-                    var headers = {};
-                    var items = (engine.getAllResponseHeaders() || "").split("\r\n");
-                    items.pop();
-                    items.forEach((e) => {
-                        if(!e) return;
-                        var key = e.split(":")[0]
-                        headers[key] = engine.getResponseHeader(key)
-                    })
+                    var headers = engine.getAllResponseHeaders();
+                    
                     var status = engine.status
                     var statusText = engine.statusText
                     var data = {data: response, headers, status, statusText};

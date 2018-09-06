@@ -407,14 +407,8 @@ var Fly = function () {
                         && !utils.isObject(response)) {
                             response = JSON.parse(response);
                         }
-                        var headers = {};
-                        var items = (engine.getAllResponseHeaders() || "").split("\r\n");
-                        items.pop();
-                        items.forEach(function (e) {
-                            if (!e) return;
-                            var key = e.split(":")[0];
-                            headers[key] = engine.getResponseHeader(key);
-                        });
+                        var headers = engine.getAllResponseHeaders();
+
                         var status = engine.status;
                         var statusText = engine.statusText;
                         var data = { data: response, headers: headers, status: status, statusText: statusText };
@@ -502,11 +496,11 @@ Fly.default = Fly;
         return this.request(url, data, utils.merge({ method: e }, option));
     };
 });
-        ["lock", "unlock", "clear"].forEach(function (e) {
-            Fly.prototype[e] = function () {
-                this.interceptors.request[e]();
-            };
-        });
+["lock", "unlock", "clear"].forEach(function (e) {
+    Fly.prototype[e] = function () {
+        this.interceptors.request[e]();
+    };
+});
 // Learn more about keep-loader: https://github.com/wendux/keep-loader
 ;
 module.exports = Fly;
