@@ -241,7 +241,7 @@ var Fly = function () {
             baseURL: "",
             headers: {},
             timeout: 0,
-            params: {},
+            params: {}, // Default Url params
             parseJson: true, // Convert response data to JSON object automatically.
             withCredentials: false
         };
@@ -369,7 +369,7 @@ var Fly = function () {
                         data = JSON.stringify(data);
                     }
                     //If user doesn't set content-type, set default.
-                    if (!customContentType) {
+                    if (!(customContentType || isGet)) {
                         options.headers[contentType] = _contentType;
                     }
 

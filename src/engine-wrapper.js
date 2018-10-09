@@ -47,12 +47,6 @@ function EngineWrapper(adapter) {
 
         send(arg) {
             arg = arg || null;
-            if (isBrowser) {
-                var cookie = document.cookie
-                if (cookie) {
-                    this.requestHeaders.cookie = cookie;
-                }
-            }
             var self = this;
             if (adapter) {
                 var request = {

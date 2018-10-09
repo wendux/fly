@@ -197,7 +197,7 @@ class Fly {
                     data = JSON.stringify(data);
                 }
                 //If user doesn't set content-type, set default.
-                if (!customContentType) {
+                if (!(customContentType || isGet)) {
                     options.headers[contentType] = _contentType;
                 }
 
