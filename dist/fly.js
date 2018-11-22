@@ -103,6 +103,7 @@ module.exports = {
         if ((typeof data === 'undefined' ? 'undefined' : _typeof(data)) != "object") {
             return data;
         }
+
         function _encode(sub, path) {
             var encode = that.encode;
             var type = that.type(sub);
@@ -130,12 +131,34 @@ module.exports = {
         _encode(data, "");
         return str;
     },
+    clone: function clone(data) {
+        var type = this.type(data);
+        var obj;
+        if (type === 'array') {
+            obj = [];
+        } else if (type === 'object') {
+            obj = {};
+        } else {
+            return data;
+        }
+        if (type === 'array') {
+            for (var i = 0, len = data.length; i < len; i++) {
+                obj.push(this.clone(data[i]));
+            }
+        } else if (type === 'object') {
+            for (var key in data) {
+                obj[key] = this.clone(data[key]);
+            }
+        }
+        return obj;
+    },
+
 
     // Do not overwrite existing attributes
     merge: function merge(a, b) {
         for (var key in b) {
             if (!a.hasOwnProperty(key)) {
-                a[key] = b[key];
+                a[key] = this.clone(b[key]);
             } else if (this.isObject(b[key], 1) && this.isObject(a[key], 1)) {
                 this.merge(a[key], b[key]);
             }
