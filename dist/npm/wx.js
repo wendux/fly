@@ -725,11 +725,11 @@ Fly.default = Fly;
         return this.request(url, data, utils.merge({ method: e }, option));
     };
 });
-        ["lock", "unlock", "clear"].forEach(function (e) {
-            Fly.prototype[e] = function () {
-                this.interceptors.request[e]();
-            };
-        });
+["lock", "unlock", "clear"].forEach(function (e) {
+    Fly.prototype[e] = function () {
+        this.interceptors.request[e]();
+    };
+});
 // Learn more about keep-loader: https://github.com/wendux/keep-loader
 ;
 module.exports = Fly;
@@ -783,12 +783,12 @@ module.exports = function (request, responseCallback) {
 
 
 //微信小程序入口
-        var _Fly = __webpack_require__(2);
+var _Fly = __webpack_require__(2);
 var EngineWrapper = __webpack_require__(1);
 var adapter = __webpack_require__(6);
 var wxEngine = EngineWrapper(adapter);
 module.exports = function (engine) {
-    return new Fly(engine || wxEngine);
+  return new _Fly(engine || wxEngine);
 };
 
 /***/ })
