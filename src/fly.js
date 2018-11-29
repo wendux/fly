@@ -299,7 +299,7 @@ class Fly {
             }
 
             enqueueIfLocked(requestInterceptor.p, () => {
-                utils.merge(options, this.config)
+                utils.merge(options, JSON.parse(JSON.stringify(this.config)));
                 var headers = options.headers;
                 headers[contentType] = headers[contentType] || headers[contentTypeLowerCase] || "";
                 delete headers[contentTypeLowerCase]

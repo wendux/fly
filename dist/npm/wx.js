@@ -140,34 +140,12 @@ module.exports = {
         _encode(data, "");
         return str;
     },
-    clone: function clone(data) {
-        var type = this.type(data);
-        var obj;
-        if (type === 'array') {
-            obj = [];
-        } else if (type === 'object') {
-            obj = {};
-        } else {
-            return data;
-        }
-        if (type === 'array') {
-            for (var i = 0, len = data.length; i < len; i++) {
-                obj.push(this.clone(data[i]));
-            }
-        } else if (type === 'object') {
-            for (var key in data) {
-                obj[key] = this.clone(data[key]);
-            }
-        }
-        return obj;
-    },
-
 
     // Do not overwrite existing attributes
     merge: function merge(a, b) {
         for (var key in b) {
             if (!a.hasOwnProperty(key)) {
-                a[key] = this.clone(b[key]);
+                a[key] = b[key];
             } else if (this.isObject(b[key], 1) && this.isObject(a[key], 1)) {
                 this.merge(a[key], b[key]);
             }
@@ -690,7 +668,7 @@ var Fly = function () {
                 }
 
                 enqueueIfLocked(requestInterceptor.p, function () {
-                    utils.merge(options, _this.config);
+                    utils.merge(options, JSON.parse(JSON.stringify(_this.config)));
                     var headers = options.headers;
                     headers[contentType] = headers[contentType] || headers[contentTypeLowerCase] || "";
                     delete headers[contentTypeLowerCase];
@@ -805,7 +783,7 @@ module.exports = function (request, responseCallback) {
 
 
 //微信小程序入口
-var Fly = __webpack_require__(2);
+        var _Fly = __webpack_require__(2);
 var EngineWrapper = __webpack_require__(1);
 var adapter = __webpack_require__(6);
 var wxEngine = EngineWrapper(adapter);

@@ -1,5 +1,5 @@
 //微信小程序入口
-var  Fly=require("./fly")
+var _Fly = require("./fly")
 var EngineWrapper = require("./engine-wrapper")
 var adapter = require("./adapter/wx")
 var wxEngine = EngineWrapper(adapter)

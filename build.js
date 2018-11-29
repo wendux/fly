@@ -4,6 +4,7 @@
 var path = require('path');
 var webpack = require('webpack');
 var env=process.argv[2]||"dev"
+require("shelljs/global")
 
 //For cdn entry
 var entry={
@@ -100,5 +101,8 @@ webpack(config,function (err,stats) {
         chunkModules: false
     }) + '\n')
 });
+
+cp("./dist/npm/wx.js", "./miniprogram_dist/index.js")
+cp("./dist/npm/engine-wrapper.js", "./miniprogram_dist/engine-wrapper.js")
 
 
