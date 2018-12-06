@@ -4,5 +4,5 @@ var EngineWrapper = require("./engine-wrapper")
 var adapter = require("./adapter/wx")
 var wxEngine = EngineWrapper(adapter)
 module.exports=function (engine) {
-    return new Fly(engine||wxEngine);
+    return new _Fly(engine || wxEngine);
 }

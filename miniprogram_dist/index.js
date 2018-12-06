@@ -891,7 +891,7 @@
             var adapter = __webpack_require__(6);
             var wxEngine = EngineWrapper(adapter);
             module.exports = function (engine) {
-                return new Fly(engine || wxEngine);
+                return new _Fly(engine || wxEngine);
             };
 
             /***/
