@@ -73,7 +73,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 8);
+/******/ 	return __webpack_require__(__webpack_require__.s = 9);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -98,7 +98,7 @@ module.exports = function handleImgBase64Data(responseData) {
 
 /***/ }),
 
-/***/ 8:
+/***/ 9:
 /***/ (function(module, exports, __webpack_require__) {
 
 function KEEP(_,cb){cb();}

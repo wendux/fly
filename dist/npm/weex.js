@@ -73,7 +73,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 10);
+/******/ 	return __webpack_require__(__webpack_require__.s = 12);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -726,11 +726,11 @@ Fly.default = Fly;
         return this.request(url, data, utils.merge({ method: e }, option));
     };
 });
-        ["lock", "unlock", "clear"].forEach(function (e) {
-            Fly.prototype[e] = function () {
-                this.interceptors.request[e]();
-            };
-        });
+["lock", "unlock", "clear"].forEach(function (e) {
+    Fly.prototype[e] = function () {
+        this.interceptors.request[e]();
+    };
+});
 // Learn more about keep-loader: https://github.com/wendux/keep-loader
 ;
 module.exports = Fly;
@@ -738,7 +738,8 @@ module.exports = Fly;
 /***/ }),
 /* 3 */,
 /* 4 */,
-/* 5 */
+/* 5 */,
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -768,11 +769,12 @@ module.exports = function (request, responseCallback) {
 };
 
 /***/ }),
-/* 6 */,
 /* 7 */,
 /* 8 */,
 /* 9 */,
-/* 10 */
+/* 10 */,
+/* 11 */,
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -781,7 +783,7 @@ module.exports = function (request, responseCallback) {
 //weex entry
 var Fly = __webpack_require__(2);
 var EngineWrapper = __webpack_require__(1);
-var adapter = __webpack_require__(5);
+var adapter = __webpack_require__(6);
 var weexEngine = EngineWrapper(adapter);
 module.exports = function (engine) {
     return new Fly(engine || weexEngine);

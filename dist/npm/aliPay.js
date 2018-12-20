@@ -73,7 +73,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 13);
+/******/ 	return __webpack_require__(__webpack_require__.s = 10);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -737,16 +737,20 @@ module.exports = Fly;
 
 /***/ }),
 /* 3 */,
-/* 4 */,
-/* 5 */,
-/* 6 */,
-/* 7 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-//微信小程序适配器
+//支付宝小程序适配器
+var statusList = {
+    11: '无权跨域',
+    12: '网络出错',
+    13: '超时',
+    14: '解码失败',
+    19: 'HTTP错误'
+};
 module.exports = function (request, responseCallback) {
     var con = {
         method: request.method,
@@ -755,43 +759,53 @@ module.exports = function (request, responseCallback) {
         header: request.headers,
         data: request.body || {},
         responseType: request.responseType || 'text',
+        timeout: request.timeout || 3000,
         success: function success(res) {
             responseCallback({
-                statusCode: res.statusCode,
+                statusCode: res.status,
                 responseText: res.data,
-                headers: res.header,
-                statusMessage: res.errMsg
+                statusHeaders: res.headers
             });
         },
         fail: function fail(res) {
             responseCallback({
-                statusCode: res.statusCode || 0,
-                statusMessage: res.errMsg
+                statusCode: res.status || 0,
+                responseText: res.data,
+                statusHeaders: res.headers,
+                errMsg: statusList[res.status]
+            });
+        },
+        complete: function complete(res) {
+            responseCallback({
+                statusCode: res.status,
+                responseText: res.data,
+                statusHeaders: res.headers,
+                errMsg: statusList[res.status]
             });
         }
     };
-    wx.request(con);
+    my.request(con);
 };
 
 /***/ }),
+/* 5 */,
+/* 6 */,
+/* 7 */,
 /* 8 */,
 /* 9 */,
-/* 10 */,
-/* 11 */,
-/* 12 */,
-/* 13 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-//微信小程序入口
+//支付宝小程序入口
 var _Fly = __webpack_require__(2);
 var EngineWrapper = __webpack_require__(1);
-var adapter = __webpack_require__(7);
-var wxEngine = EngineWrapper(adapter);
+var adapter = __webpack_require__(4);
+var aliPayEngine = EngineWrapper(adapter);
 module.exports = function (engine) {
-    return new _Fly(engine || wxEngine);
+    return new _Fly(engine || aliPayEngine);
 };
 
 /***/ })
