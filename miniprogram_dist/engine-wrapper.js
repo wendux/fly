@@ -151,7 +151,7 @@
                     var str = "";
                     var first = true;
                     var that = this;
-                    if ((typeof data === 'undefined' ? 'undefined' : _typeof(data)) != "object") {
+                    if (!this.isObject(data)) {
                         return data;
                     }
 
@@ -160,7 +160,8 @@
                         var type = that.type(sub);
                         if (type == "array") {
                             sub.forEach(function (e, i) {
-                                _encode(e, path + "%5B%5D");
+                                if (!this.isObject(data)) i = "";
+                                _encode(e, path + ('%5B' + i + '%5D'));
                             });
                         } else if (type == "object") {
                             for (var key in sub) {
