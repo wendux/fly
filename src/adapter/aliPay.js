@@ -39,5 +39,5 @@ module.exports=function(request, responseCallback) {
             })
         }
     }
-    my.request(con)
+    my.httpRequest(con)
 }
