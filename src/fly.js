@@ -248,40 +248,44 @@ class Fly {
                 }
 
                 engine.onload = () => {
-                    // The xhr of IE9 has not response field
-                    var response = engine.response || engine.responseText;
-                    if (response && options.parseJson && (engine.getResponseHeader(contentType) || "").indexOf("json") !== -1
-                        // Some third engine implementation may transform the response text to json object automatically,
-                        // so we should test the type of response before transforming it
-                        && !utils.isObject(response)) {
-                        response = JSON.parse(response);
-                    }
+                    try {
+                        // The xhr of IE9 has not response field
+                        var response = engine.response || engine.responseText;
+                        if (response && options.parseJson && (engine.getResponseHeader(contentType) || "").indexOf("json") !== -1
+                            // Some third engine implementation may transform the response text to json object automatically,
+                            // so we should test the type of response before transforming it
+                            && !utils.isObject(response)) {
+                            response = JSON.parse(response);
+                        }
 
-                    var headers = engine.responseHeaders;
-                    // In browser
-                    if (!headers) {
-                        headers = {};
-                        var items = (engine.getAllResponseHeaders() || "").split("\r\n");
-                        items.pop();
-                        items.forEach((e) => {
-                            if (!e) return;
-                            var key = e.split(":")[0]
-                            headers[key] = engine.getResponseHeader(key)
-                        })
-                    }
-                    var status = engine.status
-                    var statusText = engine.statusText
-                    var data = {data: response, headers, status, statusText};
-                    // The _response filed of engine is set in  adapter which be called in engine-wrapper.js
-                    utils.merge(data, engine._response)
-                    if ((status >= 200 && status < 300) || status === 304) {
-                        data.engine = engine;
-                        data.request = options;
-                        onresult(responseInterceptor.handler, data, 0)
-                    } else {
-                        var e = new Err(statusText, status);
-                        e.response = data
-                        onerror(e)
+                        var headers = engine.responseHeaders;
+                        // In browser
+                        if (!headers) {
+                            headers = {};
+                            var items = (engine.getAllResponseHeaders() || "").split("\r\n");
+                            items.pop();
+                            items.forEach((e) => {
+                                if (!e) return;
+                                var key = e.split(":")[0]
+                                headers[key] = engine.getResponseHeader(key)
+                            })
+                        }
+                        var status = engine.status
+                        var statusText = engine.statusText
+                        var data = {data: response, headers, status, statusText};
+                        // The _response filed of engine is set in  adapter which be called in engine-wrapper.js
+                        utils.merge(data, engine._response)
+                        if ((status >= 200 && status < 300) || status === 304) {
+                            data.engine = engine;
+                            data.request = options;
+                            onresult(responseInterceptor.handler, data, 0)
+                        } else {
+                            var e = new Err(statusText, status);
+                            e.response = data
+                            onerror(e)
+                        }
+                    } catch (e) {
+                        onerror(new Err(e.msg, engine.status))
                     }
                 }
 
