@@ -49,6 +49,11 @@
             <a href="https://www.quickapp.cn/">
                 <img  src="https://github.com/wendux/fly/raw/master/imgs/hp.png" alt="quick app logo">
             </a>
+</td>
+<td align="center" valign="middle">
+            <a href="https://mini.open.alipay.com/channel/miniIndex.htm">
+<img width="40" src="https://gw.alipayobjects.com/zos/rmsportal/kjenedafWxLSvoQqNxUF.png" alt="支付宝小程序"> 支付宝小程序
+            </a>
         </td>
     </tr>
     </tbody>
@@ -142,7 +147,21 @@ https://unpkg.com/flyio/dist/umd/fly.umd.min.js
    var fly=new Fly; //创建fly实例
    ```
 
-3. 快应用中引入
+3. 在支付宝小程序中引入
+
+   ```javascript
+   var Fly=require("flyio/dist/npm/ap") 
+   var fly=new Fly
+   ```
+
+   如果您的支付宝小程序项目没有使用`npm`来管理依赖，您可以直接下载源码到您的小程序工程，下载链接[ap.js](https://github.com/wendux/fly/tree/master/dist/npm/ap.js) 或 [ap.umd.min.js](https://github.com/wendux/fly/tree/master/dist/umd/ap.umd.min.js) .下载任意一个，保存到本地工程目录，假设在“lib”目录，接下来引入：
+
+   ```javascript
+   var Fly=require("../lib/ap") //ap.js为您下载的源码文件
+   var fly=new Fly; //创建fly实例
+   ```
+
+4. 快应用中引入
 
    [快应用](https://www.quickapp.cn/) 中Fly依赖 `fetch`模块，需要先在 `manifest.json`中添加引用：
 
@@ -162,7 +181,7 @@ https://unpkg.com/flyio/dist/umd/fly.umd.min.js
     var fly=new Fly(fetch)
    ```
 
-4. Weex中引入
+5. Weex中引入
 
    ```javascript
    var Fly=require("flyio/dist/npm/weex")

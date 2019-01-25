@@ -73,7 +73,8 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 11);
+    /******/
+    return __webpack_require__(__webpack_require__.s = 13);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -743,7 +744,8 @@ module.exports = Fly;
 /* 3 */,
 /* 4 */,
 /* 5 */,
-/* 6 */
+    /* 6 */,
+    /* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -777,11 +779,12 @@ module.exports = function (request, responseCallback) {
 };
 
 /***/ }),
-/* 7 */,
 /* 8 */,
 /* 9 */,
 /* 10 */,
-/* 11 */
+    /* 11 */,
+    /* 12 */,
+    /* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -790,7 +793,7 @@ module.exports = function (request, responseCallback) {
 //微信小程序入口
         var _Fly = __webpack_require__(2);
 var EngineWrapper = __webpack_require__(1);
-var adapter = __webpack_require__(6);
+        var adapter = __webpack_require__(7);
 var wxEngine = EngineWrapper(adapter);
 module.exports = function (engine) {
     return new _Fly(engine || wxEngine);
