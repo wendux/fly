@@ -861,11 +861,10 @@
                 var con = {
                     method: request.method,
                     url: request.url,
-                    dataType: request.dataType || undefined,
+                    dataType: 'text',
                     header: request.headers,
                     data: request.body || {},
-                    responseType: request.responseType || 'text',
-                    timeout: request.timeout || 3000,
+                    timeout: request.timeout || 20000,
                     success: function success(res) {
                         responseCallback({
                             statusCode: res.status,
@@ -878,19 +877,11 @@
                             statusCode: res.status || 0,
                             responseText: res.data,
                             statusHeaders: res.headers,
-                            errMsg: statusList[res.status]
-                        });
-                    },
-                    complete: function complete(res) {
-                        responseCallback({
-                            statusCode: res.status,
-                            responseText: res.data,
-                            statusHeaders: res.headers,
-                            errMsg: statusList[res.status]
+                            errMsg: statusList[res.status] || ""
                         });
                     }
                 };
-                my.request(con);
+                my.httpRequest(con);
             };
 
             /***/
