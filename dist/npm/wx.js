@@ -118,7 +118,7 @@ module.exports = {
             var type = that.type(sub);
             if (type == "array") {
                 sub.forEach(function (e, i) {
-                    if (!that.isObject(data)) i = "";
+                    if (!that.isObject(e)) i = "";
                     _encode(e, path + ('%5B' + i + '%5D'));
                 });
             } else if (type == "object") {

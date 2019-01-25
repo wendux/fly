@@ -61,7 +61,11 @@ open console panel to view log.
         console.log("error", e)
     })
 
-    fly.get("../package.json", {aa: 8, bb: 9, tt: {xx: 5}})
+    fly.get("../package.json", {
+        "a": "你好",
+        "b": [5, "6"],
+        "c": {"d": 8, "e": {"a": 5, "b": [66, 8]}}
+    })
         .then(function (d) {
             console.log("get result:", d)
         }).catch(function (e) {
