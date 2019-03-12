@@ -1,12 +1,12 @@
-var Fly = require("../../dist/npm/fly")
-var EngineWrapper = require("../../dist/npm/engine-wrapper")
-var adapter = require("../adapter/node")
-var utils = require("../utils/utils")
-var nodeEngine = EngineWrapper(adapter)
-var fs = require("fs")
-var path= require("path")
-var request=require("request")
-var rq = request.defaults({jar: true})
+let Fly = require("../../dist/npm/fly")
+let EngineWrapper = require("../../dist/npm/engine-wrapper")
+let adapter = require("../adapter/node")
+let utils = require("../utils/utils")
+let nodeEngine = EngineWrapper(adapter)
+let fs = require("fs")
+let path = require("path")
+let request = require("request")
+let rq = request.defaults({jar: true})
 Object.assign(Fly.prototype,{
 
     // Http plugin

@@ -3,8 +3,8 @@
  * email: 824783146@qq.com
  **/
 
-var util = require('./utils/utils')
-var isBrowser = typeof document !== "undefined";
+let util = require('./utils/utils')
+let isBrowser = typeof document !== "undefined";
 
 //EngineWrapper can help  generating  a  http engine quickly through a adapter
 function EngineWrapper(adapter) {
@@ -35,7 +35,7 @@ function EngineWrapper(adapter) {
                 if (url.indexOf("http") !== 0) {
                     // Normalize the request url
                     if (isBrowser) {
-                        var t = document.createElement("a");
+                        let t = document.createElement("a");
                         t.href = url;
                         url = t.href;
                     }
@@ -47,9 +47,9 @@ function EngineWrapper(adapter) {
 
         send(arg) {
             arg = arg || null;
-            var self = this;
+            let self = this;
             if (adapter) {
-                var request = {
+                let request = {
                     method: self.method,
                     url: self.responseURL,
                     headers: self.requestHeaders || {},
@@ -60,7 +60,7 @@ function EngineWrapper(adapter) {
                     request.body = null;
                 }
                 self._changeReadyState(3)
-                var timer;
+                let timer;
                 self.timeout = self.timeout || 0;
                 if (self.timeout > 0) {
                     timer = setTimeout(() => {
@@ -76,7 +76,7 @@ function EngineWrapper(adapter) {
                 adapter(request, function (response) {
 
                     function getAndDelete(key) {
-                        var t = response[key]
+                        let t = response[key]
                         delete response[key]
                         return t;
                     }
@@ -88,8 +88,8 @@ function EngineWrapper(adapter) {
                     // Make sure the type of status is integer
                     self.status = getAndDelete("statusCode") - 0;
 
-                    var responseText = getAndDelete("responseText")
-                    var statusMessage = getAndDelete("statusMessage")
+                    let responseText = getAndDelete("responseText")
+                    let statusMessage = getAndDelete("statusMessage")
 
                     // Network error, set the status code 0
                     if (!self.status) {
@@ -98,11 +98,11 @@ function EngineWrapper(adapter) {
                     } else {
                         // Parsing the response headers to array in a object,  because
                         // there may be multiple values with the same header name
-                        var responseHeaders = getAndDelete("headers")
-                        var headers = {};
-                        for (var field in responseHeaders) {
-                            var value = responseHeaders[field];
-                            var key = field.toLowerCase();
+                        let responseHeaders = getAndDelete("headers")
+                        let headers = {};
+                        for (let field in responseHeaders) {
+                            let value = responseHeaders[field];
+                            let key = field.toLowerCase();
                             // Is array
                             if (typeof value === "object") {
                                 headers[key] = value;
@@ -111,7 +111,7 @@ function EngineWrapper(adapter) {
                                 headers[key].push(value)
                             }
                         }
-                        var cookies = headers["set-cookie"];
+                        let cookies = headers["set-cookie"];
                         if (isBrowser && cookies) {
                             cookies.forEach((e) => {
                                 // Remove the http-Only property of the  cookie
@@ -143,8 +143,8 @@ function EngineWrapper(adapter) {
         }
 
         getAllResponseHeaders() {
-            var str = "";
-            for (var key in this.responseHeaders) {
+            let str = "";
+            for (let key in this.responseHeaders) {
                 str += key + ":" + this.getResponseHeader(key) + "\r\n";
             }
             return str || null;

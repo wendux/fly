@@ -1,5 +1,5 @@
 //weex adapter
-var stream = weex.requireModule('stream');
+let stream = weex.requireModule('stream');
 module.exports = function (request, responseCallback) {
     if (!request.body) {
         delete request.body;

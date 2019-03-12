@@ -1,6 +1,6 @@
 //微信小程序适配器
 module.exports=function(request, responseCallback) {
-    var con = {
+    let con = {
         method: request.method,
         url: request.url,
         dataType: request.dataType || undefined,

@@ -1,5 +1,5 @@
-var utils = require('./utils/utils');
-var isBrowser = typeof document !== "undefined";
+let utils = require('./utils/utils');
+let isBrowser = typeof document !== "undefined";
 
 class Fly {
     constructor(engine) {
@@ -17,8 +17,8 @@ class Fly {
          * @param [interceptor] either is interceptors.request or interceptors.response
          */
         function wrap(interceptor) {
-            var resolve;
-            var reject;
+            let resolve;
+            let reject;
 
             function _clear() {
                 interceptor.p = resolve = reject = null;
@@ -48,7 +48,7 @@ class Fly {
             })
         }
 
-        var interceptors = this.interceptors = {
+        let interceptors = this.interceptors = {
             response: {
                 use(handler, onerror) {
                     this.handler = handler;
@@ -62,8 +62,8 @@ class Fly {
             }
         }
 
-        var irq = interceptors.request;
-        var irp = interceptors.response;
+        let irq = interceptors.request;
+        let irp = interceptors.response;
         wrap(irp);
         wrap(irq);
 
@@ -79,14 +79,14 @@ class Fly {
     }
 
     request(url, data, options) {
-        var engine = new this.engine;
-        var contentType = "Content-Type";
-        var contentTypeLowerCase = contentType.toLowerCase();
-        var interceptors = this.interceptors;
-        var requestInterceptor = interceptors.request;
-        var responseInterceptor = interceptors.response;
-        var requestInterceptorHandler = requestInterceptor.handler;
-        var promise = new Promise((resolve, reject) => {
+        let engine = new this.engine;
+        let contentType = "Content-Type";
+        let contentTypeLowerCase = contentType.toLowerCase();
+        let interceptors = this.interceptors;
+        let requestInterceptor = interceptors.request;
+        let responseInterceptor = interceptors.response;
+        let requestInterceptorHandler = requestInterceptor.handler;
+        let promise = new Promise((resolve, reject) => {
             if (utils.isObject(url)) {
                 options = url;
                 url = options.url;
@@ -121,12 +121,12 @@ class Fly {
                 data = options.body;
                 // Normalize the request url
                 url = utils.trim(options.url);
-                var baseUrl = utils.trim(options.baseURL || "");
+                let baseUrl = utils.trim(options.baseURL || "");
                 if (!url && isBrowser && !baseUrl) url = location.href;
                 if (url.indexOf("http") !== 0) {
-                    var isAbsolute = url[0] === "/";
+                    let isAbsolute = url[0] === "/";
                     if (!baseUrl && isBrowser) {
-                        var arr = location.pathname.split("/");
+                        let arr = location.pathname.split("/");
                         arr.pop();
                         baseUrl = location.protocol + "//" + location.host + (isAbsolute ? "" : arr.join("/"))
                     }
@@ -138,31 +138,31 @@ class Fly {
 
                         // Normalize the url which contains the ".." or ".", such as
                         // "http://xx.com/aa/bb/../../xx" to "http://xx.com/xx" .
-                        var t = document.createElement("a");
+                        let t = document.createElement("a");
                         t.href = url;
                         url = t.href;
                     }
                 }
 
-                var responseType = utils.trim(options.responseType || "")
-                var isGet = options.method === "GET";
-                var dataType = utils.type(data);
-                var params = options.params || {};
+                let responseType = utils.trim(options.responseType || "")
+                let needQuery = ["GET", "HEAD", "DELETE", "OPTION"].indexOf(options.method) !== -1;
+                let dataType = utils.type(data);
+                let params = options.params || {};
 
                 // merge url params when the method is "GET" (data is object)
-                if (isGet && dataType === "object") {
+                if (needQuery && dataType === "object") {
                     params = utils.merge(data, params)
                 }
                 // encode params to String
                 params = utils.formatParams(params);
 
                 // save url params
-                var _params = [];
+                let _params = [];
                 if (params) {
                     _params.push(params);
                 }
                 // Add data to url params when the method is "GET" (data is String)
-                if (isGet && data && dataType === "string") {
+                if (needQuery && data && dataType === "string") {
                     _params.push(data);
                 }
 
@@ -183,10 +183,10 @@ class Fly {
                 } catch (e) {
                 }
 
-                var customContentType = options.headers[contentType] || options.headers[contentTypeLowerCase];
+                let customContentType = options.headers[contentType] || options.headers[contentTypeLowerCase];
 
                 // default content type
-                var _contentType = "application/x-www-form-urlencoded";
+                let _contentType = "application/x-www-form-urlencoded";
                 // If the request data is json object, transforming it  to json string,
                 // and set request content-type to "json". In browser,  the data will
                 // be sent as RequestBody instead of FormData
@@ -197,11 +197,11 @@ class Fly {
                     data = JSON.stringify(data);
                 }
                 //If user doesn't set content-type, set default.
-                if (!(customContentType || isGet)) {
+                if (!(customContentType || needQuery)) {
                     options.headers[contentType] = _contentType;
                 }
 
-                for (var k in options.headers) {
+                for (let k in options.headers) {
                     if (k === contentType && utils.isFormData(data)) {
                         // Delete the content-type, Let the browser set it
                         delete options.headers[k];
@@ -222,7 +222,7 @@ class Fly {
                             if (type) {
                                 data.request = options;
                             }
-                            var ret = handler.call(responseInterceptor, data, Promise)
+                            let ret = handler.call(responseInterceptor, data, Promise)
                             data = ret === undefined ? data : ret;
                         }
                         if (!isPromise(data)) {
@@ -250,7 +250,7 @@ class Fly {
                 engine.onload = () => {
                     try {
                         // The xhr of IE9 has not response field
-                        var response = engine.response || engine.responseText;
+                        let response = engine.response || engine.responseText;
                         if (response && options.parseJson && (engine.getResponseHeader(contentType) || "").indexOf("json") !== -1
                             // Some third engine implementation may transform the response text to json object automatically,
                             // so we should test the type of response before transforming it
@@ -258,21 +258,21 @@ class Fly {
                             response = JSON.parse(response);
                         }
 
-                        var headers = engine.responseHeaders;
+                        let headers = engine.responseHeaders;
                         // In browser
                         if (!headers) {
                             headers = {};
-                            var items = (engine.getAllResponseHeaders() || "").split("\r\n");
+                            let items = (engine.getAllResponseHeaders() || "").split("\r\n");
                             items.pop();
                             items.forEach((e) => {
                                 if (!e) return;
-                                var key = e.split(":")[0]
+                                let key = e.split(":")[0]
                                 headers[key] = engine.getResponseHeader(key)
                             })
                         }
-                        var status = engine.status
-                        var statusText = engine.statusText
-                        var data = {data: response, headers, status, statusText};
+                        let status = engine.status
+                        let statusText = engine.statusText
+                        let data = {data: response, headers, status, statusText};
                         // The _response filed of engine is set in  adapter which be called in engine-wrapper.js
                         utils.merge(data, engine._response)
                         if ((status >= 200 && status < 300) || status === 304) {
@@ -280,7 +280,7 @@ class Fly {
                             data.request = options;
                             onresult(responseInterceptor.handler, data, 0)
                         } else {
-                            var e = new Err(statusText, status);
+                            let e = new Err(statusText, status);
                             e.response = data
                             onerror(e)
                         }
@@ -298,20 +298,20 @@ class Fly {
                 }
                 engine._options = options;
                 setTimeout(() => {
-                    engine.send(isGet ? null : data)
+                    engine.send(needQuery ? null : data)
                 }, 0)
             }
 
             enqueueIfLocked(requestInterceptor.p, () => {
                 utils.merge(options, JSON.parse(JSON.stringify(this.config)));
-                var headers = options.headers;
+                let headers = options.headers;
                 headers[contentType] = headers[contentType] || headers[contentTypeLowerCase] || "";
                 delete headers[contentTypeLowerCase]
                 options.body = data || options.body;
                 url = utils.trim(url || "");
                 options.method = options.method.toUpperCase();
                 options.url = url;
-                var ret = options;
+                let ret = options;
                 if (requestInterceptorHandler) {
                     ret = requestInterceptorHandler.call(requestInterceptor, options, Promise) || options;
                 }

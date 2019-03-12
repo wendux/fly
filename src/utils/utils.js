@@ -26,16 +26,16 @@ module.exports = {
             .replace(/%5D/gi, ']');
     },
     formatParams(data) {
-        var str = "";
-        var first = true;
-        var that = this;
+        let str = "";
+        let first = true;
+        let that = this;
         if (!this.isObject(data)) {
             return data;
         }
 
         function _encode(sub, path) {
-            var encode = that.encode;
-            var type = that.type(sub);
+            let encode = that.encode;
+            let type = that.type(sub);
             if (type == "array") {
                 sub.forEach(function (e, i) {
                     if (!that.isObject(e)) i = "";
@@ -43,7 +43,7 @@ module.exports = {
                 });
 
             } else if (type == "object") {
-                for (var key in sub) {
+                for (let key in sub) {
                     if (path) {
                         _encode(sub[key], path + "%5B" + encode(key) + "%5D");
                     } else {
@@ -64,7 +64,7 @@ module.exports = {
     },
     // Do not overwrite existing attributes
     merge(a, b) {
-        for (var key in b) {
+        for (let key in b) {
             if (!a.hasOwnProperty(key)) {
                 a[key] = b[key];
             } else if (this.isObject(b[key], 1) && this.isObject(a[key], 1)) {

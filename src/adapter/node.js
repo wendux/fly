@@ -1,11 +1,10 @@
-
-var pkg = require('./../../package.json');
-var req = require("request");
+let pkg = require('./../../package.json');
+let req = require("request");
 module.exports = function (request, responseCallBack) {
     //自动管理cookie
-    var config = {jar: true, proxy: request.proxy}
-    var rq = req.defaults(config)
-    var headers = request.headers;
+    let config = {jar: true, proxy: request.proxy}
+    let rq = req.defaults(config)
+    let headers = request.headers;
     if (!headers['User-Agent'] && !headers['user-agent']) {
         headers['User-Agent'] = 'fly/' + pkg.version;
     }
@@ -15,7 +14,7 @@ module.exports = function (request, responseCallBack) {
         //use request lib default timeout
         delete request.timeout;
     }
-    var ret = {
+    let ret = {
         statusCode: 0
     }
     if (request.responseType === "stream") {

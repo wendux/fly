@@ -7,7 +7,7 @@ const statusList = {
     19: 'HTTP错误'
 }
 module.exports = function (request, responseCallback) {
-    var con = {
+    let con = {
         method: request.method,
         url: request.url,
         dataType: 'text',

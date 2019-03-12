@@ -3,8 +3,8 @@
  * @param responseData
  */
 module.exports = function handleImgBase64Data(responseData) {
-    var headers = responseData.headers || {};
-    var contentType = (headers["content-type"] || headers["Content-Type"] || "")
+    let headers = responseData.headers || {};
+    let contentType = (headers["content-type"] || headers["Content-Type"] || "")
         .toString().toLowerCase();
     if (contentType.indexOf("image") !== -1
         && responseData.responseText.indexOf("base64") === -1) {

@@ -1,6 +1,6 @@
 {
   "name": "flyio",
-  "version": "0.6.13",
+  "version": "0.6.14",
   "main": "node-index.js",
   "browser": "index.js",
   "weapp": "dist/npm/wx.js",

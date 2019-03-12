@@ -309,7 +309,7 @@
                                     request.body = null;
                                 }
                                 self._changeReadyState(3);
-                                var timer;
+                                var timer = void 0;
                                 self.timeout = self.timeout || 0;
                                 if (self.timeout > 0) {
                                     timer = setTimeout(function () {

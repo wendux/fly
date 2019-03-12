@@ -1,6 +1,5 @@
-
-var handleImgBase64Data=require("../utils/ImgBase64Handler")
-var adapter;
+let handleImgBase64Data = require("../utils/ImgBase64Handler")
+let adapter;
 if (window.dsBridge) {
     adapter = function (request, responseCallBack) {
         dsBridge.call("onAjaxRequest", request, function (responseData) {
