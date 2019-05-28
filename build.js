@@ -23,6 +23,7 @@ var plugins=[];
 
 var npmExtra = {
     "wx": "./src/wx.js",
+    "bd": './src/bd.js',
     "weex": "./src/weex.js",
     "hap": "./src/hap.js",
     "ap": "./src/ap.js"
