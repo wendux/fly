@@ -30,5 +30,10 @@ module.exports = function (request, responseCallback) {
             })
         }
     }
-    my.httpRequest(con)
+    if (my.request) {
+        my.request(con)
+    } else {
+        my.httpRequest(con)
+    }
+    // 支付宝端旧接口 my.httpRequest 将被废弃，请使用my.request 来代替。钉钉端目前尚未支持my.request，请继续使用 my.httpRequest。基础库 1.11.0 或更高版本
 }
