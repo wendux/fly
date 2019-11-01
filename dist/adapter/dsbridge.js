@@ -94,7 +94,7 @@ function KEEP(_,cb){cb();}
 "use strict";
 
 var handleImgBase64Data = __webpack_require__(0);
-        var adapter = void 0;
+var adapter = void 0;
 if (window.dsBridge) {
     adapter = function adapter(request, responseCallBack) {
         dsBridge.call("onAjaxRequest", request, function (responseData) {

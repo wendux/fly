@@ -145,7 +145,7 @@ class Fly {
                 }
 
                 let responseType = utils.trim(options.responseType || "")
-                let needQuery = ["GET", "HEAD", "DELETE", "OPTION"].indexOf(options.method) !== -1;
+                let needQuery = ["GET", "HEAD", "OPTION"].indexOf(options.method) !== -1;
                 let dataType = utils.type(data);
                 let params = options.params || {};
 
