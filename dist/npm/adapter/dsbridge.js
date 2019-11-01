@@ -73,8 +73,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-    /******/
-    return __webpack_require__(__webpack_require__.s = 8);
+/******/ 	return __webpack_require__(__webpack_require__.s = 8);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -99,14 +98,14 @@ module.exports = function handleImgBase64Data(responseData) {
 
 /***/ }),
 
-    /***/ 8:
+/***/ 8:
 /***/ (function(module, exports, __webpack_require__) {
 
 function KEEP(_,cb){cb();}
 "use strict";
 
 var handleImgBase64Data = __webpack_require__(3);
-        var adapter = void 0;
+var adapter = void 0;
 if (window.dsBridge) {
     adapter = function adapter(request, responseCallBack) {
         dsBridge.call("onAjaxRequest", request, function (responseData) {
