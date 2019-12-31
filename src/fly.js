@@ -250,7 +250,14 @@ class Fly {
                 engine.onload = () => {
                     try {
                         // The xhr of IE9 has not response field
-                        let response = engine.response || engine.responseText;
+                        var response;
+                        if (!engine.responseType || engine.responseType === "text") {
+                            response = engine.responseText;
+                        } else if (engine.responseType === "document") {
+                            response = engine.responseXML;
+                        } else {
+                            response = engine.response;
+                        }
                         if (response && options.parseJson && (engine.getResponseHeader(contentType) || "").indexOf("json") !== -1
                             // Some third engine implementation may transform the response text to json object automatically,
                             // so we should test the type of response before transforming it
@@ -285,7 +292,7 @@ class Fly {
                             onerror(e)
                         }
                     } catch (e) {
-                        onerror(new Err(e.msg, engine.status))
+                        onerror(new Err(e.msg||e.message, engine.status))
                     }
                 }
 
