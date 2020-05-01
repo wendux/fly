@@ -402,7 +402,7 @@ fly.interceptors.request.use(function (request) {
     log("没有token，先请求token...");
     //锁定当天实例，后续请求会在拦截器外排队
     fly.lock();
-    return newFly.get("/token").then((d) => {
+    return tokenFly.get("/token").then((d) => {
       request.headers["csrfToken"] = csrfToken = d.data.data.token;
       log("token请求成功，值为: " + d.data.data.token);
       log(`继续完成请求：path:${request.url}，baseURL:${request.baseURL}`)
