@@ -186,11 +186,13 @@ class Fly {
                 let customContentType = options.headers[contentType] || options.headers[contentTypeLowerCase];
 
                 // default content type
+                let defaultContentType = ["application/x-www-form-urlencoded","application/x-www-form-urlencoded;charset=utf-8"];
                 let _contentType = "application/x-www-form-urlencoded";
                 // If the request data is json object, transforming it  to json string,
                 // and set request content-type to "json". In browser,  the data will
                 // be sent as RequestBody instead of FormData
-                if (utils.trim((customContentType || "").toLowerCase()) === _contentType) {
+                if (defaultContentType.indexOf(utils.trim((customContentType || "").toLowerCase())) !== -1) {
+                    _contentType = utils.trim((customContentType || "").toLowerCase());
                     data = utils.formatParams(data);
                 } else if (!utils.isFormData(data) && ["object", "array"].indexOf(utils.type(data)) !== -1) {
                     _contentType = 'application/json;charset=utf-8'
