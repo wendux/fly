@@ -6,6 +6,8 @@ module.exports=function(request, responseCallback) {
         dataType: request.dataType || undefined,
         header: request.headers,
         data: request.body||{},
+        enableCache: request.enableCache || false,
+        enableHttp2: request.enableHttp2 || false,
         responseType: request.responseType || 'text',
         success(res) {
             responseCallback({
