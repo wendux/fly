@@ -23,6 +23,8 @@ export interface FlyResponse<T = any> {
     request: FlyRequestConfig;
     engine: XMLHttpRequest;
     headers: Object;
+    status:number;
+    statusText:string
 }
 
 export interface FlyErrResponse {
@@ -34,6 +36,8 @@ export interface FlyErrResponse {
 
 export interface FlyPromise<T = any> extends Promise<FlyResponse<T>> {
 }
+
+export type UntieResponse<T = any, O = any> = O extends keyof FlyResponse ? Promise<FlyResponse<T>[O]> : Promise<FlyResponse<T>>  
 
 export interface FlyRequestInterceptor<V> {
     use(onSend?: (request: V) => any): void;
@@ -57,11 +61,11 @@ export interface Fly {
         response:FlyResponseInterceptor<FlyResponse>;
     };
     engine:any;
-    request<T = any>(url: string, data?: any, config?: FlyRequestConfig): FlyPromise<T>;
-    get<T = any>(url: string, data?:any, config?: FlyRequestConfig): FlyPromise<T>;
+    request<D = any, T = any,O extends string = ''>(url: string, data?: D, config?: FlyRequestConfig): UntieResponse<T,O>;
+    get<D = any,T = any, O extends string = ''>(url: string, data?:D, config?: FlyRequestConfig): UntieResponse<T,O>;
     delete(url: string, data?:any, config?: FlyRequestConfig): FlyPromise;
     head(url: string,data?:any, config?: FlyRequestConfig): FlyPromise;
-    post<T = any>(url: string, data?: any, config?: FlyRequestConfig): FlyPromise<T>;
+    post<D = any,T = any, O extends string = ''>(url: string, data?: D, config?: FlyRequestConfig): UntieResponse<T,O>;
     put<T = any>(url: string, data?: any, config?: FlyRequestConfig): FlyPromise<T>;
     patch<T = any>(url: string, data?: any, config?: FlyRequestConfig): FlyPromise<T>;
     all<T>(values: (T | Promise<T>)[]): Promise<T[]>;
