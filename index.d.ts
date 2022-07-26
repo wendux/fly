@@ -46,7 +46,7 @@ export interface FlyRequestInterceptor<V> {
 
     clear(): void;
 }
-export interface FlyResponseInterceptor<V> {
+export interface FlyResponseInterceptor<V = FlyResponse> {
     use(onSucceed?: (response: V) => any, onError?: (err: Error) => any): void;
     lock(): void;
     unlock(): void;
